@@ -338,7 +338,7 @@ class Macho_Login_Customizer {
 						break;
 					case 'slider':
 						$manager->add_control(
-							new Epsilon_Control_Slider(
+							new Epsilon_Control_Slider_Custom(
 								$manager,
 								'ml_' . $setting['id'],
 								array(

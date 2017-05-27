@@ -10,7 +10,7 @@ if ( ! defined( 'WPINC' ) ) {
  * @access public
  *
  */
-class Epsilon_Control_Slider extends WP_Customize_Control {
+class Epsilon_Control_Slider_Custom extends WP_Customize_Control {
 	/**
 	 * The type of customize control being rendered.
 	 *
@@ -18,7 +18,7 @@ class Epsilon_Control_Slider extends WP_Customize_Control {
 	 * @access public
 	 * @var    string
 	 */
-	public $type = 'epsilon-slider';
+	public $type = 'epsilon-slider-custom';
 
 	/**
 	 * Provide a default
