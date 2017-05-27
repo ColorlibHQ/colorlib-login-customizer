@@ -1,4 +1,4 @@
-.customize-control-epsilon-slider input[type="text"] {
+.customize-control-epsilon-slider-custom input[type="text"] {
     border: none;
     text-align: center;
     padding: 2px;
@@ -14,7 +14,7 @@
     height: 22px;
 }
 
-.customize-control-epsilon-slider .ui-slider {
+.customize-control-epsilon-slider-custom .ui-slider {
     position: relative;
     text-align: left;
     height: 2px;
@@ -27,7 +27,7 @@
     background: #d6d6d6;
 }
 
-.customize-control-epsilon-slider .ui-slider .ui-slider-handle {
+.customize-control-epsilon-slider-custom .ui-slider .ui-slider-handle {
     position: absolute;
     z-index: 2;
     top: -10px;
@@ -47,7 +47,7 @@
     transform: translateX(-50%);
 }
 
-.customize-control-epsilon-slider .ui-slider .ui-slider-range {
+.customize-control-epsilon-slider-custom .ui-slider .ui-slider-range {
     position: absolute;
     z-index: 1;
     font-size: 0.7em;

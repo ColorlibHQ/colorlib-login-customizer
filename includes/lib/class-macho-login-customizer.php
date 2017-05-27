@@ -379,9 +379,6 @@ class Macho_Login_Customizer {
 	 *
 	 * Dependencies: Customizer Controls script (core)
 	 */
-	/**
-	 *
-	 */
 	public function customizer_enqueue_scripts() {
 		wp_enqueue_style( 'c-epsilon-styles', esc_url( $this->parent->assets_url ) . 'css/custom-epsilon.css' );
 		wp_localize_script( 'c-epsilon-object', 'WPUrls', array(
