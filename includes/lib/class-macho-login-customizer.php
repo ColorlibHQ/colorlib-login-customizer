@@ -34,12 +34,11 @@ class Macho_Login_Customizer {
 		$this->base = 'ml_';
 		// Initialise settings
 		$this->init_settings();
-		// Register plugin settings
+		// Register plugin sections and settings
 		$this->register_settings( $manager );
-
 		// Load customizer assets
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customizer_enqueue_scripts' ), 99 );
-		add_action( 'customize_preview_init', array( $this, 'customize_preview_styles' ), 99 );
+		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customizer_enqueue_scripts' ), 25 );
+		add_action( 'customize_preview_init', array( $this, 'customize_preview_styles' ), 25 );
 	}
 
 	/**
@@ -287,7 +286,51 @@ class Macho_Login_Customizer {
 				'priority'       => 10,
 				'capability'     => 'edit_theme_options',
 				'theme_supports' => '',
-				'title'          => esc_html__( 'Macho Login Options', 'medzone' )
+				'title'          => esc_html__( 'Macho Login Options', 'macho-login' )
+			)
+		);
+
+		/**
+		 * Add a section
+		 */
+		$manager->add_section(
+			new Epsilon_Section_Predefined_Schemes(
+				$manager,
+				'ml_predefined_color_schemes',
+				array(
+					'priority'      => 0,
+					'type'          => 'epsilon-section-predefined-schemes',
+					'panel'         => 'ml_main_panel',
+					'title'         => esc_html__( 'Predefined setups', 'macho-login' ),
+					'description'   => esc_html__( 'Select one our predefined setups', 'macho-login' ),
+					/**
+					 *
+					 * @todo Adaugat defaulturi pentru toate optiunile
+					 *       Se pot adauga direct in JS, sau aici.
+					 *       Ramane de vazut
+					 *
+					 */
+					'color_schemes' => array(
+						'black' => array(
+							'id'      => 'black',
+							/**
+							 * @todo ca sa nu mai complicam treaba aiurea, sa folosim niste PNG thumbs pentru setups
+							 */
+							'thumb'   => $this->parent->assets_url . '/img/black-scheme.png',
+							'options' => array(
+								'custom_background_color' => '#000',
+							),
+						),
+						'red'   => array(
+							'id'      => 'black',
+							'thumb'   => $this->parent->assets_url . '/img/black-scheme.png',
+							'options' => array(
+								'custom_background_color' => '#e62117',
+								'form_background_color'   => '#000',
+							),
+						),
+					)
+				)
 			)
 		);
 
@@ -381,6 +424,11 @@ class Macho_Login_Customizer {
 	 */
 	public function customizer_enqueue_scripts() {
 		wp_enqueue_style( 'c-epsilon-styles', esc_url( $this->parent->assets_url ) . 'css/custom-epsilon.css' );
+		wp_enqueue_script( 'c-epsilon-object', esc_url( $this->parent->assets_url ) . 'js/ml-login.js', array(
+			'jquery',
+			'customize-controls'
+		), false, true );
+
 		wp_localize_script( 'c-epsilon-object', 'WPUrls', array(
 			'siteurl' => get_option( 'siteurl' ),
 			'theme'   => get_template_directory_uri(),

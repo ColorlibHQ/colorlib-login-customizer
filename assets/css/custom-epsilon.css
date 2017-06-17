@@ -157,3 +157,22 @@
 .dashicons.dashicons-editor-help:hover > .mte-tooltip {
     display: block;
 }
+
+.predefined-color-schemes-container {
+    padding: 10px;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list {
+    list-style-type: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list li {
+    display: inline-block;
+    text-align: center;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list a img {
+    width: 50px;
+}
