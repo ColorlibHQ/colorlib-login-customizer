@@ -3,10 +3,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 };
 
-class Macho_Login {
+class Colorlib_Login_Customizer {
 
 	/**
-	 * The single instance of Macho_Login.
+	 * The single instance of Colorlib_Login_Customizer.
 	 *
 	 * @var    object
 	 * @access   private
@@ -94,8 +94,9 @@ class Macho_Login {
 	 */
 	public function __construct( $file = '', $version = '1.0.0' ) {
 		$this->_version = $version;
-		$this->_token   = 'macho-login';
-		$this->base     = 'ml_';
+		$this->_token   = 'colorlib-login-customizer';
+		$this->base     = 'clc_';
+		$this->key_name = 'clc-options';
 
 		// Load plugin environment variables
 		$this->file       = $file;
@@ -104,8 +105,12 @@ class Macho_Login {
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->file ) ) );
 
 		$this->script_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		// Remove this after Grunt
+		$this->script_suffix = '';
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
+
+		add_action( 'admin_init', array( $this, 'redirect_customizer' ) );
 
 		// Load customizer settings
 		add_action( 'customize_register', array( $this, 'load_customizer' ), 10, 1 );
@@ -113,11 +118,7 @@ class Macho_Login {
 		// Load frontend JS & CSS
 		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
 
-		// Load admin JS & CSS
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
-
-		add_action( 'plugins_loaded', array( $this, 'handle_login_settings' ) );
+		add_filter( 'template_include', array( $this, 'change_template_if_necessary' ), 99 );
 
 		// Handle localisation
 		$this->load_plugin_textdomain();
@@ -126,19 +127,35 @@ class Macho_Login {
 	} // End __construct ()
 
 	/**
-	 * Handle login settings, unrelated to CSS
-	 */
-	public function handle_login_settings() {
-		new Macho_Login_Options();
-	}
-
-	/**
 	 * Load the customizer controls
 	 *
 	 * @param $manager
 	 */
 	public function load_customizer( $manager ) {
-		new Macho_Login_Customizer( $this, $manager );
+		new Colorlib_Login_Customizer_Customizer( $this, $manager );
+	}
+
+	/**
+	 * Hook to redirect the page for the Customizer.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function redirect_customizer() {
+		if ( ! empty( $_GET['page'] ) ) { // Input var okay.
+			if ( 'colorlib-login-customizer_settings' === $_GET['page'] ) { // Input var okay.
+
+				// Generate the redirect url.
+				$url = add_query_arg(
+					array(
+						'autofocus[panel]' => 'clc_main_panel',
+					),
+					admin_url( 'customize.php' )
+				);
+
+				wp_safe_redirect( $url );
+			}
+		}
 	}
 
 	/**
@@ -157,32 +174,8 @@ class Macho_Login {
 		/**
 		 * Overrides, yep
 		 */
-		new Macho_Login_CSS_Customization();
+		new Colorlib_Login_Customizer_CSS_Customization();
 	} // End enqueue_styles ()
-
-	/**
-	 * Load admin CSS.
-	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
-	 */
-	public function admin_enqueue_styles( $hook = '' ) {
-		wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-admin' );
-	} // End admin_enqueue_styles ()
-
-	/**
-	 * Load admin Javascript.
-	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
-	 */
-	public function admin_enqueue_scripts( $hook = '' ) {
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
-		wp_enqueue_script( $this->_token . '-admin' );
-	} // End admin_enqueue_scripts ()
 
 	/**
 	 * Load plugin localisation
@@ -192,7 +185,7 @@ class Macho_Login {
 	 * @return  void
 	 */
 	public function load_localisation() {
-		load_plugin_textdomain( 'macho-login', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
+		load_plugin_textdomain( 'colorlib-login-customizer', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
 	} // End load_localisation ()
 
 	/**
@@ -203,7 +196,7 @@ class Macho_Login {
 	 * @return  void
 	 */
 	public function load_plugin_textdomain() {
-		$domain = 'macho-login';
+		$domain = 'colorlib-login-customizer';
 
 		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
 
@@ -212,14 +205,14 @@ class Macho_Login {
 	} // End load_plugin_textdomain ()
 
 	/**
-	 * Main Macho_Login Instance
+	 * Main Colorlib_Login_Customizer Instance
 	 *
-	 * Ensures only one instance of Macho_Login is loaded or can be loaded.
+	 * Ensures only one instance of Colorlib_Login_Customizer is loaded or can be loaded.
 	 *
 	 * @since 1.0.0
 	 * @static
-	 * @see   Macho_Login()
-	 * @return Main Macho_Login instance
+	 * @see   Colorlib_Login_Customizer()
+	 * @return Main Colorlib_Login_Customizer instance
 	 */
 	public static function instance( $file = '', $version = '1.0.0' ) {
 		if ( is_null( self::$_instance ) ) {
@@ -269,4 +262,15 @@ class Macho_Login {
 		update_option( $this->_token . '_version', $this->_version );
 	} // End _log_version_number ()
 
+
+	// Let's hack a little bit
+	public function change_template_if_necessary( $template ) {
+		
+		if ( is_customize_preview() && isset( $_REQUEST['colorlib-login-customizer-customization'] ) && is_user_logged_in() ) {
+			$new_template = plugin_dir_path( __FILE__ ) . 'login-template.php';
+			return $new_template;
+		}
+
+		return $template;
+	}
 }

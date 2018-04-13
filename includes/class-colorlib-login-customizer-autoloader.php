@@ -4,11 +4,11 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 /**
- * Class Macho_Login_Autoloader
+ * Class Colorlib_Login_Customizer_Autoloader
  */
-class Macho_Login_Autoloader {
+class Colorlib_Login_Customizer_Autoloader {
 	/**
-	 * Macho_Login_Autoloader constructor.
+	 * Colorlib_Login_Customizer_Autoloader constructor.
 	 */
 	public function __construct() {
 		spl_autoload_register( array( $this, 'load' ) );
@@ -21,14 +21,14 @@ class Macho_Login_Autoloader {
 		$parts = explode( '_', $class );
 		$bind  = implode( '-', $parts );
 
-		if ( $parts[0] == 'Macho' || $parts[0] == 'Epsilon' ) {
+		if ( $parts[0] == 'Colorlib' ) {
 
 			/*
 			 * Core library autoload.
 			 */
 			$directories = array(
-				MACHO_LOGIN_BASE . '/includes',
-				MACHO_LOGIN_BASE . '/includes/lib',
+				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes',
+				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes/lib',
 			);
 
 			foreach ( $directories as $directory ) {
@@ -42,4 +42,4 @@ class Macho_Login_Autoloader {
 	}
 }
 
-$autoloader = new Macho_Login_Autoloader();
+$autoloader = new Colorlib_Login_Customizer_Autoloader();

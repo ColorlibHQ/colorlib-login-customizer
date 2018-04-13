@@ -1,0 +1,168 @@
+.customize-control-clc-range-slider input[type="text"] {
+    border: none;
+    text-align: center;
+    padding: 2px;
+    margin: 0;
+    font-size: 12px;
+    color: #333;
+    border-radius: 10px;
+    background-color: rgb(248, 248, 248);
+    -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: inset 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
+    width: 42px;
+    height: 22px;
+}
+
+.customize-control-clc-range-slider .ui-slider {
+    position: relative;
+    text-align: left;
+    height: 2px;
+    border-radius: 3px;
+    border: none;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: inline-block;
+    width: 202px;
+    background: #d6d6d6;
+}
+
+.customize-control-clc-range-slider .ui-slider .ui-slider-handle {
+    position: absolute;
+    z-index: 2;
+    top: -10px;
+    cursor: default;
+    -ms-touch-action: none;
+    touch-action: none;
+    width: 18px;
+    height: 18px;
+    -webkit-border-radius: 9px;
+    -moz-border-radius: 9px;
+    border-radius: 9px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    border: solid 1px #d7d7d7;
+    transform: translateX(-50%);
+}
+
+.customize-control-clc-range-slider .ui-slider .ui-slider-range {
+    position: absolute;
+    z-index: 1;
+    font-size: 0.7em;
+    display: block;
+    border: 0;
+    background-position: 0 0;
+    background: #E04D43;
+    top: 0;
+    bottom: 0;
+}
+
+.clc-tooltip {
+    width: 150px;
+    position: absolute;
+    background: #55AAD3;
+    color: #EEE;
+    font-size: 12px;
+    min-height: 50px;
+    border-radius: 5px;
+    left: -75px; /* half of its width */
+    bottom: 25px;
+    z-index: 10;
+    display: none;
+    padding: 12px;
+    line-height: 1.5;
+    font-family: 'Arial', sans-serif;
+}
+
+.accordion-section-content > li:nth-of-type(2) .clc-tooltip {
+    bottom: initial;
+    top: 25px;
+}
+
+.dashicons.dashicons-editor-help {
+    cursor: pointer;
+    color: #55AAD3;
+}
+
+.dashicons.dashicons-editor-help:hover > .clc-tooltip {
+    display: block;
+}
+
+.predefined-color-schemes-container {
+    padding: 10px;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list {
+    list-style-type: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list li {
+    display: inline-block;
+    text-align: center;
+}
+
+.predefined-color-schemes-container .ml-color-schemes-list a img {
+    width: 50px;
+}
+
+.customize-control-clc-templates {
+  margin-bottom: 0;
+  margin-top: -6px;
+  position: relative;
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates {
+  margin-left: -3px;
+  overflow-y: scroll;
+  padding-left: 3px;
+  padding-right: 3px;
+  padding-top: 3px;
+  width: calc(100% + 1px);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__input {
+  display: none !important;
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__input:checked + label {
+  box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.7);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__label {
+  border-radius: 1px;
+  border: 1px solid transparent;
+  box-shadow: 0 0 0 0 #5b9dd9, 0 0 0 0 rgba(30, 140, 190, 0.8);
+  cursor: pointer;
+  display: block;
+  margin: 0 0 8px;
+  transition: border-color 100ms, box-shadow 100ms cubic-bezier(0.455, 0.03, 0.515, 0.955), transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__label:hover {
+  box-shadow: 0 0 0 1px #5b9dd9, 0 0 3px rgba(0, 115, 170, 0.8);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__label:active {
+  transform: scale(0.985);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__screenshot {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: 2px solid #eee;
+  border-radius: 3px;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__intrinsic {
+  line-height: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  position: relative;
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__intrinsic:after {
+  content: "";
+  display: block;
+  padding-top: 70.4%;
+}

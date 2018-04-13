@@ -1,1 +1,1 @@
-# macho-login
+# colorlib-login-customizer

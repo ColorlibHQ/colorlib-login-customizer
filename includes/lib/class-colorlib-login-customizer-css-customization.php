@@ -4,9 +4,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class Macho_Login_Customization
+ * Class Colorlib_Login_Customizer_Customization
  */
-class Macho_Login_CSS_Customization {
+class Colorlib_Login_Customizer_CSS_Customization {
 	/**
 	 * @var array
 	 */
@@ -17,78 +17,76 @@ class Macho_Login_CSS_Customization {
 	private $base = '';
 
 	/**
-	 * Macho_Login_CSS_Customization constructor.
+	 * Colorlib_Login_Customizer_CSS_Customization constructor.
 	 */
 	public function __construct() {
-		$plugin     = Macho_Login::instance();
-		$this->base = $plugin->base;
+		$plugin     = Colorlib_Login_Customizer::instance();
+		$this->key_name = $plugin->key_name;
 		$this->set_options();
 		add_action( 'login_enqueue_scripts', array( $this, 'enqueue' ), 15 );
+		add_action( 'login_header', array( $this, 'add_extra_div' ) );
+		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
+
+		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 	}
 
 	/**
 	 * Set the options array, it returns nothing
 	 */
 	public function set_options() {
-		/**
-		 * @todo adding themes
-		 *
-		 *       IDEA :
-		 *       Themes will be stored as JSON, and decoded here
-		 *
-		 *       Theme overrides will be possible by merging the two arrays,
-		 *       basically overwriting the theme array with what option is modified by the user
-		 *
-		 *       Probably defaults should be removed, having a default in the customizer, will save the option in the   database
-		 *
-		 *       Switched to get_option, while get_theme_mod is easier and does not flood the database with options,
-		 *       changes are "lost" if you change theme, the changes should persist on all themes
-		 *
-		 */
-		$arr = array(
+		
+		$options = get_option( $this->key_name, array() );
+
+		$defaults = array(
+			/**
+			 * Templates
+			 */
+			'templates'                 => 'default',
 			/**
 			 * Logo section
 			 */
-			'custom-logo'               => get_option( $this->base . 'custom_logo' ),
-			'logo-width'                => get_option( $this->base . 'logo_width' ),
-			'logo-height'               => get_option( $this->base . 'logo_height' ),
+			'custom-logo-url'           => '',
+			'custom-logo'               => '',
+			'logo-width'                => '',
+			'logo-height'               => '',
 			/**
 			 * Background section
 			 */
-			'background-image'          => get_option( $this->base . 'custom_background' ),
-			'background-color'          => get_option( $this->base . 'custom_background_color' ),
+			'custom-background'          => '',
+			'custom-background-color'          => '',
 			/**
 			 * Form section
 			 */
-			'form-width'                => get_option( $this->base . 'form_width' ),
-			'form-height'               => get_option( $this->base . 'form_height' ),
-			'form-background-image'     => get_option( $this->base . 'form_background_image' ),
-			'form-background-color'     => get_option( $this->base . 'form_background_color' ),
-			'form-padding'              => get_option( $this->base . 'form_padding' ),
-			'form-border'               => get_option( $this->base . 'form_border' ),
-			'form-field-width'          => get_option( $this->base . 'form_field_width' ),
-			'form-field-margin'         => get_option( $this->base . 'form_field_margin' ),
-			'form-field-background'     => get_option( $this->base . 'form_field_background' ),
-			'form-field-color'          => get_option( $this->base . 'form_field_color' ),
-			'form-label-color'          => get_option( $this->base . 'form_label_color' ),
+			'form-width'                => '',
+			'form-height'               => '',
+			'form-background-image'     => '',
+			'form-background-color'     => '',
+			'form-padding'              => '',
+			'form-border'               => '',
+			'form-field-width'          => '',
+			'form-field-margin'         => '',
+			'form-field-background'     => '',
+			'form-field-color'          => '',
+			'form-label-color'          => '',
 			/**
 			 * Others section ( misc )
 			 */
-			'button-background'         => get_option( $this->base . 'button_background' ),
-			'button-background-hover'   => get_option( $this->base . 'button_background_hover' ),
-			'button-border-color'       => get_option( $this->base . 'button_border_color' ),
-			'button-border-color-hover' => get_option( $this->base . 'button_border_color_hover' ),
-			'button-shadow'             => get_option( $this->base . 'button_shadow' ),
-			'button-color'              => get_option( $this->base . 'button_color' ),
-			'link-color'                => get_option( $this->base . 'link_color' ),
-			'link-color-hover'          => get_option( $this->base . 'link_color_hover' ),
+			'button-background'         => '',
+			'button-background-hover'   => '',
+			'button-border-color'       => '',
+			'button-border-color-hover' => '',
+			'button-shadow'             => '',
+			'button-color'              => '',
+			'link-color'                => '',
+			'link-color-hover'          => '',
 			/**
 			 * Reset value is not dynamic
 			 */
 			'initial'                   => 'initial',
 		);
 
-		$this->options = array_filter( $arr );
+		$this->options = wp_parse_args( $options, $defaults );
+
 	}
 
 	/**
@@ -100,7 +98,7 @@ class Macho_Login_CSS_Customization {
 		/**
 		 * Get an instance of the plugin so we can get the token
 		 */
-		//$instance = Macho_Login::instance();
+		//$instance = Colorlib_Login_Customizer::instance();
 
 		$string = '';
 		/**
@@ -113,6 +111,7 @@ class Macho_Login_CSS_Customization {
 		/**
 		 * Start building the CSS file
 		 */
+		$string .= '.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0; }body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}';
 		$string .= $this->_set_background_options();
 		$string .= $this->_set_logo_options();
 		$string .= $this->_set_form_options();
@@ -192,8 +191,8 @@ class Macho_Login_CSS_Customization {
 			array(
 				'width',
 				'height',
-				'background-image',
-				'background-color',
+				'custom-background-image',
+				'custom-background-color',
 				'padding',
 				'border',
 			),
@@ -246,14 +245,14 @@ class Macho_Login_CSS_Customization {
 		 * Set background-image
 		 */
 		$string .= $this->create_css_lines(
-			'body',
+			'.ml-container .ml-extra-div',
 			array(
 				'background-image',
 				'background-color',
 			),
 			array(
-				'background-image',
-				'background-color',
+				'custom-background',
+				'custom-background-color',
 			) );
 
 		return $string;
@@ -344,13 +343,30 @@ class Macho_Login_CSS_Customization {
 		return $value;
 	}
 
+	public function body_class( $classes ) {
+		if ( 'default' != $this->options['templates'] ) {
+			$classes[] = 'ml-half-screen';
+		}
+
+		return $classes;
+	}
+
 	/**
 	 * Enqueue the inline CSS string
 	 */
 	public function enqueue() {
-		$instance = Macho_Login::instance();
+		$instance = Colorlib_Login_Customizer::instance();
 		$css      = $this->create_css();
 
 		wp_add_inline_style( $instance->_token . '-login', $css );
 	}
+
+	public function add_extra_div() {
+		echo '<div class="ml-container"><div class="ml-extra-div"></div><div class="ml-form-container">';
+	}
+
+	public function close_extra_div() {
+		echo '</div></div>';
+	}
+
 }

@@ -1,0 +1,35 @@
+.clc-general-actions {
+	position: absolute;
+	top: 10px;
+	left: 10px;
+    z-index: 99;
+}
+
+.clc-preview-event {
+	cursor: pointer;
+	background-color: #008ec2;
+	border-radius: 100%;
+	color: #fff;
+	width: 30px;
+	height: 30px;
+	text-align: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 1px rgba(46,68,83,.15);
+}
+.clc-preview-event > span {
+	margin-top: 5px;
+}
+
+.clc-general-actions > .clc-preview-event {
+	display: inline-block;
+}
+.login h1 a {
+	text-indent: initial;
+	position: relative;
+	overflow: visible;
+}
+.login h1 a .clc-preview-event {
+	position: absolute;
+	left: -15px;
+	top: -15px;
+}

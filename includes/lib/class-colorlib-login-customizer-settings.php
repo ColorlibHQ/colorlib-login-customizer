@@ -4,10 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 };
 
-class Macho_Login_Settings {
+class Colorlib_Login_Customizer_Settings {
 
 	/**
-	 * The single instance of Macho_Login_Settings.
+	 * The single instance of Colorlib_Login_Customizer_Settings.
 	 *
 	 * @var    object
 	 * @access   private
@@ -45,8 +45,6 @@ class Macho_Login_Settings {
 	public function __construct( $parent ) {
 		$this->parent = $parent;
 
-		$this->base = 'ml_';
-
 		// Add settings page to menu
 		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
 
@@ -64,7 +62,7 @@ class Macho_Login_Settings {
 	 * @return void
 	 */
 	public function add_menu_item() {
-		$page = add_menu_page( esc_html__( 'Macho Login', 'macho-login' ), esc_html__( 'Macho Login', 'macho-login' ), 'manage_options', $this->parent->_token . '_settings', array(
+		$page = add_menu_page( esc_html__( 'Colorlib Login Customizer', 'colorlib-login-customizer' ), esc_html__( 'Login Customizer', 'colorlib-login-customizer' ), 'manage_options', $this->parent->_token . '_settings', array(
 			$this,
 			'settings_page'
 		), 'dashicons-share-alt' );
@@ -78,7 +76,7 @@ class Macho_Login_Settings {
 	 * @return array        Modified links
 	 */
 	public function add_settings_link( $links ) {
-		$settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __( 'Settings', 'macho-login' ) . '</a>';
+		$settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __( 'Settings', 'colorlib-login-customizer' ) . '</a>';
 		array_push( $links, $settings_link );
 
 		return $links;
@@ -93,23 +91,23 @@ class Macho_Login_Settings {
 
 		// Build page HTML
 		$html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
-		$html .= '<h2>' . esc_html__( 'Macho Login', 'macho-login' ) . '</h2>' . "\n";
-		$html .= '<p>' . esc_html__( 'Login Customizer plugin allows you to easily customize your login page straight from your WordPress Customizer! You can preview your changes before you save them! Awesome, right?', 'macho-login' ) . '</p>';
-		$html .= '<a href="' . get_admin_url() . 'customize.php?url=' . wp_login_url() . '" id="submit" class="button button-primary">' . __( 'Start Customizing!', 'macho-login' ) . '</a>';
+		$html .= '<h2>' . esc_html__( 'Colorlib Login Customizer', 'colorlib-login-customizer' ) . '</h2>' . "\n";
+		$html .= '<p>' . esc_html__( 'Login Customizer plugin allows you to easily customize your login page straight from your WordPress Customizer! You can preview your changes before you save them! Awesome, right?', 'colorlib-login-customizer' ) . '</p>';
+		$html .= '<a href="' . get_admin_url() . 'customize.php?url=' . wp_login_url() . '" id="submit" class="button button-primary">' . __( 'Start Customizing!', 'colorlib-login-customizer' ) . '</a>';
 		$html .= '</div>' . "\n";
 
 		echo $html;
 	}
 
 	/**
-	 * Main Macho_Login_Settings Instance
+	 * Main Colorlib_Login_Customizer_Settings Instance
 	 *
-	 * Ensures only one instance of Macho_Login_Settings is loaded or can be loaded.
+	 * Ensures only one instance of Colorlib_Login_Customizer_Settings is loaded or can be loaded.
 	 *
 	 * @since 1.0.0
 	 * @static
-	 * @see   Macho_Login()
-	 * @return Main Macho_Login_Settings instance
+	 * @see   Colorlib_Login_Customizer()
+	 * @return Main Colorlib_Login_Customizer_Settings instance
 	 */
 	public static function instance( $parent ) {
 		if ( is_null( self::$_instance ) ) {
