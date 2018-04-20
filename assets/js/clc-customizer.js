@@ -1,7 +1,7 @@
 (function( $ ) {
   'use strict';
 
-  if ( 'undefined' !== typeof( wp ) && 'undefined' !== typeof(wp.customize) ) {
+  if ( 'undefined' !== typeof( wp ) && 'undefined' !== typeof( wp.customize ) ) {
 
     // Detect when the templates section is expanded (or closed) so we can hide the templates shortcut when it's open.
     wp.customize.panel( 'clc_main_panel', function( section ) {
@@ -16,7 +16,7 @@
       } );
     } );
 
-    wp.customize.controlConstructor['colorlib-login-customizer-templates'] = wp.customize.Control.extend( {
+    wp.customize.controlConstructor[ 'colorlib-login-customizer-templates' ] = wp.customize.Control.extend( {
       ready: function() {
         var control = this;
 
@@ -26,14 +26,14 @@
       }
     } );
 
-    wp.customize.controlConstructor['clc-range-slider'] = wp.customize.Control.extend({
+    wp.customize.controlConstructor[ 'clc-range-slider' ] = wp.customize.Control.extend( {
       ready: function() {
         var control = this,
-          controlField = control.container.find( 'input.clc-slider' ),
-          controlSlider = control.container.find( 'div.clc-slider' ),
-          controlSliderData = control.params.choices;
+            controlField = control.container.find( 'input.clc-slider' ),
+            controlSlider = control.container.find( 'div.clc-slider' ),
+            controlSliderData = control.params.choices;
 
-        controlSlider.slider({
+        controlSlider.slider( {
           range: 'min',
           min: controlSliderData.min,
           max: controlSliderData.max,
@@ -46,20 +46,20 @@
             controlField.val( ui.value );
             control.setting.set( ui.value );
           }
-        });
+        } );
       }
-    });
+    } );
 
     // Listen for previewer events
     wp.customize.bind( 'ready', function() {
-      wp.customize.previewer.bind( 'clc-focus-section', function( section_name ) {
-        var section = wp.customize.section( section_name );
-        
+      wp.customize.previewer.bind( 'clc-focus-section', function( sectionName ) {
+        var section = wp.customize.section( sectionName );
+
         if ( undefined !== section ) {
           section.focus();
         }
-      });
-    });
+      } );
+    } );
 
   }
 })( jQuery );
