@@ -20,21 +20,22 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * Colorlib_Login_Customizer_CSS_Customization constructor.
 	 */
 	public function __construct() {
-		$plugin     = Colorlib_Login_Customizer::instance();
+		$plugin         = Colorlib_Login_Customizer::instance();
 		$this->key_name = $plugin->key_name;
 		$this->set_options();
-		add_action( 'login_enqueue_scripts', array( $this, 'enqueue' ), 15 );
+		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
+		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
 	}
 
 	/**
 	 * Set the options array, it returns nothing
 	 */
 	public function set_options() {
-		
+
 		$options = get_option( $this->key_name, array() );
 
 		$defaults = array(
@@ -52,8 +53,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			/**
 			 * Background section
 			 */
-			'custom-background'          => '',
-			'custom-background-color'          => '',
+			'custom-background'         => '',
+			'custom-background-color'   => '',
 			/**
 			 * Form section
 			 */
@@ -111,7 +112,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		/**
 		 * Start building the CSS file
 		 */
-		$string .= '.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0; }body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}';
+		$string .= '.login h1 a{background-position: center;}.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;}body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}';
 		$string .= $this->_set_background_options();
 		$string .= $this->_set_logo_options();
 		$string .= $this->_set_form_options();
@@ -144,13 +145,13 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background',
 				'border-color',
 				'box-shadow',
-				'color'
+				'color',
 			),
 			array(
 				'button-background',
 				'button-border-color',
 				'button-shadow',
-				'button-color'
+				'button-color',
 			)
 		);
 
@@ -183,27 +184,36 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	public function _set_form_options() {
 		$string = '';
 
+		$string .= $this->create_css_lines(
+			'.ml-container #login',
+			array(
+				'max-width',
+			),
+			array(
+				'form-width',
+			)
+		);
+
 		/**
 		 * Set form variables
 		 */
 		$string .= $this->create_css_lines(
 			'#loginform',
 			array(
-				'width',
 				'height',
-				'custom-background-image',
-				'custom-background-color',
+				'background-image',
+				'background-color',
 				'padding',
 				'border',
 			),
 			array(
-				'form-width',
 				'form-height',
 				'form-background-image',
 				'form-background-color',
 				'form-padding',
-				'form-border'
-			) );
+				'form-border',
+			)
+		);
 
 		/**
 		 * Set form field variables
@@ -211,16 +221,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$string .= $this->create_css_lines(
 			'.login form .input, .login input[type="text"]',
 			array(
-				'width',
+				'max-width',
 				'margin',
 				'background',
-				'color'
+				'color',
 			),
 			array(
 				'form-field-width',
 				'form-field-margin',
 				'form-field-background',
-				'form-field-color'
+				'form-field-color',
 			)
 		);
 
@@ -253,7 +263,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			array(
 				'custom-background',
 				'custom-background-color',
-			) );
+			)
+		);
 
 		return $string;
 
@@ -273,14 +284,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background-image',
 				'background-size',
 				'width',
-				'height'
+				'height',
 			),
 			array(
 				'custom-logo',
 				'logo-width',
 				'logo-width',
 				'logo-height',
-			) );
+			)
+		);
 
 		return $string;
 	}
@@ -331,8 +343,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				break;
 
 			case 'width':
+			case 'min-width':
+			case 'max-width':
 			case 'background-size':
 			case 'height':
+			case 'min-height':
+			case 'max-height':
 				$value = $value . 'px';
 				break;
 
@@ -351,14 +367,22 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $classes;
 	}
 
+	public function logo_url( $url ) {
+		if ( '' != $this->options['custom-logo-url'] ) {
+			return esc_url( $this->options['custom-logo-url'] );
+		}
+
+		return $url;
+	}
+
 	/**
-	 * Enqueue the inline CSS string
+	 * Output the inline CSS
 	 */
-	public function enqueue() {
+	public function generate_css() {
 		$instance = Colorlib_Login_Customizer::instance();
 		$css      = $this->create_css();
 
-		wp_add_inline_style( $instance->_token . '-login', $css );
+		echo '<style type="text/css">' . $css . '</style>';
 	}
 
 	public function add_extra_div() {

@@ -1,0 +1,64 @@
+sudo: false
+language: php
+dist: precise
+matrix:
+  fast_finish: true
+  include:
+  - php: '5.3'
+  - php: '5.4'
+  - php: '5.5'
+  - php: '5.6'
+  - php: '7.0'
+  - php: '7.1'
+    env:
+    - DEPLOY=1
+    - SNIFF=1
+before_script:
+- export PHPCS_DIR=/tmp/phpcs
+- export SNIFFS_DIR=/tmp/sniffs
+- if [[ "$SNIFF" == "1" ]]; then git clone -b 2.9 --depth 1 https://github.com/squizlabs/PHP_CodeSniffer.git
+  $PHPCS_DIR; fi
+- if [[ "$SNIFF" == "1" ]]; then git clone -b master --depth 1 https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git
+  $SNIFFS_DIR; fi
+- if [[ "$SNIFF" == "1" ]]; then git clone -b 7.1.4 --depth 1 https://github.com/wimg/PHPCompatibility.git
+  $SNIFFS_DIR/PHPCompatibility; fi
+- if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs --config-set installed_paths
+  $SNIFFS_DIR; fi
+- if [[ "$SNIFF" == "1" ]]; then phpenv rehash; fi
+- if [[ "$SNIFF" == "1" ]]; then npm install -g jscs; fi
+- if [[ "$SNIFF" == "1" ]]; then npm install -g jshint; fi
+- if [[ "$SNIFF" == "1" ]]; then wget https://develop.svn.wordpress.org/trunk/.jshintrc;
+  fi
+- if [[ "$SNIFF" == "1" ]] || [[ "$DEPLOY" == "1" ]]; then npm install -g grunt-cli;
+  fi
+- if [[ "$SNIFF" == "1" ]] || [[ "$DEPLOY" == "1" ]]; then npm install; fi
+- if [[ "$SNIFF" == "1" ]] || [[ "$DEPLOY" == "1" ]]; then npm install -g grunt-checktextdomain;
+  fi
+script:
+- mkdir -p build/logs
+- find -L . -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+- if [[ "$SNIFF" == "1" ]]; then jshint ./assets/js/*.js; fi
+- if [[ "$SNIFF" == "1" ]]; then jscs ./assets/js/*.js; fi
+- if [[ "$SNIFF" == "1" ]]; then grunt textdomain; fi
+- if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n ./*.php --standard=./phpcs.ruleset.xml
+  --extensions=php; fi
+- if [[ "$SNIFF" == "1" ]]; then $PHPCS_DIR/scripts/phpcs -p -s -v -n ./**/*.php --standard=./phpcs.ruleset.xml
+  --extensions=php --ignore=./inc/plugin-activation.php,./node_modules/*.php; fi
+notifications:
+  email: false
+cache:
+  directories:
+  - node_modules
+after_success:
+- if [[ "$DEPLOY" == "1" ]]; then grunt build-archive; fi
+- if [[ "$DEPLOY" == "1" ]]; then sh set_tags.sh; fi
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: YyWdoTU1Grfghjj5knb7GX6r2+MAnkElQ9Q2iGZW5V35WDGMo2/6m1r0nyFQojBRkVXx5netnvXTg52KunlgqiUr59S3cXEyDwyC/KI7htS+724lBkoIlydASpWYBhEIc2/7hl/pY6nhMyHVj2j/m6JzjrZW47OwXfr1GOI/SnM+mWpe9DXP+HMeYQb7HGR1WjUCCv/rQuB6IDncqj/kpp4KDNd3ET2p2cTRkoN5ESc7ID0W9PiJUlReszC+2xsGr0kuN1++oatBBqERkymXhd3n90FRa9BS2sXKDel+bLcQtvB0h7pm0nSrZ0KxLW2xCVL/pdcqTCfPIHSX05XePZ9dNwzWYPZl02K7Gt2j/NqA0US387aSlqfDaUBhUNKp5ohjgDZ+MLi2FvZ8Dyk2HTTNNWoR1GI8QLItdVhD+hDyMJ4Zx+aCHzeKdTrn8nM5osjCiARSwXcA6fdzkGFl6I1tFV+wE+NNZOdV5LZ6GKCtV8MpYK6ElWK1JDWCXi8h/La8PFlv+9uZLiZ5CvnWMP6HGN98Nfxn/UZ5wLUnkMZLacqqJxc/mJhmoVRgWBHVsRVjXGeodxBqpt0lIJOoRET5L1/9d1ug/G3FNbBTda8t8iEBk/jeRxjaVPuNeLNQ8RHuWWk68d7mqYmyOlIPbkbJi2/KV4TGDeO7le6AUDo=
+  file: colorlib-login-customizer.zip
+  on:
+    repo: puikinsh/colorlib-login-customizer
+    branch: 'master'
+    condition: "$DEPLOY = 1"
