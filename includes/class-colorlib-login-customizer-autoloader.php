@@ -21,7 +21,7 @@ class Colorlib_Login_Customizer_Autoloader {
 		$parts = explode( '_', $class );
 		$bind  = implode( '-', $parts );
 
-		if ( $parts[0] == 'Colorlib' ) {
+		if ( 'Colorlib' == $parts[0] ) {
 
 			/*
 			 * Core library autoload.

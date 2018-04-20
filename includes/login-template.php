@@ -27,7 +27,7 @@ function clc_login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 	$login_title = get_bloginfo( 'name', 'display' );
 
 	/* translators: Login screen title. 1: Login screen name, 2: Network or site name */
-	$login_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress' ), $title, $login_title );
+	$login_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress', 'colorlib-login-customizer' ), $title, $login_title );
 	/**
 	 * Filters the title tag content for login page.
 	 *
@@ -78,7 +78,7 @@ do_action( 'login_init' );
  *
  * @since 2.8.0
  */
-do_action( "login_form_login" );
+do_action( 'login_form_login' );
 
 /**
  * Filters the separator used between login form navigation links.
@@ -93,10 +93,10 @@ $login_link_separator = apply_filters( 'login_link_separator', ' | ' );
  * @param object $errors      WP Error object.
  * @param string $redirect_to Redirect destination URL.
  */
-clc_login_header( __( 'Log In' ), '', '' );
+clc_login_header( __( 'Log In', 'colorlib-login-customizer' ), '', '' );
 
-$login_header_url   = __( 'https://wordpress.org/' );
-$login_header_title = __( 'Powered by WordPress' );
+$login_header_url   = __( 'https://wordpress.org/', 'colorlib-login-customizer' );
+$login_header_title = __( 'Powered by WordPress', 'colorlib-login-customizer' );
 
 /**
  * Filters link URL of the header logo above login form.
@@ -164,11 +164,11 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<form name="loginform" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
 				<div id="clc-loginform" class="clc-preview-event" data-section="clc_form"><span class="dashicons dashicons-edit"></span></div>
 				<p>
-					<label for="user_login"><?php _e( 'Username or Email Address' ); ?><br />
+					<label for="user_login"><?php _e( 'Username or Email Address', 'colorlib-login-customizer' ); ?><br />
 					<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
-					<label for="user_pass"><?php _e( 'Password' ); ?><br />
+					<label for="user_pass"><?php _e( 'Password', 'colorlib-login-customizer' ); ?><br />
 					<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" /></label>
 				</p>
 				<?php
@@ -179,13 +179,13 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'login_form' );
 				?>
-				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php esc_html_e( 'Remember Me' ); ?></label></p>
-				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e('Log In'); ?>" /></p>
+				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></label></p>
+				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
 			</form>
 			<p id="nav">
 				<?php
 				if ( get_option( 'users_can_register' ) ) :
-					$registration_url = sprintf( '<a href="%s">%s</a>', esc_url( wp_registration_url() ), __( 'Register' ) );
+					$registration_url = sprintf( '<a href="%s">%s</a>', esc_url( wp_registration_url() ), __( 'Register', 'colorlib-login-customizer' ) );
 
 					/** This filter is documented in wp-includes/general-template.php */
 					echo apply_filters( 'register', $registration_url );
@@ -193,13 +193,13 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 					echo esc_html( $login_link_separator );
 				endif;
 				?>
-				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?' ); ?></a>
+				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
 			</p>
 			<p id="backtoblog">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
 					<?php
 					/* translators: %s: site title */
-					printf( _x( '&larr; Back to %s', 'site' ), esc_html( get_bloginfo( 'title', 'display' ) ) );
+					printf( _x( '&larr; Back to %s', 'site', 'colorlib-login-customizer' ), esc_html( get_bloginfo( 'title', 'display' ) ) );
 					?>
 				</a>
 			</p>

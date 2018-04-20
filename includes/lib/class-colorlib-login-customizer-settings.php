@@ -49,10 +49,12 @@ class Colorlib_Login_Customizer_Settings {
 		add_action( 'admin_menu', array( $this, 'add_menu_item' ) );
 
 		// Add settings link to plugins page
-		add_filter( 'plugin_action_links_' . plugin_basename( $this->parent->file ), array(
-			$this,
-			'add_settings_link'
-		) );
+		add_filter(
+			'plugin_action_links_' . plugin_basename( $this->parent->file ), array(
+				$this,
+				'add_settings_link',
+			)
+		);
 	}
 
 
@@ -62,10 +64,12 @@ class Colorlib_Login_Customizer_Settings {
 	 * @return void
 	 */
 	public function add_menu_item() {
-		$page = add_menu_page( esc_html__( 'Colorlib Login Customizer', 'colorlib-login-customizer' ), esc_html__( 'Login Customizer', 'colorlib-login-customizer' ), 'manage_options', $this->parent->_token . '_settings', array(
-			$this,
-			'settings_page'
-		), 'dashicons-share-alt' );
+		$page = add_menu_page(
+			esc_html__( 'Colorlib Login Customizer', 'colorlib-login-customizer' ), esc_html__( 'Login Customizer', 'colorlib-login-customizer' ), 'manage_options', $this->parent->_token . '_settings', array(
+				$this,
+				'settings_page',
+			), 'dashicons-share-alt'
+		);
 	}
 
 	/**
@@ -90,7 +94,7 @@ class Colorlib_Login_Customizer_Settings {
 	public function settings_page() {
 
 		// Build page HTML
-		$html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
+		$html  = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
 		$html .= '<h2>' . esc_html__( 'Colorlib Login Customizer', 'colorlib-login-customizer' ) . '</h2>' . "\n";
 		$html .= '<p>' . esc_html__( 'Login Customizer plugin allows you to easily customize your login page straight from your WordPress Customizer! You can preview your changes before you save them! Awesome, right?', 'colorlib-login-customizer' ) . '</p>';
 		$html .= '<a href="' . get_admin_url() . 'customize.php?url=' . wp_login_url() . '" id="submit" class="button button-primary">' . __( 'Start Customizing!', 'colorlib-login-customizer' ) . '</a>';
@@ -123,7 +127,7 @@ class Colorlib_Login_Customizer_Settings {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->parent->_version );
 	} // End __clone()
 
 	/**
@@ -132,7 +136,7 @@ class Colorlib_Login_Customizer_Settings {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->parent->_version );
 	} // End __wakeup()
 
 }

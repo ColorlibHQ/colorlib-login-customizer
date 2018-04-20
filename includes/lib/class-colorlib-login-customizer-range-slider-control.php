@@ -57,24 +57,25 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 		if ( ! $value && isset( $this->default ) ) {
 			return $this->default;
 		}
+
 		return $value;
 	}
 
 	public function to_json() {
 
 		$default_choices = array(
-			'min' => 1,
-			'max' => 10,
+			'min'  => 1,
+			'max'  => 10,
 			'step' => 1,
 		);
 
 		$this->choices = wp_parse_args( $this->choices, $default_choices );
 
 		parent::to_json();
-		$this->json['value'] 	= $this->get_value();
-		$this->json['id']     	= $this->id;
-		$this->json['link']   	= $this->get_link();
-		$this->json['choices']	= $this->choices;
+		$this->json['value']   = $this->get_value();
+		$this->json['id']      = $this->id;
+		$this->json['link']    = $this->get_link();
+		$this->json['choices'] = $this->choices;
 	}
 
 	/**
@@ -84,9 +85,11 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 	 * @access public
 	 * @return void
 	 */
-	public function render_content() {}
+	public function render_content() {
+	}
 
-	public function content_template() { ?>
+	public function content_template() {
+		?>
 		<label>
 			<span class="customize-control-title">
 				<# if ( data.label != '' ){ #>
@@ -101,7 +104,7 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 			<input type="text" class="clc-slider" id="input_{{ data.id }}" value="{{ data.value }}" {{ data.link }}/>
 		</label>
 		<div id="slider_{{ data.id }}" class="clc-slider"></div>
-	<?php
+		<?php
 	}
 }
 
