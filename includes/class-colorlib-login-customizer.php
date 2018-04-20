@@ -115,14 +115,14 @@ class Colorlib_Login_Customizer {
 		// Load customizer settings
 		add_action( 'customize_register', array( $this, 'load_customizer' ), 10, 1 );
 
-		// Load frontend JS & CSS
-		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-
 		add_filter( 'template_include', array( $this, 'change_template_if_necessary' ), 99 );
 
 		// Handle localisation
 		$this->load_plugin_textdomain();
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
+
+		// Generate plugins css
+		add_action( 'init', array( $this, 'load_customizer_css' ) );
 
 	} // End __construct ()
 
@@ -133,6 +133,10 @@ class Colorlib_Login_Customizer {
 	 */
 	public function load_customizer( $manager ) {
 		new Colorlib_Login_Customizer_Customizer( $this, $manager );
+	}
+
+	public function load_customizer_css() {
+		new Colorlib_Login_Customizer_CSS_Customization();
 	}
 
 	/**
@@ -157,25 +161,6 @@ class Colorlib_Login_Customizer {
 			}
 		}
 	}
-
-	/**
-	 * Load Login CSS and JS.
-	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return void
-	 */
-	public function enqueue_styles() {
-		wp_register_style( $this->_token . '-login', esc_url( $this->assets_url ) . 'css/ml-login.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-login' );
-		wp_register_script( $this->_token . '-login', esc_url( $this->assets_url ) . 'js/ml-login' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
-		wp_enqueue_script( $this->_token . '-login' );
-
-		/**
-		 * Overrides, yep
-		 */
-		new Colorlib_Login_Customizer_CSS_Customization();
-	} // End enqueue_styles ()
 
 	/**
 	 * Load plugin localisation
@@ -228,7 +213,7 @@ class Colorlib_Login_Customizer {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->_version );
 	} // End __clone ()
 
 	/**
@@ -237,7 +222,7 @@ class Colorlib_Login_Customizer {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->_version );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->_version );
 	} // End __wakeup ()
 
 	/**
@@ -265,7 +250,7 @@ class Colorlib_Login_Customizer {
 
 	// Let's hack a little bit
 	public function change_template_if_necessary( $template ) {
-		
+
 		if ( is_customize_preview() && isset( $_REQUEST['colorlib-login-customizer-customization'] ) && is_user_logged_in() ) {
 			$new_template = plugin_dir_path( __FILE__ ) . 'login-template.php';
 			return $new_template;
