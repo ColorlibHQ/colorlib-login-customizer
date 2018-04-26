@@ -323,12 +323,8 @@ class Colorlib_Login_Customizer_Customizer {
 				$key_name      = $this->generate_name( $setting['id'] );
 				$settings_args = array(
 					'type'      => 'option',
-					'transport' => 'refresh',
+					'transport' => 'postMessage',
 				);
-
-				if ( 'templates' == $setting['id'] ) {
-					$settings_args['transport'] = 'postMessage';
-				}
 
 				$manager->add_setting( $key_name, $settings_args );
 
