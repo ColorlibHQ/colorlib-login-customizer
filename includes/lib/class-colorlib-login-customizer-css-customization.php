@@ -12,6 +12,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 */
 	private $options = array();
 	/**
+	 * @var array
+	 */
+	private $selectors = array();
+	/**
 	 * @var string
 	 */
 	private $base = '';
@@ -29,6 +33,35 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
+
+		// 
+		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
+	}
+
+	private function generate_name( $id ) {
+		return $this->key_name . '[' . $id . ']';
+	}
+
+	public function output_css_object() {
+
+		$css_object = array(
+			'selectors' => array(),
+			'settings' => array(),
+		);
+
+		foreach ( $this->selectors as $selector => $settings ) {
+			$css_object['selectors'][ $selector ] = $settings['options'];
+			foreach ( $settings['options'] as $index => $setting ) {
+				$css_object['settings'][ $setting ] = array(
+					'name' => $this->generate_name( $setting ),
+					'value' => $this->options[ $setting ],
+					'attribute' => $settings['attributes'][ $index ],
+				);
+			}
+		}
+
+		wp_localize_script( 'colorlib-login-customizer-preview', 'CLC', $css_object );
+
 	}
 
 	/**
@@ -88,6 +121,119 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		$this->options = wp_parse_args( $options, $defaults );
 
+		$this->selectors = array(
+			'.wp-core-ui .button-primary.focus, .wp-core-ui .button-primary.hover, .wp-core-ui .button-primary:focus, .wp-core-ui .button-primary:hover' => array(
+				'attributes' => array(
+					'background',
+					'border-color',
+				),
+				'options' => array(
+					'button-background-hover',
+					'button-border-color-hover',
+				),
+			),
+			'.wp-core-ui .button-primary' => array(
+				'attributes' => array(
+					'background',
+					'border-color',
+					'box-shadow',
+					'color',
+				),
+				'options' => array(
+					'button-background',
+					'button-border-color',
+					'button-shadow',
+					'button-color',
+				),
+			),
+			'.login #backtoblog a, .login #nav a' => array(
+				'attributes' => array(
+					'color',
+				),
+				'options' => array(
+					'link-color',
+				),
+			),
+			'.login #backtoblog a:hover, .login #nav a:hover, .login h1 a:hover' => array(
+				'attributes' => array(
+					'color',
+				),
+				'options' => array(
+					'link-color-hover',
+				),
+			),
+			'.ml-container #login' => array(
+				'attributes' => array(
+					'max-width',
+				),
+				'options' => array(
+					'form-width',
+				),
+			),
+			'#loginform' => array(
+				'attributes' => array(
+					'height',
+					'background-image',
+					'background-color',
+					'padding',
+					'border',
+				),
+				'options' => array(
+					'form-height',
+					'form-background-image',
+					'form-background-color',
+					'form-padding',
+					'form-border',
+				),
+			),
+			'.login form .input, .login input[type="text"]' => array(
+				'attributes' => array(
+					'max-width',
+					'margin',
+					'background',
+					'color',
+				),
+				'options' => array(
+					'form-field-width',
+					'form-field-margin',
+					'form-field-background',
+					'form-field-color',
+				),
+			),
+			'.login label' => array(
+				'attributes' => array(
+					'color',
+				),
+				'options' => array(
+					'form-label-color',
+				),
+			),
+			'.ml-container .ml-extra-div' => array(
+				'attributes' => array(
+					'background-image',
+					'background-color',
+				),
+				'options' => array(
+					'custom-background',
+					'custom-background-color',
+				),
+			),
+			'.login h1 a' => array(
+				'attributes' => array(
+					'background-image',
+					'background-size',
+					'width',
+					'height',
+				),
+				'options' => array(
+					'custom-logo',
+					'logo-width',
+					'logo-width',
+					'logo-height',
+				),
+			),
+		);
+
 	}
 
 	/**
@@ -112,7 +258,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		/**
 		 * Start building the CSS file
 		 */
-		$string .= '.login h1 a{background-position: center;}.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;}body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}';
 		$string .= $this->_set_background_options();
 		$string .= $this->_set_logo_options();
 		$string .= $this->_set_form_options();
@@ -382,7 +527,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$instance = Colorlib_Login_Customizer::instance();
 		$css      = $this->create_css();
 
-		echo '<style type="text/css">' . $css . '</style>';
+		echo '<style type="text/css">.login h1 a{background-position: center;}.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;}body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 	}
 
 	public function add_extra_div() {

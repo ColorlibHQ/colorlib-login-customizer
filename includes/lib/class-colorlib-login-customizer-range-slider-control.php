@@ -37,7 +37,9 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		$manager->register_section_type( 'Colorlib_Login_Customizer_Range_Slider_Control' );
 		parent::__construct( $manager, $id, $args );
-		$this->default = $args['default'];
+		if ( isset( $args['default'] ) ) {
+			$this->default = $args['default'];
+		}
 	}
 
 	/**

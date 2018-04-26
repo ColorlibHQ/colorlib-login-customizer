@@ -6,10 +6,11 @@
     // Detect when the templates section is expanded (or closed) so we can hide the templates shortcut when it's open.
     wp.customize.panel( 'clc_main_panel', function( section ) {
       section.expanded.bind( function( isExpanding ) {
+        var loginURL = CLCUrls.siteurl + '?colorlib-login-customizer-customization=true';
 
         // Value of isExpanding will = true if you're entering the section, false if you're leaving it.
         if ( isExpanding ) {
-          wp.customize.previewer.previewUrl.set( CLCUrls.siteurl + '?colorlib-login-customizer-customization=true' );
+          wp.customize.previewer.previewUrl.set( loginURL );
         } else {
           wp.customize.previewer.previewUrl.set( CLCUrls.siteurl );
         }
