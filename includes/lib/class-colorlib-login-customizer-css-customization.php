@@ -77,8 +77,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 */
 			'templates'                 => 'default',
 			/**
+			 * Layout
+			 */
+			'columns'                  => '1',
+			'form-column-align'        => '3',
+			'form-vertical-align'      => '2',
+			/**
 			 * Logo section
 			 */
+			'hide-logo'                 => 0,
 			'custom-logo-url'           => '',
 			'custom-logo'               => '',
 			'logo-width'                => '',
@@ -102,6 +109,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-field-background'     => '',
 			'form-field-color'          => '',
 			'form-label-color'          => '',
+			'hide-extra-links'          => 0,
 			/**
 			 * Others section ( misc )
 			 */
@@ -230,6 +238,22 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'logo-width',
 					'logo-width',
 					'logo-height',
+				),
+			),
+			'#login > h1' => array(
+				'attributes' => array(
+					'display',
+				),
+				'options' => array(
+					'hide-logo',
+				),
+			),
+			'#login > #nav,#login > #backtoblog' => array(
+				'attributes' => array(
+					'display',
+				),
+				'options' => array(
+					'hide-extra-links',
 				),
 			),
 		);
@@ -388,6 +412,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			array( 'form-label-color' )
 		);
 
+		$string .= $this->create_css_lines(
+			'#login > #nav,#login > #backtoblog',
+			array(
+				'display',
+			),
+			array(
+				'hide-extra-links',
+			)
+		);
+
 		return $string;
 	}
 
@@ -436,6 +470,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'logo-width',
 				'logo-width',
 				'logo-height',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'#login > h1',
+			array(
+				'display',
+			),
+			array(
+				'hide-logo',
 			)
 		);
 
@@ -496,7 +540,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			case 'max-height':
 				$value = $value . 'px';
 				break;
-
+			case 'display':
+				if ( ! $value ) {
+					$value = 'block';
+				}else{
+					$value = 'none';
+				}
 			default:
 				break;
 		}
@@ -505,8 +554,20 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	public function body_class( $classes ) {
-		if ( 'default' != $this->options['templates'] ) {
+
+		if ( '2' == $this->options['columns'] ) {
 			$classes[] = 'ml-half-screen';
+			if ( isset( $this->options['form-column-align'] ) ) {
+				$classes[] = 'ml-login-align-' . esc_attr( $this->options['form-column-align'] );
+			}
+		}
+
+		if ( isset( $this->options['form-vertical-align'] ) ) {
+			$classes[] = 'ml-login-vertical-align-' . esc_attr( $this->options['form-vertical-align'] );
+		}
+
+		if ( isset( $this->options['form-horizontal-align'] ) ) {
+			$classes[] = 'ml-login-horizontal-align-' . esc_attr( $this->options['form-horizontal-align'] );
 		}
 
 		return $classes;
@@ -527,7 +588,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$instance = Colorlib_Login_Customizer::instance();
 		$css      = $this->create_css();
 
-		echo '<style type="text/css">.login h1 a{background-position: center;}.ml-container{position:relative;width100%;min-height:100vh;display:flex;}.ml-container .ml-extra-div{background-position: center;background-size: cover;background-repeat: no-repeat;}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh;display:flex;align-items:center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;}body.ml-half-screen .ml-container{ flex-wrap: wrap; }body.ml-half-screen .ml-container > .ml-extra-div,body.ml-half-screen .ml-container > .ml-form-container{ width: 50%; }body.ml-half-screen .ml-form-container{display:flex;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css">.login h1 a{background-position: center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 	}
 

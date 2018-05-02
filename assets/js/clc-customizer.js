@@ -17,13 +17,28 @@
       } );
     } );
 
-    wp.customize.controlConstructor[ 'colorlib-login-customizer-templates' ] = wp.customize.Control.extend( {
+    wp.customize.controlConstructor[ 'clc-templates' ] = wp.customize.Control.extend( {
       ready: function() {
         var control = this;
 
         this.container.on( 'change', 'input:radio', function() {
-          control.setting.set( $( this ).val() );
+          var template = $( this ).val();
+
+          control.loadTemplate( 'default' );
+
+          if ( 'default' !== template ) {
+            control.loadTemplate( template );
+          }
+          
         } );
+      },
+      loadTemplate: function( option_name ) {
+        var control = this,
+            options = control.params.options[ option_name ];
+            
+            $.each( options, function( index, option ) {
+              wp.customize( option.name ).set( option.value );
+            });
       }
     } );
 
@@ -51,6 +66,19 @@
       }
     } );
 
+    wp.customize.controlConstructor[ 'clc-button-group' ] = wp.customize.Control.extend({
+      ready: function() {
+        var control = this;
+        control.container.on( 'click', '.colorlib-login-customizer-control-group > a', function(){
+          var value = $( this ).attr( 'data-value' );
+          $( this ).siblings().removeClass( 'active' );
+          $( this ).addClass( 'active' );
+
+          control.setting.set( value );
+        });
+      }
+    });
+
     // Listen for previewer events
     wp.customize.bind( 'ready', function() {
       wp.customize.previewer.bind( 'clc-focus-section', function( sectionName ) {
@@ -60,6 +88,19 @@
           section.focus();
         }
       } );
+
+      wp.customize( 'clc-options[columns]', function( value ) {
+ 
+        value.bind( function( to ) {
+            var align_control = wp.customize.control( 'clc-options[form-column-align]' );
+            if ( '2' == to ) {
+                align_control.toggle( true );
+            }else{
+                align_control.toggle( false );
+            }
+        } );
+      } );
+
     } );
 
   }
