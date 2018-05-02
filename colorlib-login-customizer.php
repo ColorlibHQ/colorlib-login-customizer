@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Colorlib Login Customizer
- * Version: 1.0
+ * Version: 1.1
  * Description: Login page customization
  * Author: Colorlib
  * Author URI: https://colorlib.com/
@@ -34,7 +34,7 @@ require_once 'includes/class-colorlib-login-customizer-autoloader.php';
  * @return object Colorlib_Login_Customizer
  */
 function colorlib_login_customizer() {
-	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.0.0' );
+	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.1.0' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Colorlib_Login_Customizer_Settings::instance( $instance );

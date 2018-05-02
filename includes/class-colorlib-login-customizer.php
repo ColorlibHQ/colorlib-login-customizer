@@ -234,6 +234,14 @@ class Colorlib_Login_Customizer {
 	 */
 	public function install() {
 		$this->_log_version_number();
+
+		// Backward compatibility
+		$options = get_option( $this->key_name, array() );
+		if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
+			$options['templates'] = 'default';
+			$options['columns'] = 2;
+			update_option( $this->key_name, $options );
+		}
 	} // End install ()
 
 	/**
