@@ -70,7 +70,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 'default',
 					'choices'     => array(
 						'default'      => array(
-							'url' => esc_url( $this->parent->assets_url ) . '/img/default.jpg',
+							'url' => esc_url( $this->parent->assets_url ) . 'img/default.jpg',
 							'options' => array(
 								/**
 								 * Layout
@@ -97,42 +97,44 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-width'                => '320',
 								'form-height'               => '297',
 								'form-background-image'     => '',
-								'form-background-color'     => '#fff',
+								'form-background-color'     => '#ffffff',
 								'form-padding'              => '26px 24px 46px',
 								'form-border'               => '',
 								'form-field-width'          => '',
 								'form-field-margin'         => '',
 								'form-field-background'     => '',
-								'form-field-color'          => '',
-								'form-label-color'          => '',
+								'form-field-color'          => '#333333',
+								'form-label-color'          => '#72777c',
 								'hide-extra-links'          => 0,
 								/**
 								 * Others section ( misc )
 								 */
-								'button-background'         => '',
-								'button-background-hover'   => '',
-								'button-border-color'       => '',
-								'button-border-color-hover' => '',
+								'button-background'         => '#0085ba',
+								'button-background-hover'   => '#008ec2',
+								'button-border-color'       => '#0073aa',
+								'button-border-color-hover' => '#006799',
 								'button-shadow'             => '',
-								'button-color'              => '',
-								'link-color'                => '',
-								'link-color-hover'          => '',
+								'button-color'              => '#ffffff',
+								'link-color'                => '#555d66',
+								'link-color-hover'          => '#00a0d2',
 							),
 						),
 						'template-01'  => array(
-							'url'     => esc_url( $this->parent->assets_url ) . '/img/template-01.jpg',
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/template-01.jpg',
 							'options' => array(
 								'columns' => '2',
 								'form-column-align' => '1',
-								'custom-background-color' => '#000'
+								'custom-background' => esc_url( $this->parent->assets_url ) . 'img/background.jpg',
 							),
 						),
 						'template-02'  => array(
-							'url' => esc_url( $this->parent->assets_url ) . '/img/template-01.jpg',
+							'url' => esc_url( $this->parent->assets_url ) . 'img/template-02.jpg',
 							'options' => array(
 								'hide-logo' => '1',
 								'hide-extra-links' => '1',
-								'custom-background-color' => '#000'
+								'custom-background' => esc_url( $this->parent->assets_url ) . 'img/background-1.jpg',
+								'form-background-color' => 'rgba(255, 255, 255, 0)',
+								'form-shadow' => 'none',
 							),
 						),
 					),
@@ -289,6 +291,13 @@ class Colorlib_Login_Customizer_Customizer {
 			'description' => '',
 			'fields'      => array(
 				array(
+					'id'          => 'custom-background-color',
+					'label'       => esc_html__( 'Custom background color', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
+					'type'        => 'color',
+					'default'     => '#f1f1f1',
+				),
+				array(
 					'id'          => 'custom-background',
 					'label'       => esc_html__( 'Custom background', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
@@ -296,11 +305,20 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '',
 				),
 				array(
-					'id'          => 'custom-background-color',
-					'label'       => esc_html__( 'Custom background color', 'colorlib-login-customizer' ),
+					'id'          => 'custom-background-color-form',
+					'label'       => esc_html__( 'Form Column background color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '',
+					'default'     => '#f1f1f1',
+					'active_callback' => array( $this, 'check_two_column_layout' ),
+				),
+				array(
+					'id'          => 'custom-background-form',
+					'label'       => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'type'        => 'image',
+					'default'     => esc_url( $this->parent->assets_url ) . '/img/background.jpg',
+					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 			),
 		);
@@ -345,7 +363,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form background color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '',
+					'default'     => '#ffffff',
 				),
 				array(
 					'id'          => 'form-padding',
@@ -359,7 +377,14 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form border', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the border property. Example: 2px dotted black', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => '',
+					'default'     => '0 none',
+				),
+				array(
+					'id'          => 'form-shadow',
+					'label'       => esc_html__( 'Form shadow', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the form\'s shadow property. Example: 0 1px 0 #006799', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '0 1px 3px rgba(0,0,0,.13)',
 				),
 				array(
 					'id'          => 'form-field-width',
@@ -380,7 +405,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form field background', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '',
+					'default'     => '#fbfbfb',
 				),
 				array(
 					'id'          => 'form-field-color',
@@ -394,7 +419,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form label color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the label text color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '#2EA2CC',
+					'default'     => '#72777c',
 				),
 				array(
 					'id'          => 'hide-extra-links',
@@ -415,48 +440,56 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Button background', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s background property', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#0085ba',
 				),
 				array(
 					'id'          => 'button-background-hover',
 					'label'       => esc_html__( 'Button background hover state', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s background property on hover', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#008ec2',
 				),
 				array(
 					'id'          => 'button-border-color',
 					'label'       => esc_html__( 'Button border color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s border color property', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#0073aa',
 				),
 				array(
 					'id'          => 'button-border-color-hover',
 					'label'       => esc_html__( 'Button border hover state', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s border property on hover', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#006799',
 				),
 				array(
 					'id'          => 'button-shadow',
 					'label'       => esc_html__( 'Button shadow', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s shadow property. Example: 0 1px 0 #006799', 'colorlib-login-customizer' ),
 					'type'        => 'text',
+					'default'     => '0 1px 0 #006799',
 				),
 				array(
 					'id'          => 'button-color',
 					'label'       => esc_html__( 'Button color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s text color property', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#ffffff',
 				),
 				array(
 					'id'          => 'link-color',
 					'label'       => esc_html__( 'Link color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the text color of links that are underneath the login form', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#555d66',
 				),
 				array(
 					'id'          => 'link-color-hover',
 					'label'       => esc_html__( 'Link color hover', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the text color of links, that are underneath the login form, on hover', 'colorlib-login-customizer' ),
 					'type'        => 'color',
+					'default'     => '#00a0d2',
 				),
 			),
 		);
@@ -524,7 +557,7 @@ class Colorlib_Login_Customizer_Customizer {
 						break;
 					case 'color':
 						$manager->add_control(
-							new WP_Customize_Color_Control( $manager, $key_name, $control_args )
+							new Colorlib_Login_Customizer_Control_Color_Picker( $manager, $key_name, $control_args )
 						);
 						break;
 					case 'clc-range-slider':
@@ -570,11 +603,18 @@ class Colorlib_Login_Customizer_Customizer {
 	 * Dependencies: Customizer Controls script (core)
 	 */
 	public function customizer_enqueue_scripts() {
+		wp_enqueue_style( 'colorlib-login-customizer-minicolors-styles', esc_url( $this->parent->assets_url ) . 'css/jquery.minicolors.css' );
 		wp_enqueue_style( 'colorlib-login-customizer-styles', esc_url( $this->parent->assets_url ) . 'css/clc-customizer.css' );
+		wp_enqueue_script(
+			'colorlib-login-customizer-minicolors-script', esc_url( $this->parent->assets_url ) . 'js/jquery.minicolors.js', array(
+				'jquery',
+			), false, true
+		);
 		wp_enqueue_script(
 			'colorlib-login-customizer-script', esc_url( $this->parent->assets_url ) . 'js/clc-customizer.js', array(
 				'jquery',
 				'customize-controls',
+				'colorlib-login-customizer-minicolors-script',
 			), false, true
 		);
 

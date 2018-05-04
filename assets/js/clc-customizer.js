@@ -35,9 +35,19 @@
       loadTemplate: function( option_name ) {
         var control = this,
             options = control.params.options[ option_name ];
+        
             
+
             $.each( options, function( index, option ) {
-              wp.customize( option.name ).set( option.value );
+              var currentControl = wp.customize.control( option.name ),
+                  defaultValue = currentControl.settings.default();
+
+              if ( 'default' == option_name ) {
+                currentControl.setting( option.value );
+              }else{
+                currentControl.setting( option.value );
+              }
+
             });
       }
     } );
@@ -79,6 +89,51 @@
       }
     });
 
+    wp.customize.controlConstructor[ 'clc-color-picker' ] = wp.customize.Control.extend({
+      ready: function() {
+        var control = this,
+            updating = false,
+            clear = control.container.find( 'a.clc-color-picker-default' ),
+        	input = $( control.container ).find( '.clc-color-picker' );
+
+        input.minicolors({
+          format : 'rgb',
+          opacity : true,
+          keywords: 'transparent, initial, inherit',
+          change : function(value, opacity) {
+            updating = true;
+            control.setting.set( input.minicolors( 'rgbaString' ) );
+            updating = false;
+          }
+        });
+
+
+	    if ( clear.length > 0 ) {
+	      clear.on( 'click', function( e ) {
+	      		var defaultValue = jQuery( this ).attr( 'data-default' );
+		      	e.preventDefault();
+
+		      	input.minicolors( 'value', defaultValue );
+		      	updating = true;
+            	control.setting.set( defaultValue );
+            	updating = false;
+		    } );
+	    }
+
+        // Whenever the setting's value changes, refresh the preview.
+        control.setting.bind( function ( value ) {
+
+          	// Bail if the update came from the control itself.
+          	if ( updating ) {
+            	return;
+          	}
+
+          	input.minicolors( 'value', value );
+
+        } );
+      },
+    });
+
     // Listen for previewer events
     wp.customize.bind( 'ready', function() {
       wp.customize.previewer.bind( 'clc-focus-section', function( sectionName ) {
@@ -92,11 +147,17 @@
       wp.customize( 'clc-options[columns]', function( value ) {
  
         value.bind( function( to ) {
-            var align_control = wp.customize.control( 'clc-options[form-column-align]' );
+            var align_control = wp.customize.control( 'clc-options[form-column-align]' ),
+                background_control = wp.customize.control( 'clc-options[custom-background-form]' ),
+                background_color_control = wp.customize.control( 'clc-options[custom-background-color-form]' );
             if ( '2' == to ) {
                 align_control.toggle( true );
+                background_control.toggle( true );
+                background_color_control.toggle( true );
             }else{
                 align_control.toggle( false );
+                background_control.toggle( false );
+                background_color_control.toggle( false );
             }
         } );
       } );

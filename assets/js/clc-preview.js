@@ -4,9 +4,6 @@
     selectors : {},
     settings : {},
     style : '',
-    generateCSS : function(){
-
-    },
     init : function( settings, selectors ) {
       this.selectors = selectors;
       this.settings = settings;

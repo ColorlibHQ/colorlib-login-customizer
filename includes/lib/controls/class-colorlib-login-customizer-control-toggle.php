@@ -28,7 +28,7 @@ class Colorlib_Login_Customizer_Control_Toggle extends WP_Customize_Control {
 	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
-	 * @since  1.2.0
+	 * @since  1.0.0
 	 * @access public
 	 */
 	public function json() {
@@ -51,7 +51,7 @@ class Colorlib_Login_Customizer_Control_Toggle extends WP_Customize_Control {
 	public function render_content() {}
 
 	/**
-	 * @since  1.2.0
+	 * @since  1.0.0
 	 * @access public
 	 */
 	public function content_template() {
@@ -62,7 +62,7 @@ class Colorlib_Login_Customizer_Control_Toggle extends WP_Customize_Control {
 				{{{ data.label }}}
 				<# if( data.description ){ #>
 					<i class="dashicons dashicons-editor-help" style="vertical-align: text-bottom; position: relative;">
-						<span class="mte-tooltip">
+						<span class="clc-tooltip">
 							{{{ data.description }}}
 						</span>
 					</i>
