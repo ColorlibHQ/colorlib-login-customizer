@@ -97,7 +97,7 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-width'                => '320',
 								'form-height'               => '297',
 								'form-background-image'     => '',
-								'form-background-color'     => '#ffffff',
+								'form-background-color'     => 'rgba(255, 255, 255, 1)',
 								'form-padding'              => '26px 24px 46px',
 								'form-border'               => '',
 								'form-field-width'          => '',
