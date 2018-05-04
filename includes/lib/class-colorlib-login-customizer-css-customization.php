@@ -93,17 +93,20 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			/**
 			 * Background section
 			 */
-			'custom-background'         => '',
-			'custom-background-color'   => '',
+			'custom-background'             => '',
+			'custom-background-form'        => '',
+			'custom-background-color'       => '',
+			'custom-background-color-form'  => '',
 			/**
 			 * Form section
 			 */
 			'form-width'                => '',
 			'form-height'               => '',
 			'form-background-image'     => '',
-			'form-background-color'     => '',
+			'form-background-color'     => '#fff',
 			'form-padding'              => '',
 			'form-border'               => '',
+			'form-shadow'               => '',
 			'form-field-width'          => '',
 			'form-field-margin'         => '',
 			'form-field-background'     => '',
@@ -185,6 +188,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background-color',
 					'padding',
 					'border',
+					'box-shadow',
 				),
 				'options' => array(
 					'form-height',
@@ -192,6 +196,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-background-color',
 					'form-padding',
 					'form-border',
+					'form-shadow',
 				),
 			),
 			'.login form .input, .login input[type="text"]' => array(
@@ -226,16 +231,24 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'custom-background-color',
 				),
 			),
+			'.ml-container .ml-form-container' => array(
+				'attributes' => array(
+					'background-image',
+					'background-color',
+				),
+				'options' => array(
+					'custom-background-form',
+					'custom-background-color-form',
+				)
+			),
 			'.login h1 a' => array(
 				'attributes' => array(
 					'background-image',
-					'background-size',
 					'width',
 					'height',
 				),
 				'options' => array(
 					'custom-logo',
-					'logo-width',
 					'logo-width',
 					'logo-height',
 				),
@@ -374,6 +387,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background-color',
 				'padding',
 				'border',
+				'box-shadow',
 			),
 			array(
 				'form-height',
@@ -381,6 +395,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'form-background-color',
 				'form-padding',
 				'form-border',
+				'form-shadow',
 			)
 		);
 
@@ -442,6 +457,18 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			array(
 				'custom-background',
 				'custom-background-color',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'.ml-container .ml-form-container',
+			array(
+				'background-image',
+				'background-color',
+			),
+			array(
+				'custom-background-form',
+				'custom-background-color-form',
 			)
 		);
 
@@ -588,7 +615,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$instance = Colorlib_Login_Customizer::instance();
 		$css      = $this->create_css();
 
-		echo '<style type="text/css">.login h1 a{background-position: center;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css">body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 	}
 

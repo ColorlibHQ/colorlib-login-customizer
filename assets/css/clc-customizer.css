@@ -294,3 +294,55 @@
   right: 27px;
   font-size: 11px;
   font-family: 'Arial'; }
+
+  /* Color Picker */
+  .clc-color-picker-title {
+  margin-left: 42px;
+  margin-bottom: 0 !important;
+  line-height: 24px !important;
+}
+  .clc-color-picker-title .clc-color-picker-description {
+    font-size: 13px;
+    line-height: 16px;
+    font-weight: initial;
+    color: #959696;
+    display: block; }
+  .clc-color-picker-title .clc-color-picker-default {
+    font-style: italic;
+    font-weight: 300;
+    color: #959696;
+    cursor: pointer; }
+    .clc-color-picker-title .clc-color-picker-default:hover, .clc-color-picker-title .clc-color-picker-default:focus {
+      color: #55AAD3; }
+
+.minicolors-theme-default {
+  display: block !important; }
+  .minicolors-theme-default .clc-color-picker {
+    z-index: 100;
+    position: absolute;
+    top: -20px;
+    left: 50px;
+    opacity: 0;
+    visibility: hidden;
+    width: 153px !important;
+    padding: 5px;
+    transition: all .1s ease-in; }
+  .minicolors-theme-default.minicolors-focus .clc-color-picker {
+    opacity: 1;
+    visibility: visible; }
+  .minicolors-theme-default .minicolors-input-swatch {
+    width: 30px;
+    height: 22px;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    cursor: pointer; }
+
+.lite {
+  opacity: 0;
+  visibility: hidden; }
+
+.minicolors-position-left .minicolors-panel {
+  left: 50px; }
+.customize-control-clc-color-picker {
+  padding: 18px 0 6px 0; }
