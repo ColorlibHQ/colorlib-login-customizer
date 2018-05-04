@@ -317,7 +317,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
 					'type'        => 'image',
-					'default'     => esc_url( $this->parent->assets_url ) . '/img/background.jpg',
+					'default'     => '',
 					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 			),
