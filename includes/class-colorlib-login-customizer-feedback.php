@@ -4,7 +4,7 @@ class Colorlib_Login_Customizer_Feedback {
 
 	private $plugin_file = '';
 	private $plugin_name = '';
-	
+
 	function __construct( $_plugin_file ) {
 
 		$this->plugin_file = $_plugin_file;
@@ -23,7 +23,7 @@ class Colorlib_Login_Customizer_Feedback {
 	 */
 	public function filter_action_links( $links ) {
 
-		if( isset( $links['deactivate'] ) ) {
+		if ( isset( $links['deactivate'] ) ) {
 			$deactivation_link = $links['deactivate'];
 			// Insert an onClick action to allow form before deactivating
 			$deactivation_link = str_replace( '<a ', '<div class="epsilon-deactivate-form-wrapper"><span class="epsilon-deactivate-form" id="epsilon-deactivate-form-' . esc_attr( $this->plugin_name ) . '"></span></div><a onclick="javascript:event.preventDefault();" id="epsilon-deactivate-link-' . esc_attr( $this->plugin_name ) . '" ', $deactivation_link );
@@ -44,16 +44,16 @@ class Colorlib_Login_Customizer_Feedback {
 		// Build the HTML to go in the form
 		$html = '<div class="epsilon-deactivate-form-head"><strong>' . esc_html( $form['heading'] ) . '</strong></div>';
 		$html .= '<div class="epsilon-deactivate-form-body"><p>' . esc_html( $form['body'] ) . '</p>';
-		if( is_array( $form['options'] ) ) {
+		if ( is_array( $form['options'] ) ) {
 			$html .= '<div class="epsilon-deactivate-options"><p>';
-			foreach( $form['options'] as $key => $option ) {
+			foreach ( $form['options'] as $key => $option ) {
 				if ( 'no-reason' == $key ) {
 					$html .= '<input type="radio" name="epsilon-deactivate-reason" checked="checked" id="' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '"> <label for="' . esc_attr( $key ) . '">' . esc_attr( $option ) . '</label><br>';
-				}else{
+				} else {
 					$html .= '<input type="radio" name="epsilon-deactivate-reason" id="' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '"> <label for="' . esc_attr( $key ) . '">' . esc_attr( $option ) . '</label><br>';
 				}
 			}
-			$html .= '</p><label id="epsilon-deactivate-details-label" for="epsilon-deactivate-reasons"><strong>' . esc_html( $form['details'] ) .'</strong></label><textarea name="epsilon-deactivate-details" id="epsilon-deactivate-details" rows="2" style="width:100%"></textarea>';
+			$html .= '</p><label id="epsilon-deactivate-details-label" for="epsilon-deactivate-reasons"><strong>' . esc_html( $form['details'] ) . '</strong></label><textarea name="epsilon-deactivate-details" id="epsilon-deactivate-details" rows="2" style="width:100%"></textarea>';
 			$html .= '<input type="checkbox" name="epsilon-deactivate-tracking" checked="" id="allow-tracking" value="yes"> <label for="allow-tracking">' . esc_html__( 'Allow us to get more information in order to improve our plugin', 'colorlib-login-customizer' ) . '</label><br>';
 			$html .= '</div><!-- .epsilon-deactivate-options -->';
 		}
@@ -84,10 +84,10 @@ class Colorlib_Login_Customizer_Feedback {
 			}
 			.epsilon-deactivate-form-active .epsilon-deactivate-form {
 				position: absolute;
-			    bottom: 30px;
-			    left: 0;
+				bottom: 30px;
+				left: 0;
 				width: 400px;
-			    background: #fff;
+				background: #fff;
 				white-space: normal;
 			}
 			.epsilon-deactivate-form-head {
@@ -137,12 +137,12 @@ class Colorlib_Login_Customizer_Feedback {
 				var deactivateURL = $("#epsilon-deactivate-link-<?php echo esc_attr( $this->plugin_name ); ?>"),
 					formContainer = $('#epsilon-deactivate-form-<?php echo esc_attr( $this->plugin_name ); ?>'),
 					detailsStrings = {
-						'no-reson' : '<?php echo __( 'How could we improve ?', 'colorlib-login-customizer' ) ?>',
-						'setup' : '<?php echo __( 'What was the dificult part ?', 'colorlib-login-customizer' ) ?>',
-						'documentation' : '<?php echo __( 'What can we describe more ?', 'colorlib-login-customizer' ) ?>',
-						'features' : '<?php echo __( 'How could we improve ?', 'colorlib-login-customizer' ) ?>',
-						'better-plugin' : '<?php echo __( 'Can you mention it ?', 'colorlib-login-customizer' ) ?>',
-						'incompatibility' : '<?php echo __( 'With what plugin or theme is incompatible ?', 'colorlib-login-customizer' ) ?>',
+						'no-reson' : '<?php echo __( 'How could we improve ?', 'colorlib-login-customizer' ); ?>',
+						'setup' : '<?php echo __( 'What was the dificult part ?', 'colorlib-login-customizer' ); ?>',
+						'documentation' : '<?php echo __( 'What can we describe more ?', 'colorlib-login-customizer' ); ?>',
+						'features' : '<?php echo __( 'How could we improve ?', 'colorlib-login-customizer' ); ?>',
+						'better-plugin' : '<?php echo __( 'Can you mention it ?', 'colorlib-login-customizer' ); ?>',
+						'incompatibility' : '<?php echo __( 'With what plugin or theme is incompatible ?', 'colorlib-login-customizer' ); ?>',
 					};
 
 				$( deactivateURL ).on("click",function(){
@@ -153,8 +153,8 @@ class Colorlib_Login_Customizer_Feedback {
 						complete: function() {
 							var offset = formContainer.offset();
 							if( offset.top < 50 ) {
-	                            $(this).parent().css('top', (50 - offset.top) + 'px')
-	                        }
+	                        	$(this).parent().css('top', (50 - offset.top) + 'px')
+	                    	}
 							$( 'body' ).animate( { scrollTop: Math.max( 0, offset.top - 50 ) } );
 						}
 					} );
@@ -169,7 +169,7 @@ class Colorlib_Login_Customizer_Feedback {
 					formContainer.on('click', '#epsilon-deactivate-submit-form', function(e){
 						var data = {
 							'action': 'epsilon_deactivate_plugin',
-							'security': "<?php echo wp_create_nonce ( 'epsilon_deactivate_plugin' ); ?>",
+							'security': "<?php echo wp_create_nonce( 'epsilon_deactivate_plugin' ); ?>",
 							'dataType': "json"
 						};
 						e.preventDefault();
@@ -205,7 +205,8 @@ class Colorlib_Login_Customizer_Feedback {
 				});
 			});
 		</script>
-	<?php }
+	<?php 
+	}
 
 	/*
 	 * Form text strings
@@ -232,8 +233,7 @@ class Colorlib_Login_Customizer_Feedback {
 
 		check_ajax_referer( 'epsilon_deactivate_plugin', 'security' );
 
-		if ( isset($_POST['reason']) && isset($_POST['details']) && isset($_POST['tracking']) ) {
-			require_once 'class-epsilon-plugin-request.php';
+		if ( isset( $_POST['reason'] ) && isset( $_POST['details'] ) && isset( $_POST['tracking'] ) ) {
 			$args = array(
 				'reason' => $_POST['reason'],
 				'details' => $_POST['details'],
@@ -244,17 +244,17 @@ class Colorlib_Login_Customizer_Feedback {
 				echo json_encode( array(
 					'status' => 'ok',
 				) );
-			}else{
+			} else {
 				echo json_encode( array(
 					'status' => 'nok',
 				) );
 			}
-		}else{
+		} else {
 			echo json_encode( array(
 				'status' => 'ok',
 			) );
 		}
-		
+
 		die();
 
 	}

@@ -75,14 +75,33 @@
 
         wp.customize.controlConstructor['clc-button-group'] = wp.customize.Control.extend({
             ready: function() {
-                var control = this;
+                var control = this,
+                    updating = false;
                 control.container.on( 'click', '.colorlib-login-customizer-control-group > a', function() {
                     var value = $( this ).attr( 'data-value' );
                     $( this ).siblings().removeClass( 'active' );
                     $( this ).addClass( 'active' );
 
+                    updating = true;
                     control.setting.set( value );
+                    updating = false;
                 });
+
+                // Whenever the setting's value changes, refresh the preview.
+                control.setting.bind( function( value ) {
+
+                    var options = control.container.find( '.colorlib-login-customizer-control-group > a' );
+
+                    // Bail if the update came from the control itself.
+                    if ( updating ) {
+                        return;
+                    }
+
+                    options.removeClass( 'active' );
+                    options.filter( '[data-value=' + value + ']' ).addClass( 'active' );
+
+                });
+
             }
         });
 
