@@ -37,14 +37,6 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 		parent::__construct( $manager, $id, $args );
 	}
 
-	public function get_value() {
-		$value = $this->value();
-		if ( ! $value && isset( $this->default ) ) {
-			return $this->default;
-		}
-		return $value;
-	}
-
 	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
@@ -55,11 +47,40 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 	public function to_json() {
 		parent::to_json();
 
+		$arrays = $this->generate_arrays();
+
 		// The setting value.
 		$this->json['id']      = $this->id;
-		$this->json['value']   = $this->get_value();
+		$this->json['value']   = $this->value();
 		$this->json['link']    = $this->get_link();
-		$this->json['choices'] = $this->choices;
+		$this->json['choices'] = $arrays['choices'];
+		$this->json['options'] = $arrays['options'];
+
+	}
+
+	private function generate_name( $id ) {
+		return 'clc-options[' . $id . ']';
+	}
+
+	public function generate_arrays() {
+		$arrays = array(
+			'choices' => array(),
+			'options' => array(),
+		);
+
+		foreach ( $this->choices as $key => $choice ) {
+			$arrays['choices'][ $key ] = $choice['url'];
+			$arrays['options'][ $key ] = array();
+			foreach ( $choice['options'] as $option_key => $option_value ) {
+				$name = $this->generate_name( $option_key );
+				$arrays['options'][ $key ][ $option_key ] = array(
+					'name' => $name,
+					'value' => $option_value
+				);
+			}
+		}
+
+		return $arrays;
 
 	}
 

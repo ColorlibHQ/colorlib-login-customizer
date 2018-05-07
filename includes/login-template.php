@@ -142,6 +142,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
 		<div class="clc-general-actions">
 			<div id="clc-templates" class="clc-preview-event" data-section="clc_templates"><span class="dashicons dashicons-tagcloud"></span></div>
+			<div id="clc-layout" class="clc-preview-event" data-section="clc_layout"><span class="dashicons dashicons-layout"></span></div>
 			<div id="clc-background" class="clc-preview-event" data-section="clc_background"><span class="dashicons dashicons-admin-customizer"></span></div>
 		</div>
 		<?php
