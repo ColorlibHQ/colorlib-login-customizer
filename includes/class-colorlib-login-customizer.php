@@ -108,6 +108,11 @@ class Colorlib_Login_Customizer {
 		// Remove this after Grunt
 		$this->script_suffix = '';
 
+		if ( is_admin() ) {
+			// Plugin Deactivate Feedback
+			new Colorlib_Login_Customizer_Feedback( $file );
+		}
+
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
 		add_action( 'admin_init', array( $this, 'redirect_customizer' ) );

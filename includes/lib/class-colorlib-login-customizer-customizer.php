@@ -102,7 +102,7 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-border'               => '',
 								'form-field-width'          => '',
 								'form-field-margin'         => '',
-								'form-field-background'     => '',
+								'form-field-background'     => '#fbfbfb',
 								'form-field-color'          => '#333333',
 								'form-label-color'          => '#72777c',
 								'hide-extra-links'          => 0,
