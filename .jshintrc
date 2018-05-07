@@ -19,6 +19,7 @@
     "wp": false,
     "ajaxurl": false,
     "CLCUrls": false,
+    "CLC": false,
     "_" : false
   }
 }
