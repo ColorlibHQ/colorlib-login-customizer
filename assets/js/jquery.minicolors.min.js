@@ -1,3 +1,4 @@
+// jscs:disable
 //
 // jQuery MiniColors: A tiny color picker built on jQuery
 //
