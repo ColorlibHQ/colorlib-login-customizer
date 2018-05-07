@@ -1,33 +1,33 @@
-(function( $ ) {
+( function( $ ) {
 
   var clcCustomCSS = {
-    selectors : {},
-    settings : {},
-    style : '',
-    init : function( settings, selectors ) {
+    selectors: {},
+    settings: {},
+    style: '',
+    init: function( settings, selectors ) {
       this.selectors = selectors;
       this.settings = settings;
 
       this.style = $( '#clc-style' );
       this._binds();
     },
-    _binds : function() {
+    _binds: function() {
       var self = this;
-      $.each( self.settings, function( index, setting ){
-        wp.customize( setting['name'], function( value ) {
+      $.each( self.settings, function( index, setting ) {
+        wp.customize( setting.name, function( value ) {
           value.bind( function( to ) {
-            self.settings[ index ]['value'] = to;
+            self.settings[ index ].value = to;
             self.createCSSLines();
           } );
         } );
       });
     },
-    createCSSLines : function() {
+    createCSSLines: function() {
       var style = '',
           self = this;
-      $.each( self.selectors, function( index, selector ){
+      $.each( self.selectors, function( index, selector ) {
         var cssLine = index + '{';
-        $.each( selector, function( index, option ){
+        $.each( selector, function( index, option ) {
           cssLine = cssLine + self.generateCSSLine( option );
         });
         style = style + cssLine + '}';
@@ -36,26 +36,28 @@
       self.style.html( style );
 
     },
-    generateCSSLine : function( option ) {
+    generateCSSLine: function( option ) {
+        var line = this.settings[ option ].attribute + ':';
 
-      if ( '' == this.settings[ option ]['value'] ) { return ''; }
-      if ( undefined == this.settings[ option ]['attribute'] || undefined == this.settings[ option ]['value'] ) { 
-        return '';
-      }
+        if ( '' === this.settings[ option ].value ) {
+          return '';
+        }
+        if ( undefined === this.settings[ option ].attribute || undefined === this.settings[ option ].value ) {
+          return '';
+        }
 
-      var line = this.settings[ option ]['attribute'] + ':';
-      if ( $.inArray( this.settings[ option ]['attribute'], [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height' ] ) >= 0 ) {
-        line += this.settings[ option ]['value'] + 'px';
-      }else if ( 'background-image' == this.settings[ option ]['attribute'] ) {
-        line += 'url(' + this.settings[ option ]['value'] + ')';
-      }else if ( 'display' == this.settings[ option ]['attribute'] ) {
-        if ( '1' == this.settings[ option ]['value'] ) {
+      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height' ] ) >= 0 ) {
+        line += this.settings[ option ].value + 'px';
+      }else if ( 'background-image' === this.settings[ option ].attribute ) {
+        line += 'url(' + this.settings[ option ].value + ')';
+      }else if ( 'display' === this.settings[ option ].attribute ) {
+        if ( '1' === this.settings[ option ].value ) {
           line += 'none';
-        }else{
+        } else {
           line += 'block';
         }
-      }else{
-        line += this.settings[ option ]['value'];
+      } else {
+        line += this.settings[ option ].value;
       }
       line += ';';
 
