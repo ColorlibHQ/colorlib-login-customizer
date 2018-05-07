@@ -36,7 +36,7 @@ class Colorlib_Login_Customizer_Plugin_Request {
 	private $allow_tracking = 0;
 
 	public $request_successful = false;
-	
+
 	function __construct( $_plugin_file, $args ) {
 
 		// Set variables
@@ -107,7 +107,7 @@ class Colorlib_Login_Customizer_Plugin_Request {
 			$this->data['user']['email'] = '';
 			$this->data['user']['first_name'] = '';
 			$this->data['user']['last_name'] = '';
-		}else{
+		} else {
 			$this->data['user']['email'] = get_bloginfo( 'admin_email' );
 			$this->data['user']['first_name'] = $admin->first_name;
 			$this->data['user']['last_name'] = $admin->last_name;
@@ -149,7 +149,7 @@ class Colorlib_Login_Customizer_Plugin_Request {
 				'slug'    => $slug,
 				'name'    => $info->get( 'Name' ),
 				'version' => $info->get( 'Version' ),
-				'author'  => $info->get( 'Author' )
+				'author'  => $info->get( 'Author' ),
 			);
 		};
 
@@ -212,7 +212,7 @@ class Colorlib_Login_Customizer_Plugin_Request {
 			'httpversion' => '1.1',
 			'blocking'    => true,
 			'body'        => $this->data,
-			'user-agent'  => 'MT/EPSILON-CUSTOMER-TRACKING/' . esc_url( home_url() )
+			'user-agent'  => 'MT/EPSILON-CUSTOMER-TRACKING/' . esc_url( home_url() ),
 		) );
 
 		if ( is_wp_error( $request ) ) {
