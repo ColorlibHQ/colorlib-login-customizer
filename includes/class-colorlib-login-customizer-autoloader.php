@@ -29,6 +29,7 @@ class Colorlib_Login_Customizer_Autoloader {
 			$directories = array(
 				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes',
 				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes/lib',
+				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes/lib/controls',
 			);
 
 			foreach ( $directories as $directory ) {

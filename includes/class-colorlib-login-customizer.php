@@ -108,6 +108,11 @@ class Colorlib_Login_Customizer {
 		// Remove this after Grunt
 		$this->script_suffix = '';
 
+		if ( is_admin() ) {
+			// Plugin Deactivate Feedback
+			new Colorlib_Login_Customizer_Feedback( $file );
+		}
+
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
 		add_action( 'admin_init', array( $this, 'redirect_customizer' ) );
@@ -234,6 +239,14 @@ class Colorlib_Login_Customizer {
 	 */
 	public function install() {
 		$this->_log_version_number();
+
+		// Backward compatibility
+		$options = get_option( $this->key_name, array() );
+		if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
+			$options['templates'] = 'default';
+			$options['columns'] = 2;
+			update_option( $this->key_name, $options );
+		}
 	} // End install ()
 
 	/**
