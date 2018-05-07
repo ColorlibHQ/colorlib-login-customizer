@@ -1,5 +1,5 @@
 // jscs:disable
-//
+
 // jQuery MiniColors: A tiny color picker built on jQuery
 //
 // Developed by Cory LaViska for A Beautiful Site, LLC
