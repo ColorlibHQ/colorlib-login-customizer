@@ -51,7 +51,7 @@
       }else if ( 'background-image' === this.settings[ option ].attribute ) {
         line += 'url(' + this.settings[ option ].value + ')';
       }else if ( 'display' === this.settings[ option ].attribute ) {
-        if ( '1' === this.settings[ option ].value ) {
+        if ( this.settings[ option ].value ) {
           line += 'none';
         } else {
           line += 'block';
