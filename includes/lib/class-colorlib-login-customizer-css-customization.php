@@ -112,7 +112,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-field-background'     => '',
 			'form-field-color'          => '',
 			'form-label-color'          => '',
-			'hide-extra-links'          => 0,
+			'hide-extra-links'          => false,
 			/**
 			 * Others section ( misc )
 			 */
@@ -125,6 +125,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'button-color'              => '',
 			'link-color'                => '',
 			'link-color-hover'          => '',
+			'hide-rememberme'           => false,
 			/**
 			 * Reset value is not dynamic
 			 */
@@ -272,6 +273,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'hide-extra-links',
 				),
 			),
+			'#login form .forgetmenot' => array(
+				'attributes' => array(
+					'display',
+				),
+				'options' => array(
+					'hide-rememberme',
+				),
+			),
 		);
 
 	}
@@ -359,6 +368,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			),
 			array(
 				'link-color-hover',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'#login form .forgetmenot',
+			array(
+				'display',
+			),
+			array(
+				'hide-rememberme',
 			)
 		);
 

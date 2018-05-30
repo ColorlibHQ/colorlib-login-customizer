@@ -433,7 +433,7 @@ class Colorlib_Login_Customizer_Customizer {
 		);
 
 		$settings['general'] = array(
-			'title'       => esc_html__( 'Miscellaneous', 'colorlib-login-customizer' ),
+			'title'       => esc_html__( 'Form Button', 'colorlib-login-customizer' ),
 			'description' => '',
 			'fields'      => array(
 				array(
@@ -498,6 +498,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the text color of links, that are underneath the login form, on hover', 'colorlib-login-customizer' ),
 					'type'        => 'color',
 					'default'     => '#00a0d2',
+				),
+				array(
+					'id'          => 'hide-rememberme',
+					'label'       => esc_html__( 'Hide "Remember Me"', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Show/Hide the "Remember Me" checkbox', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
 				),
 			),
 		);
