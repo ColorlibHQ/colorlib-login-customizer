@@ -113,7 +113,7 @@
                     input = $( control.container ).find( '.clc-color-picker' );
 
                 input.minicolors({
-                    format: 'rgb',
+                    format: 'hex',
                     opacity: true,
                     keywords: 'transparent, initial, inherit',
                     change: function( value, opacity ) {
