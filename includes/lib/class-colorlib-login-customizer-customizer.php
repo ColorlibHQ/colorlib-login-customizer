@@ -114,6 +114,7 @@ class Colorlib_Login_Customizer_Customizer {
 								'button-border-color'       => '#0073aa',
 								'button-border-color-hover' => '#006799',
 								'button-shadow'             => '',
+								'button-text-shadow'        => '',
 								'button-color'              => '#ffffff',
 								'link-color'                => '#555d66',
 								'link-color-hover'          => '#00a0d2',
@@ -469,6 +470,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the submit button\'s shadow property. Example: 0 1px 0 #006799', 'colorlib-login-customizer' ),
 					'type'        => 'text',
 					'default'     => '0 1px 0 #006799',
+				),
+				array(
+					'id'          => 'button-text-shadow',
+					'label'       => esc_html__( 'Button text shadow', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the submit button text\'s shadow property. Example: 0 -1px 1px #006799', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '0 -1px 1px #006799',
 				),
 				array(
 					'id'          => 'button-color',

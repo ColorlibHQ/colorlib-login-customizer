@@ -121,6 +121,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'button-border-color'       => '',
 			'button-border-color-hover' => '',
 			'button-shadow'             => '',
+			'button-text-shadow'        => '',
 			'button-color'              => '',
 			'link-color'                => '',
 			'link-color-hover'          => '',
@@ -148,12 +149,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background',
 					'border-color',
 					'box-shadow',
+					'text-shadow',
 					'color',
 				),
 				'options' => array(
 					'button-background',
 					'button-border-color',
 					'button-shadow',
+					'button-text-shadow',
 					'button-color',
 				),
 			),
@@ -327,12 +330,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background',
 				'border-color',
 				'box-shadow',
+				'text-shadow',
 				'color',
 			),
 			array(
 				'button-background',
 				'button-border-color',
 				'button-shadow',
+				'button-text-shadow',
 				'button-color',
 			)
 		);
