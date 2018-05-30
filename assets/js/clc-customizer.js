@@ -54,7 +54,8 @@
                 var control = this,
                     controlField = control.container.find( 'input.clc-slider' ),
                     controlSlider = control.container.find( 'div.clc-slider' ),
-                    controlSliderData = control.params.choices;
+                    controlSliderData = control.params.choices,
+                    updating = false;
 
                 controlSlider.slider({
                     range: 'min',
@@ -67,9 +68,25 @@
                     },
                     stop: function( event, ui ) {
                         controlField.val( ui.value );
+                        updating = true;
                         control.setting.set( ui.value );
+                        updating = false;
                     }
                 });
+
+                // Whenever the setting's value changes, refresh the preview.
+                control.setting.bind( function( value ) {
+
+                    // Bail if the update came from the control itself.
+                    if ( updating ) {
+                        return;
+                    }
+                    
+                    controlField.val( value )
+                    controlSlider.slider( 'value', value );
+
+                });
+
             }
         });
 
