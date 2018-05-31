@@ -110,6 +110,20 @@
     } );
   } );
 
+  // Username label
+  wp.customize( 'clc-options[username-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-username-label' ).text( to );
+    } );
+  } );
+
+  // Password label
+  wp.customize( 'clc-options[password-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-password-label' ).text( to );
+    } );
+  } );
+
   $( '.clc-preview-event' ).click( function() {
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
   } );
