@@ -81,8 +81,8 @@
                     if ( updating ) {
                         return;
                     }
-                    
-                    controlField.val( value )
+
+                    controlField.val( value );
                     controlSlider.slider( 'value', value );
 
                 });
