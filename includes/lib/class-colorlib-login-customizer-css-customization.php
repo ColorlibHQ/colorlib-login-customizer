@@ -27,8 +27,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$plugin         = Colorlib_Login_Customizer::instance();
 		$this->key_name = $plugin->key_name;
 		$this->set_options();
-		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
+
+		add_action( 'login_head', array( $this, 'check_labels' ) );
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
+		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
@@ -109,8 +111,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-shadow'               => '',
 			'form-field-width'          => '',
 			'form-field-margin'         => '',
+			'form-field-border-radius'  => 'none',
 			'form-field-background'     => '',
 			'form-field-color'          => '',
+			'username-label'            => 'Username or Email Address',
+			'password-label'            => 'Password',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
 			/**
@@ -207,12 +212,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'attributes' => array(
 					'max-width',
 					'margin',
+					'border-radius',
 					'background',
 					'color',
 				),
 				'options' => array(
 					'form-field-width',
 					'form-field-margin',
+					'form-field-border-radius',
 					'form-field-background',
 					'form-field-color',
 				),
@@ -431,12 +438,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			array(
 				'max-width',
 				'margin',
+				'border-radius',
 				'background',
 				'color',
 			),
 			array(
 				'form-field-width',
 				'form-field-margin',
+				'form-field-border-radius',
 				'form-field-background',
 				'form-field-color',
 			)
@@ -447,8 +456,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 */
 		$string .= $this->create_css_lines(
 			'.login label',
-			array( 'color' ),
-			array( 'form-label-color' )
+			array(
+				'color',
+			),
+			array(
+				'form-label-color',
+			)
 		);
 
 		$string .= $this->create_css_lines(
@@ -640,7 +653,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$css        = $this->create_css();
 		$custom_css = $this->options['custom-css'];
 
-		echo '<style type="text/css">body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css">#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
 	}
@@ -651,6 +664,66 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 	public function close_extra_div() {
 		echo '</div></div>';
+	}
+
+	public function check_labels() {
+
+		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
+
+	}
+
+	/**
+	 * Customizer output for custom username label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_username_label( $translated_text, $text, $domain ) {
+		$default = 'Username or Email Address';
+		$label   = $this->options['username-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+	/**
+	 * Customizer output for custom password label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_password_label( $translated_text, $text, $domain ) {
+		$default = 'Password';
+		$label   = $this->options['password-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
 	}
 
 }

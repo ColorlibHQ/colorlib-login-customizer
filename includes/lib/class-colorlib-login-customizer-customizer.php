@@ -404,6 +404,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '2px 6px 16px 0px',
 				),
 				array(
+					'id'          => 'form-field-border-radius',
+					'label'       => esc_html__( 'Form field border radius', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Please input the desired border radiuse for the form field. Example: 5px 5px 5px 5px', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'none',
+				),
+				array(
 					'id'          => 'form-field-background',
 					'label'       => esc_html__( 'Form field background', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
@@ -423,6 +430,20 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the label text color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
 					'default'     => '#72777c',
+				),
+				array(
+					'id'          => 'username-label',
+					'label'       => esc_html__( 'Username label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Username or Email Address',
+				),
+				array(
+					'id'          => 'password-label',
+					'label'       => esc_html__( 'Password label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for password label or just delete it.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Password',
 				),
 				array(
 					'id'          => 'hide-extra-links',
