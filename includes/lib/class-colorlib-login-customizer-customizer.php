@@ -435,7 +435,7 @@ class Colorlib_Login_Customizer_Customizer {
 		);
 
 		$settings['general'] = array(
-			'title'       => esc_html__( 'Form Button', 'colorlib-login-customizer' ),
+			'title'       => esc_html__( 'Form Button & Links', 'colorlib-login-customizer' ),
 			'description' => '',
 			'fields'      => array(
 				array(
@@ -511,6 +511,23 @@ class Colorlib_Login_Customizer_Customizer {
 			),
 		);
 
+		$settings['clc-custom-css'] = array(
+			'title'       => esc_html__( 'Custom CSS', 'colorlib-login-customizer' ),
+			'description' => '',
+			'fields'      => array(
+				array(
+					'id'          => 'custom-css',
+					'label'       => __( 'CSS code', 'colorlib-login-customizer' ),
+					'description' => '',
+					'code_type'   => 'text/css',
+					'type'        => 'custom-css',
+					'input_attrs' => array(
+						'aria-describedby' => 'editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4',
+					),
+				),
+			),
+		);
+
 		$settings = apply_filters( $this->parent->_token . '_settings_fields', $settings );
 
 		return $settings;
@@ -566,6 +583,14 @@ class Colorlib_Login_Customizer_Customizer {
 					$control_args['choices'] = $setting['choices'];
 				}
 
+				if ( isset( $setting['code_type'] ) ) {
+					$control_args['code_type'] = $setting['code_type'];
+				}
+
+				if ( isset( $setting['input_attrs'] ) ) {
+					$control_args['input_attrs'] = $setting['input_attrs'];
+				}
+
 				switch ( $setting['type'] ) {
 					case 'image':
 						$manager->add_control(
@@ -595,6 +620,11 @@ class Colorlib_Login_Customizer_Customizer {
 					case 'clc-toggle' :
 						$manager->add_control(
 							new Colorlib_Login_Customizer_Control_Toggle( $manager, $key_name, $control_args )
+						);
+						break;
+					case 'custom-css' :
+						$manager->add_control(
+							new WP_Customize_Code_Editor_Control( $manager, $key_name, $control_args )
 						);
 						break;
 					default:

@@ -103,6 +103,13 @@
     } );
   } );
 
+  // Custom CSS
+  wp.customize( 'clc-options[custom-css]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-custom-css' ).text( to );
+    } );
+  } );
+
   $( '.clc-preview-event' ).click( function() {
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
   } );
