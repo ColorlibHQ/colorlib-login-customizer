@@ -126,8 +126,6 @@ class Colorlib_Login_Customizer_Customizer {
 								'columns' => '2',
 								'form-column-align' => '1',
 								'custom-background' => esc_url( $this->parent->assets_url ) . 'img/background.jpg',
-								'form-field-width'  => 20,
-								'form-width' => 40,
 							),
 						),
 						'template-02'  => array(
