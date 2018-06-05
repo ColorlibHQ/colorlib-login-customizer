@@ -120,7 +120,7 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 
 			<# for ( choice in data.choices ) { #>
 
-				<input type="radio" value="{{ choice }}" name="_customize-{{ data.id }}" id="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__input" {{{ data.link }}} <# if ( data.value === choice ) { #> checked="checked" <# } #> />
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.id }}" id="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__input" />
 
 				<label for="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__label">
 					<div class="colorlib-login-customizer-templates__intrinsic">
