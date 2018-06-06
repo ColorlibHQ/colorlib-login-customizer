@@ -465,11 +465,18 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '2px 6px 16px 0px',
 				),
 				array(
+					'id'          => 'form-field-border',
+					'label'       => esc_html__( 'Form field border', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Please input the desired border for the form field. Example: 2px dotted black', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '1px solid #ddd',
+				),
+				array(
 					'id'          => 'form-field-border-radius',
 					'label'       => esc_html__( 'Form field border radius', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'Please input the desired border radiuse for the form field. Example: 5px 5px 5px 5px', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => 'none',
+					'default'     => 'unset',
 				),
 				array(
 					'id'          => 'form-field-background',
