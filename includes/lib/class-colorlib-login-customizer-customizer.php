@@ -437,6 +437,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '0 none',
 				),
 				array(
+					'id'          => 'form-border-radius',
+					'label'       => esc_html__( 'Form border radius', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the border radius property. Example: 2px 2px 2px 2px', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '0',
+				),
+				array(
 					'id'          => 'form-shadow',
 					'label'       => esc_html__( 'Form shadow', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the form\'s shadow property. Example: 0 1px 0 #006799', 'colorlib-login-customizer' ),

@@ -116,6 +116,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-background-color'     => '#fff',
 			'form-padding'              => '',
 			'form-border'               => '',
+			'form-border-radius'        => '',
 			'form-shadow'               => '',
 			'form-field-width'          => '',
 			'form-field-margin'         => '',
@@ -205,6 +206,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background-color',
 					'padding',
 					'border',
+					'border-radius',
 					'box-shadow',
 				),
 				'options' => array(
@@ -213,6 +215,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-background-color',
 					'form-padding',
 					'form-border',
+					'form-border-radius',
 					'form-shadow',
 				),
 			),
@@ -444,6 +447,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background-color',
 				'padding',
 				'border',
+				'border-radius',
 				'box-shadow',
 			),
 			array(
@@ -452,6 +456,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'form-background-color',
 				'form-padding',
 				'form-border',
+				'form-border-radius',
 				'form-shadow',
 			)
 		);
