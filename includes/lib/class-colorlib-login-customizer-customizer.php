@@ -82,8 +82,12 @@ class Colorlib_Login_Customizer_Customizer {
 								 * Logo section
 								 */
 								'hide-logo'                 => 0,
+								'use-text-logo'             => 0,
 								'custom-logo-url'           => '',
 								'custom-logo'               => '',
+								'logo-text-color'           => '#444',
+								'logo-text-size'            => '#00a0d2',
+								'logo-text-color-hover'     => '20',
 								'logo-width'                => '84',
 								'logo-height'               => '84',
 								/**
@@ -155,6 +159,50 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 0,
 				),
 				array(
+					'id'          => 'use-text-logo',
+					'label'       => esc_html__( 'Use Text Logo', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Show/Hide the logo text from login page', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+				),
+				array(
+					'id'          => 'logo-text',
+					'label'       => esc_html__( 'Logo text', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This is will be your logo.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'          => 'logo-text-color',
+					'label'       => esc_html__( 'Logo text color', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the color text property.', 'colorlib-login-customizer' ),
+					'type'        => 'color',
+					'default'     => '#444',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'          => 'logo-text-color-hover',
+					'label'       => esc_html__( 'Logo text color hover', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the color text property on hover.', 'colorlib-login-customizer' ),
+					'type'        => 'color',
+					'default'     => '#00a0d2',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'          => 'logo-text-size',
+					'label'       => esc_html__( 'Logo text size', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the text size of logo.', 'colorlib-login-customizer' ),
+					'default'     => 20,
+					'choices'     => array(
+						'min'  => 10,
+						'max'  => 120,
+						'step' => 1,
+					),
+					'type'        => 'clc-range-slider',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
 					'id'          => 'custom-logo-url',
 					'label'       => esc_html__( 'Custom logo URL', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
@@ -167,6 +215,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
 					'type'        => 'image',
 					'default'     => '',
+					'active_callback' => array( $this, 'check_if_not_text_logo' ),
 				),
 				array(
 					'id'          => 'logo-width',
@@ -712,5 +761,25 @@ class Colorlib_Login_Customizer_Customizer {
 		}
 
 		return false;
+	}
+
+	public function check_if_text_logo( $control ) {
+		$options = get_option( 'clc-options', array() );
+
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function check_if_not_text_logo( $control ) {
+		$options = get_option( 'clc-options', array() );
+
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() ) {
+			return false;
+		}
+
+		return true;
 	}
 }
