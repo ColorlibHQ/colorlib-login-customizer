@@ -103,7 +103,7 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 				</i>
 				<# } #>
 			</span>
-			<input type="text" class="clc-slider" id="input_{{ data.id }}" value="{{ data.value }}" {{ data.link }}/>
+			<input type="text" class="clc-slider" id="input_{{ data.id }}" value="{{ data.value }}"/>
 		</label>
 		<div id="slider_{{ data.id }}" class="clc-slider"></div>
 		<?php

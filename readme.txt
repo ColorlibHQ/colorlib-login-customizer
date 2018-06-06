@@ -3,7 +3,7 @@ Contributors: colorlibplugins, silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: 1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,7 +21,7 @@ Build and personalize your WordPress login form from start to finish. Colorlib L
 
 -    Logo options: you can add a custom logo and set up its height and weight.
 -    Background options: from here you can upload a background image or change the background’s color.
--    Form options: you can change the form’s width and height, add a background image, change the background color, add padding and borders, and change the form’s field background color, width, and margin. 
+-    Form options: you can change the form’s width and height, add a background image, change the background color, add padding and borders, and change the form’s field background color, width, and margin.
 -    Miscellaneous: in here you will find the options to change the button’s background, color, hover state, border, shadow, and the link’s color and hover color.
 
 = Further Reading =
@@ -42,6 +42,9 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.2.0 =
+* Implemented everything from here: https://github.com/puikinsh/colorlib-login-customizer/milestone/1?closed=1
 
 = 1.1 =
 * Changed templates functionality

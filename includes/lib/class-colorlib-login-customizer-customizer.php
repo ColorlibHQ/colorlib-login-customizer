@@ -69,72 +69,181 @@ class Colorlib_Login_Customizer_Customizer {
 					'type'        => 'clc-templates',
 					'default'     => 'default',
 					'choices'     => array(
-						'default'      => array(
-							'url' => esc_url( $this->parent->assets_url ) . 'img/default.jpg',
+						'default'     => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/default.jpg',
 							'options' => array(
 								/**
 								 * Layout
 								 */
 								'columns'                  => '1',
+								'columns-width'            => array(
+									'left'  => 6,
+									'right' => 6,
+								),
 								'form-column-align'        => '3',
 								'form-vertical-align'      => '2',
 								/**
 								 * Logo section
 								 */
-								'hide-logo'                 => 0,
-								'custom-logo-url'           => '',
-								'custom-logo'               => '',
-								'logo-width'                => '84',
-								'logo-height'               => '84',
+								'hide-logo'                => 0,
+								'use-text-logo'            => 0,
+								'logo-text'                => '',
+								'custom-logo-url'          => '',
+								'custom-logo'              => '',
+								'logo-text-color'          => '#444',
+								'logo-text-size'           => '20',
+								'logo-text-color-hover'    => '#00a0d2',
+								'logo-width'               => '84',
+								'logo-height'              => '84',
 								/**
 								 * Background section
 								 */
-								'custom-background'         => '',
-								'custom-background-color'   => '#f1f1f1',
+								'custom-background'        => '',
+								'custom-background-form'   => '',
+								'custom-background-color'  => '#f1f1f1',
+								'custom-background-color-form' => '#f1f1f1',
 								/**
 								 * Form section
 								 */
-								'form-width'                => '320',
-								'form-height'               => '297',
-								'form-background-image'     => '',
-								'form-background-color'     => 'rgba(255, 255, 255, 1)',
-								'form-padding'              => '26px 24px 46px',
-								'form-border'               => '',
-								'form-field-width'          => '',
-								'form-field-margin'         => '',
-								'form-field-background'     => '#fbfbfb',
-								'form-field-color'          => '#333333',
-								'form-label-color'          => '#72777c',
-								'hide-extra-links'          => 0,
+								'form-width'               => '320',
+								'form-height'              => '297',
+								'form-background-image'    => '',
+								'form-background-color'    => '#ffffff',
+								'form-padding'             => '26px 24px',
+								'form-border'              => '0 none',
+								'form-shadow'              => '0 1px 3px rgba(0,0,0,.13)',
+								'form-border-radius'       => 'unset',
+								'form-field-border-radius' => 'unset',
+								'form-field-border'        => '1px solid #ddd',
+								'form-field-width'         => '',
+								'form-field-margin'        => '2px 6px 16px 0',
+								'form-field-background'    => '#fbfbfb',
+								'form-field-color'         => '#32373c',
+								'form-label-color'         => '#72777c',
+								'hide-extra-links'         => 0,
+								'username-label'           => 'Username or Email Address',
+								'password-label'           => 'Password',
 								/**
 								 * Others section ( misc )
 								 */
-								'button-background'         => '#0085ba',
-								'button-background-hover'   => '#008ec2',
-								'button-border-color'       => '#0073aa',
+								'button-background'        => '#0085ba',
+								'button-background-hover'  => '#008ec2',
+								'button-border-color'      => '#0073aa',
 								'button-border-color-hover' => '#006799',
-								'button-shadow'             => '',
-								'button-color'              => '#ffffff',
-								'link-color'                => '#555d66',
-								'link-color-hover'          => '#00a0d2',
+								'button-shadow'            => '0 1px 0 #006799',
+								'button-text-shadow'       => '0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799',
+								'button-color'             => '#ffffff',
+								'link-color'               => '#555d66',
+								'link-color-hover'         => '#00a0d2',
+								'hide-rememberme'          => false,
+								'custom-css'            => '',
 							),
 						),
-						'template-01'  => array(
+						'template-01' => array(
 							'url'     => esc_url( $this->parent->assets_url ) . 'img/template-01.jpg',
 							'options' => array(
-								'columns' => '2',
-								'form-column-align' => '1',
-								'custom-background' => esc_url( $this->parent->assets_url ) . 'img/background.jpg',
+								'columns'               => '2',
+								'form-column-align'     => '1',
+								'form-background-color' => 'rgba(255, 255, 255, 1)',
+								'custom-background'     => esc_url( $this->parent->assets_url ) . 'img/background.jpg',
+								'custom-css'            => '',
 							),
 						),
-						'template-02'  => array(
-							'url' => esc_url( $this->parent->assets_url ) . 'img/template-02.jpg',
+						'template-02' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/template-02.jpg',
 							'options' => array(
-								'hide-logo' => '1',
-								'hide-extra-links' => '1',
-								'custom-background' => esc_url( $this->parent->assets_url ) . 'img/background-1.jpg',
+								'hide-logo'             => '1',
+								'hide-extra-links'      => '1',
+								'custom-background'     => esc_url( $this->parent->assets_url ) . 'img/background-1.jpg',
 								'form-background-color' => 'rgba(255, 255, 255, 0)',
-								'form-shadow' => 'none',
+								'form-shadow'           => 'none',
+								'custom-css'            => '',
+							),
+						),
+						'template-03' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-03/screen.jpg',
+							'options' => array(
+								'columns'                 => '2',
+								'columns-width'           => array(
+									'left'  => 8,
+									'right' => 4,
+								),
+								/**
+								 * Form section
+								 */
+								'form-width'              => '430',
+								'form-height'             => '350',
+								'form-column-align'       => '3',
+								'hide-logo'               => '1',
+								'hide-extra-links'        => '1',
+								'custom-background-color' => '#f7f7f7',
+								'custom-background'       => esc_url( $this->parent->assets_url ) . 'img/tpl-03/bg.jpg',
+								'form-background-color'   => 'rgba(255,255,255,0)',
+								'form-shadow'             => 'none',
+								'custom-css'              => ".ml-form-container .submit input[type='submit'] {width: 100%; box-sizing: border-box;display: inline-block;text-align: center;border-radius: 30px;padding: 0 20px;height: 38px;line-height: 1;font-weight: bold;vertical-align: middle; }",
+								'form-field-background'   => '#f7f7f7',
+								'button-background'       => '#6675df',
+								'button-background-hover' => '#333333',
+								'button-border-color'     => '#6675df',
+								'button-border-color-hover' => '#333333',
+								'hide-rememberme'         => '1',
+								/**
+								 * Logo section
+								 */
+								'hide-logo'               => 0,
+								'use-text-logo'           => 1,
+								'logo-text'               => 'Login to continue',
+								'custom-logo-url'         => '',
+								'custom-logo'             => '',
+								'logo-text-color'         => '#333',
+								'logo-text-size'          => '30',
+								'logo-text-color-hover'   => '#00a0d2',
+								'logo-width'              => '350',
+								'logo-height'             => '0',
+								'username-label'          => 'Username',
+								'password-label'          => 'Password',
+							),
+						),
+						'template-04' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-04/screen.jpg',
+							'options' => array(
+								'form-width'               => '350',
+								'form-height'              => '350',
+								'form-padding'             => '50px 30px',
+								'columns'                  => '1',
+								'hide-logo'                => '1',
+								'hide-extra-links'         => 0,
+								'custom-background-color'  => '#e9faff',
+								'custom-background'        => '',
+								'form-background-color'    => 'rgba(255,255,255,1)',
+								'form-shadow'              => 'none',
+								'form-field-background'    => '#FFF',
+								'button-background'        => '#4272d7',
+								'button-background-hover'  => '#333333',
+								'button-border-color'      => '#4272d7',
+								'button-border-color-hover' => '#333333',
+								'hide-rememberme'          => 1,
+								/**
+								 * Logo section
+								 */
+								'hide-logo'                => 0,
+								'use-text-logo'            => 1,
+								'logo-text'                => 'Account Login',
+								'custom-logo-url'          => '',
+								'custom-logo'              => '',
+								'logo-text-color'          => '#333',
+								'logo-text-size'           => '20',
+								'logo-text-color-hover'    => '#00a0d2',
+								'logo-width'               => '350',
+								'logo-height'              => '0',
+								'username-label'           => '',
+								'password-label'           => '',
+								'form-shadow'              => '0 3px 20px 0px rgba(0, 0, 0, 0.1)',
+								'custom-css'               => '',
+								'form-field-border-radius' => '0',
+								'form-field-margin'        => '0',
+								'form-field-border'        => '1px solid #eee',
+								'custom-css'               => ".ml-form-container .submit input[type='submit'] {width: 100%; box-sizing: border-box;display: inline-block;text-align: center;padding: 0 20px;height: 38px;line-height: 1;font-weight: bold;vertical-align: middle; margin-top: 15px;} .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 50px; } .login .ml-form-container #backtoblog,.login .ml-form-container #nav{position:absolute;left:0;right:0;margin-right:auto!important;bottom:50px;max-width:100%;text-align:center}.login .ml-form-container #nav{bottom:40px}.ml-form-container #login>h1{position:absolute;top:50px}",
 							),
 						),
 					),
@@ -154,6 +263,50 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 0,
 				),
 				array(
+					'id'          => 'use-text-logo',
+					'label'       => esc_html__( 'Use Text Logo', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Show/Hide the logo text from login page', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+				),
+				array(
+					'id'              => 'logo-text',
+					'label'           => esc_html__( 'Logo text', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This is will be your logo.', 'colorlib-login-customizer' ),
+					'type'            => 'text',
+					'default'         => '',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'              => 'logo-text-color',
+					'label'           => esc_html__( 'Logo text color', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will change the color text property.', 'colorlib-login-customizer' ),
+					'type'            => 'color',
+					'default'         => '#444',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'              => 'logo-text-color-hover',
+					'label'           => esc_html__( 'Logo text color hover', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will change the color text property on hover.', 'colorlib-login-customizer' ),
+					'type'            => 'color',
+					'default'         => '#00a0d2',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
+					'id'              => 'logo-text-size',
+					'label'           => esc_html__( 'Logo text size', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will change the text size of logo.', 'colorlib-login-customizer' ),
+					'default'         => 20,
+					'choices'         => array(
+						'min'  => 10,
+						'max'  => 120,
+						'step' => 1,
+					),
+					'type'            => 'clc-range-slider',
+					'active_callback' => array( $this, 'check_if_text_logo' ),
+				),
+				array(
 					'id'          => 'custom-logo-url',
 					'label'       => esc_html__( 'Custom logo URL', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
@@ -161,11 +314,12 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => esc_url( get_home_url() ),
 				),
 				array(
-					'id'          => 'custom-logo',
-					'label'       => esc_html__( 'Custom logo', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
-					'type'        => 'image',
-					'default'     => '',
+					'id'              => 'custom-logo',
+					'label'           => esc_html__( 'Custom logo', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'type'            => 'image',
+					'default'         => '',
+					'active_callback' => array( $this, 'check_if_not_text_logo' ),
 				),
 				array(
 					'id'          => 'logo-width',
@@ -173,7 +327,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'Make sure you set the logo width to match your image.', 'colorlib-login-customizer' ),
 					'default'     => 84,
 					'choices'     => array(
-						'min'  => 50,
+						'min'  => 0,
 						'max'  => 1000,
 						'step' => 5,
 					),
@@ -183,9 +337,9 @@ class Colorlib_Login_Customizer_Customizer {
 					'id'          => 'logo-height',
 					'label'       => esc_html__( 'Logo Height', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'Make sure you set the logo height to match your image.', 'colorlib-login-customizer' ),
-					'default'     => 84,
+					'default'     => 20,
 					'choices'     => array(
-						'min'  => 50,
+						'min'  => 0,
 						'max'  => 1000,
 						'step' => 5,
 					),
@@ -216,20 +370,27 @@ class Colorlib_Login_Customizer_Customizer {
 					'type'        => 'clc-button-group',
 				),
 				array(
-					'id'          => 'form-column-align',
-					'label'       => esc_html__( 'Form Column Alignment', 'colorlib-login-customizer' ),
-					'description' => '',
-					'default'     => 3,
-					'choices'     => array(
-						'left' => array(
+					'id'              => 'columns-width',
+					'label'           => esc_html__( 'Columns Width', 'colorlib-login-customizer' ),
+					'description'     => '',
+					'type'            => 'clc-column-width',
+					'active_callback' => array( $this, 'check_two_column_layout' ),
+				),
+				array(
+					'id'              => 'form-column-align',
+					'label'           => esc_html__( 'Form Column Alignment', 'colorlib-login-customizer' ),
+					'description'     => '',
+					'default'         => 3,
+					'choices'         => array(
+						'left'   => array(
 							'value' => 1,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-left.jpg',
 						),
-						'top' => array(
+						'top'    => array(
 							'value' => 2,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-top.jpg',
 						),
-						'right' => array(
+						'right'  => array(
 							'value' => 3,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-right.jpg',
 						),
@@ -238,7 +399,7 @@ class Colorlib_Login_Customizer_Customizer {
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-bottom.jpg',
 						),
 					),
-					'type'        => 'clc-button-group',
+					'type'            => 'clc-button-group',
 					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 				array(
@@ -247,7 +408,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => '',
 					'default'     => 2,
 					'choices'     => array(
-						'top' => array(
+						'top'    => array(
 							'value' => 1,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-top.png',
 						),
@@ -268,7 +429,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => '',
 					'default'     => 2,
 					'choices'     => array(
-						'left' => array(
+						'left'   => array(
 							'value' => 1,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-horizontal-align-left.png',
 						),
@@ -276,7 +437,7 @@ class Colorlib_Login_Customizer_Customizer {
 							'value' => 2,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-middle.png',
 						),
-						'right' => array(
+						'right'  => array(
 							'value' => 3,
 							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-horizontal-align-right.png',
 						),
@@ -305,19 +466,19 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '',
 				),
 				array(
-					'id'          => 'custom-background-color-form',
-					'label'       => esc_html__( 'Form Column background color', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
-					'type'        => 'color',
-					'default'     => '#f1f1f1',
+					'id'              => 'custom-background-color-form',
+					'label'           => esc_html__( 'Form Column background color', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),
+					'type'            => 'color',
+					'default'         => '#f1f1f1',
 					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 				array(
-					'id'          => 'custom-background-form',
-					'label'       => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
-					'type'        => 'image',
-					'default'     => '',
+					'id'              => 'custom-background-form',
+					'label'           => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'type'            => 'image',
+					'default'         => '',
 					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 			),
@@ -370,7 +531,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form padding', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the padding property. Example: 26px 24px 46px 30px', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => '26px 24px 46px',
+					'default'     => '26px 24px',
 				),
 				array(
 					'id'          => 'form-border',
@@ -378,6 +539,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the border property. Example: 2px dotted black', 'colorlib-login-customizer' ),
 					'type'        => 'text',
 					'default'     => '0 none',
+				),
+				array(
+					'id'          => 'form-border-radius',
+					'label'       => esc_html__( 'Form border radius', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the border radius property. Example: 2px 2px 2px 2px', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '0',
 				),
 				array(
 					'id'          => 'form-shadow',
@@ -398,7 +566,21 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form field margin', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the margin property. Example: 26px 24px 46px 30px', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => '2px 6px 16px 0px',
+					'default'     => '2px 6px 16px 0',
+				),
+				array(
+					'id'          => 'form-field-border',
+					'label'       => esc_html__( 'Form field border', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Please input the desired border for the form field. Example: 2px dotted black', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '1px solid #ddd',
+				),
+				array(
+					'id'          => 'form-field-border-radius',
+					'label'       => esc_html__( 'Form field border radius', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Please input the desired border radiuse for the form field. Example: 5px 5px 5px 5px', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'unset',
 				),
 				array(
 					'id'          => 'form-field-background',
@@ -412,7 +594,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form field color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the text color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '#333333',
+					'default'     => '#32373c',
 				),
 				array(
 					'id'          => 'form-label-color',
@@ -420,6 +602,20 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the label text color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
 					'default'     => '#72777c',
+				),
+				array(
+					'id'          => 'username-label',
+					'label'       => esc_html__( 'Username label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Username or Email Address',
+				),
+				array(
+					'id'          => 'password-label',
+					'label'       => esc_html__( 'Password label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for password label or just delete it.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Password',
 				),
 				array(
 					'id'          => 'hide-extra-links',
@@ -432,7 +628,7 @@ class Colorlib_Login_Customizer_Customizer {
 		);
 
 		$settings['general'] = array(
-			'title'       => esc_html__( 'Miscellaneous', 'colorlib-login-customizer' ),
+			'title'       => esc_html__( 'Form Button & Links', 'colorlib-login-customizer' ),
 			'description' => '',
 			'fields'      => array(
 				array(
@@ -471,6 +667,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '0 1px 0 #006799',
 				),
 				array(
+					'id'          => 'button-text-shadow',
+					'label'       => esc_html__( 'Button text shadow', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This will change the submit button text\'s shadow property. Example: 0 -1px 1px #006799', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '0 -1px 1px #006799',
+				),
+				array(
 					'id'          => 'button-color',
 					'label'       => esc_html__( 'Button color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the submit button\'s text color property', 'colorlib-login-customizer' ),
@@ -490,6 +693,30 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'This will change the text color of links, that are underneath the login form, on hover', 'colorlib-login-customizer' ),
 					'type'        => 'color',
 					'default'     => '#00a0d2',
+				),
+				array(
+					'id'          => 'hide-rememberme',
+					'label'       => esc_html__( 'Hide "Remember Me"', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Show/Hide the "Remember Me" checkbox', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+				),
+			),
+		);
+
+		$settings['clc-custom-css'] = array(
+			'title'       => esc_html__( 'Custom CSS', 'colorlib-login-customizer' ),
+			'description' => '',
+			'fields'      => array(
+				array(
+					'id'          => 'custom-css',
+					'label'       => __( 'CSS code', 'colorlib-login-customizer' ),
+					'description' => '',
+					'code_type'   => 'text/css',
+					'type'        => 'custom-css',
+					'input_attrs' => array(
+						'aria-describedby' => 'editor-keyboard-trap-help-1 editor-keyboard-trap-help-2 editor-keyboard-trap-help-3 editor-keyboard-trap-help-4',
+					),
 				),
 			),
 		);
@@ -549,6 +776,14 @@ class Colorlib_Login_Customizer_Customizer {
 					$control_args['choices'] = $setting['choices'];
 				}
 
+				if ( isset( $setting['code_type'] ) ) {
+					$control_args['code_type'] = $setting['code_type'];
+				}
+
+				if ( isset( $setting['input_attrs'] ) ) {
+					$control_args['input_attrs'] = $setting['input_attrs'];
+				}
+
 				switch ( $setting['type'] ) {
 					case 'image':
 						$manager->add_control(
@@ -575,9 +810,19 @@ class Colorlib_Login_Customizer_Customizer {
 							new Colorlib_Login_Customizer_Button_Group_Control( $manager, $key_name, $control_args )
 						);
 						break;
-					case 'clc-toggle' :
+					case 'clc-column-width':
+						$manager->add_control(
+							new Colorlib_Login_Customizer_Column_Width( $manager, $key_name, $control_args )
+						);
+						break;
+					case 'clc-toggle':
 						$manager->add_control(
 							new Colorlib_Login_Customizer_Control_Toggle( $manager, $key_name, $control_args )
+						);
+						break;
+					case 'custom-css':
+						$manager->add_control(
+							new WP_Customize_Code_Editor_Control( $manager, $key_name, $control_args )
 						);
 						break;
 					default:
@@ -634,5 +879,25 @@ class Colorlib_Login_Customizer_Customizer {
 		}
 
 		return false;
+	}
+
+	public function check_if_text_logo( $control ) {
+		$options = get_option( 'clc-options', array() );
+
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function check_if_not_text_logo( $control ) {
+		$options = get_option( 'clc-options', array() );
+
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() ) {
+			return false;
+		}
+
+		return true;
 	}
 }

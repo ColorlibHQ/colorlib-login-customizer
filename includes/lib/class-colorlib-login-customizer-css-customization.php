@@ -27,12 +27,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$plugin         = Colorlib_Login_Customizer::instance();
 		$this->key_name = $plugin->key_name;
 		$this->set_options();
-		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
+
+		add_action( 'login_head', array( $this, 'check_labels' ) );
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
+		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
+		add_filter( 'login_headertitle', array( $this, 'logo_text' ), 99 );
 
 		// 
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
@@ -80,14 +83,22 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 * Layout
 			 */
 			'columns'                  => '1',
+			'columns-width'            => array(
+				'left'  => 6,
+				'right' => 6,
+			),
 			'form-column-align'        => '3',
 			'form-vertical-align'      => '2',
 			/**
 			 * Logo section
 			 */
 			'hide-logo'                 => 0,
+			'use-text-logo'             => 0,
 			'custom-logo-url'           => '',
 			'custom-logo'               => '',
+			'logo-text-color'           => '#444',
+			'logo-text-size'            => '20',
+			'logo-text-color-hover'     => '#00a0d2',
 			'logo-width'                => '',
 			'logo-height'               => '',
 			/**
@@ -106,13 +117,18 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-background-color'     => '#fff',
 			'form-padding'              => '',
 			'form-border'               => '',
+			'form-border-radius'        => '',
 			'form-shadow'               => '',
 			'form-field-width'          => '',
 			'form-field-margin'         => '',
+			'form-field-border-radius'  => 'unset',
+			'form-field-border'         => '1px solid #ddd',
 			'form-field-background'     => '',
 			'form-field-color'          => '',
+			'username-label'            => 'Username or Email Address',
+			'password-label'            => 'Password',
 			'form-label-color'          => '',
-			'hide-extra-links'          => 0,
+			'hide-extra-links'          => false,
 			/**
 			 * Others section ( misc )
 			 */
@@ -121,9 +137,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'button-border-color'       => '',
 			'button-border-color-hover' => '',
 			'button-shadow'             => '',
+			'button-text-shadow'        => '',
 			'button-color'              => '',
 			'link-color'                => '',
 			'link-color-hover'          => '',
+			'hide-rememberme'           => false,
 			/**
 			 * Reset value is not dynamic
 			 */
@@ -148,12 +166,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background',
 					'border-color',
 					'box-shadow',
+					'text-shadow',
 					'color',
 				),
 				'options' => array(
 					'button-background',
 					'button-border-color',
 					'button-shadow',
+					'button-text-shadow',
 					'button-color',
 				),
 			),
@@ -188,6 +208,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background-color',
 					'padding',
 					'border',
+					'border-radius',
 					'box-shadow',
 				),
 				'options' => array(
@@ -196,6 +217,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-background-color',
 					'form-padding',
 					'form-border',
+					'form-border-radius',
 					'form-shadow',
 				),
 			),
@@ -203,12 +225,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'attributes' => array(
 					'max-width',
 					'margin',
+					'border-radius',
+					'border',
 					'background',
 					'color',
 				),
 				'options' => array(
 					'form-field-width',
 					'form-field-margin',
+					'form-field-border-radius',
+					'form-field-border',
 					'form-field-background',
 					'form-field-color',
 				),
@@ -253,6 +279,24 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'logo-height',
 				),
 			),
+			'.login.clc-text-logo h1 a' => array(
+				'attributes' => array(
+					'color',
+					'font-size',
+				),
+				'options' => array(
+					'logo-text-color',
+					'logo-text-size',
+				),
+			),
+			'.login.clc-text-logo h1 a:hover' => array(
+				'attributes' => array(
+					'color',
+				),
+				'options' => array(
+					'logo-text-color-hover',
+				),
+			),
 			'#login > h1' => array(
 				'attributes' => array(
 					'display',
@@ -267,6 +311,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				),
 				'options' => array(
 					'hide-extra-links',
+				),
+			),
+			'#login form .forgetmenot' => array(
+				'attributes' => array(
+					'display',
+				),
+				'options' => array(
+					'hide-rememberme',
 				),
 			),
 		);
@@ -327,12 +379,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background',
 				'border-color',
 				'box-shadow',
+				'text-shadow',
 				'color',
 			),
 			array(
 				'button-background',
 				'button-border-color',
 				'button-shadow',
+				'button-text-shadow',
 				'button-color',
 			)
 		);
@@ -354,6 +408,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			),
 			array(
 				'link-color-hover',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'#login form .forgetmenot',
+			array(
+				'display',
+			),
+			array(
+				'hide-rememberme',
 			)
 		);
 
@@ -387,6 +451,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'background-color',
 				'padding',
 				'border',
+				'border-radius',
 				'box-shadow',
 			),
 			array(
@@ -395,6 +460,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'form-background-color',
 				'form-padding',
 				'form-border',
+				'form-border-radius',
 				'form-shadow',
 			)
 		);
@@ -407,12 +473,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			array(
 				'max-width',
 				'margin',
+				'border-radius',
+				'border',
 				'background',
 				'color',
 			),
 			array(
 				'form-field-width',
 				'form-field-margin',
+				'form-field-border-radius',
+				'form-field-border',
 				'form-field-background',
 				'form-field-color',
 			)
@@ -423,8 +493,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 */
 		$string .= $this->create_css_lines(
 			'.login label',
-			array( 'color' ),
-			array( 'form-label-color' )
+			array(
+				'color',
+			),
+			array(
+				'form-label-color',
+			)
 		);
 
 		$string .= $this->create_css_lines(
@@ -501,6 +575,28 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		);
 
 		$string .= $this->create_css_lines(
+			'.login.clc-text-logo h1 a',
+			array(
+				'color',
+				'font-size',
+			),
+			array(
+				'logo-text-color',
+				'logo-text-size',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'.login.clc-text-logo h1 a:hover',
+			array(
+				'color',
+			),
+			array(
+				'logo-text-color-hover',
+			)
+		);
+
+		$string .= $this->create_css_lines(
 			'#login > h1',
 			array(
 				'display',
@@ -565,6 +661,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			case 'height':
 			case 'min-height':
 			case 'max-height':
+			case 'font-size':
 				$value = $value . 'px';
 				break;
 			case 'display':
@@ -597,6 +694,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			$classes[] = 'ml-login-horizontal-align-' . esc_attr( $this->options['form-horizontal-align'] );
 		}
 
+		if ( isset( $this->options['use-text-logo'] ) && $this->options['use-text-logo'] ) {
+			$classes[] = 'clc-text-logo';
+		}
+
 		return $classes;
 	}
 
@@ -608,15 +709,41 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $url;
 	}
 
+	public function logo_text( $text ) {
+		if ( isset( $this->options['use-text-logo'] ) && $this->options['use-text-logo'] ) {
+			return wp_kses_post( $this->options['logo-text'] );
+		}
+
+		return $text;
+	}
+
 	/**
 	 * Output the inline CSS
 	 */
 	public function generate_css() {
-		$instance = Colorlib_Login_Customizer::instance();
-		$css      = $this->create_css();
+		$instance    = Colorlib_Login_Customizer::instance();
+		$css         = $this->create_css();
+		$custom_css  = $this->options['custom-css'];
+		$columns_css = '';
 
-		echo '<style type="text/css">body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		if ( 2 == $this->options['columns'] ) {
+			$widths = $this->options['columns-width'];
+
+			$left_width = ( 100 / 12 )*absint( $widths['left'] );
+			$right_width = ( 100 / 12 )*absint( $widths['right'] );
+
+			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' . $left_width . '%; }';
+			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' . $left_width . '%; }';
+
+			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' . $right_width . '%; }';
+			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' . $right_width . '%; }';
+
+		}
+
+		echo '<style type="text/css">.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
+		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
+		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
 	}
 
 	public function add_extra_div() {
@@ -625,6 +752,66 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 	public function close_extra_div() {
 		echo '</div></div>';
+	}
+
+	public function check_labels() {
+
+		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
+
+	}
+
+	/**
+	 * Customizer output for custom username label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_username_label( $translated_text, $text, $domain ) {
+		$default = 'Username or Email Address';
+		$label   = $this->options['username-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+	/**
+	 * Customizer output for custom password label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_password_label( $translated_text, $text, $domain ) {
+		$default = 'Password';
+		$label   = $this->options['password-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
 	}
 
 }
