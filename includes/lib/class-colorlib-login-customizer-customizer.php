@@ -217,6 +217,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'type'        => 'clc-button-group',
 				),
 				array(
+					'id'          => 'columns-width',
+					'label'       => esc_html__( 'Columns Width', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'clc-column-width',
+					'active_callback' => array( $this, 'check_two_column_layout' ),
+				),
+				array(
 					'id'          => 'form-column-align',
 					'label'       => esc_html__( 'Form Column Alignment', 'colorlib-login-customizer' ),
 					'description' => '',
@@ -634,6 +641,11 @@ class Colorlib_Login_Customizer_Customizer {
 					case 'clc-button-group':
 						$manager->add_control(
 							new Colorlib_Login_Customizer_Button_Group_Control( $manager, $key_name, $control_args )
+						);
+						break;
+					case 'clc-column-width':
+						$manager->add_control(
+							new Colorlib_Login_Customizer_Column_Width( $manager, $key_name, $control_args )
 						);
 						break;
 					case 'clc-toggle' :
