@@ -32,6 +32,8 @@ If you are new to WordPress and want to learn more we have got you covered. Colo
 
 If you enjoy using Colorlib Login Customizer for WordPress please leave a [positive feedback](https://wordpress.org/support/plugin/colorlib-login-customiezr/reviews/?filter=5). We are committed to make it the best Login Customizer plugin for WordPress.
 
+= How to add a new template in Colorlib Login Customizer = 
+- https://github.com/ColorlibHQ/colorlib-login-customizer/wiki/How-to-create-a-new-template-in-CLC
 
 == Installation ==
 
