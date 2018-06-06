@@ -1,3 +1,4 @@
 node_modules/*
 .idea/*
 colorlib-login-customizer.zip
+.DS_Store
