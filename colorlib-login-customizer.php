@@ -1,12 +1,12 @@
 <?php
 /*
  * Plugin Name: Colorlib Login Customizer
- * Version: 1.1.0
+ * Version: 1.2.0
  * Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
  * Author: Colorlib
  * Author URI: https://colorlib.com/
  * Requires at least: 4.0
- * Tested up to: 4.7
+ * Tested up to: 4.9
  *
  * Text Domain: colorlib-login-customizer
  * Domain Path: /languages/
@@ -34,7 +34,7 @@ require_once 'includes/class-colorlib-login-customizer-autoloader.php';
  * @return object Colorlib_Login_Customizer
  */
 function colorlib_login_customizer() {
-	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.1.0' );
+	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.0' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Colorlib_Login_Customizer_Settings::instance( $instance );
