@@ -33,3 +33,9 @@
 	left: -15px;
 	top: -15px;
 }
+.login h1 a #logo-text {
+	display: none;
+}
+.login.clc-text-logo h1 a #logo-text {
+	display: block;
+}

@@ -35,6 +35,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
+		add_filter( 'login_headertitle', array( $this, 'logo_text' ), 99 );
 
 		// 
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
@@ -94,6 +95,9 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'hide-logo'                 => 0,
 			'custom-logo-url'           => '',
 			'custom-logo'               => '',
+			'logo-text-color'           => '#444',
+			'logo-text-size'            => '20',
+			'logo-text-color-hover'     => '#00a0d2',
 			'logo-width'                => '',
 			'logo-height'               => '',
 			/**
@@ -266,6 +270,24 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'custom-logo',
 					'logo-width',
 					'logo-height',
+				),
+			),
+			'.login.clc-text-logo h1 a' => array(
+				'attributes' => array(
+					'color',
+					'font-size',
+				),
+				'options' => array(
+					'logo-text-color',
+					'logo-text-size',
+				),
+			),
+			'.login.clc-text-logo h1 a:hover' => array(
+				'attributes' => array(
+					'color',
+				),
+				'options' => array(
+					'logo-text-color-hover',
 				),
 			),
 			'#login > h1' => array(
@@ -542,6 +564,28 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		);
 
 		$string .= $this->create_css_lines(
+			'.login.clc-text-logo h1 a',
+			array(
+				'color',
+				'font-size',
+			),
+			array(
+				'logo-text-color',
+				'logo-text-size',
+			)
+		);
+
+		$string .= $this->create_css_lines(
+			'.login.clc-text-logo h1 a:hover',
+			array(
+				'color',
+			),
+			array(
+				'logo-text-color-hover',
+			)
+		);
+
+		$string .= $this->create_css_lines(
 			'#login > h1',
 			array(
 				'display',
@@ -606,6 +650,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			case 'height':
 			case 'min-height':
 			case 'max-height':
+			case 'font-size':
 				$value = $value . 'px';
 				break;
 			case 'display':
@@ -638,6 +683,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			$classes[] = 'ml-login-horizontal-align-' . esc_attr( $this->options['form-horizontal-align'] );
 		}
 
+		if ( isset( $this->options['use-text-logo'] ) && $this->options['use-text-logo'] ) {
+			$classes[] = 'clc-text-logo';
+		}
+
 		return $classes;
 	}
 
@@ -647,6 +696,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		}
 
 		return $url;
+	}
+
+	public function logo_text( $text ) {
+		if ( isset( $this->options['use-text-logo'] ) && $this->options['use-text-logo'] ) {
+			return wp_kses_post( $this->options['logo-text'] );
+		}
+
+		return $text;
 	}
 
 	/**
@@ -672,7 +729,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		}
 
-		echo '<style type="text/css">#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css">.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';

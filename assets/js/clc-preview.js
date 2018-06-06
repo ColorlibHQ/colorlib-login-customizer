@@ -46,7 +46,7 @@
           return '';
         }
 
-      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height' ] ) >= 0 ) {
+      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height', 'font-size' ] ) >= 0 ) {
         line += this.settings[ option ].value + 'px';
       }else if ( 'background-image' === this.settings[ option ].attribute ) {
         line += 'url(' + this.settings[ option ].value + ')';
@@ -76,6 +76,23 @@
       } else {
         $( 'body' ).removeClass( 'ml-half-screen' );
       }
+    } );
+  } );
+
+  // Add class if we have text logo
+  wp.customize( 'clc-options[use-text-logo]', function( value ) {
+    value.bind( function( to ) {
+      if ( to ) {
+        $( 'body' ).addClass( 'clc-text-logo' );
+      } else {
+        $( 'body' ).removeClass( 'clc-text-logo' );
+      }
+    } );
+  } );
+
+  wp.customize( 'clc-options[logo-text]', function( value ) {
+    value.bind( function( to ) {
+      $( '#logo-text' ).text( to );
     } );
   } );
 
