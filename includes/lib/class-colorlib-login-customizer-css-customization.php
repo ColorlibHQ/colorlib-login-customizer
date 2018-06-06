@@ -82,6 +82,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 * Layout
 			 */
 			'columns'                  => '1',
+			'columns-width'            => array(
+				'left'  => 6,
+				'right' => 6,
+			),
 			'form-column-align'        => '3',
 			'form-vertical-align'      => '2',
 			/**
@@ -649,12 +653,28 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * Output the inline CSS
 	 */
 	public function generate_css() {
-		$instance   = Colorlib_Login_Customizer::instance();
-		$css        = $this->create_css();
-		$custom_css = $this->options['custom-css'];
+		$instance    = Colorlib_Login_Customizer::instance();
+		$css         = $this->create_css();
+		$custom_css  = $this->options['custom-css'];
+		$columns_css = '';
 
-		echo '<style type="text/css">#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;height:50%;flex:1;flex-shrink:0}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		if ( 2 == $this->options['columns'] ) {
+			$widths = $this->options['columns-width'];
+
+			$left_width = ( 100 / 12 )*absint( $widths['left'] );
+			$right_width = ( 100 / 12 )*absint( $widths['right'] );
+
+			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' . $left_width . '%; }';
+			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' . $left_width . '%; }';
+
+			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' . $right_width . '%; }';
+			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' . $right_width . '%; }';
+
+		}
+
+		echo '<style type="text/css">#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
+		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
 	}
 

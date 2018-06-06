@@ -124,6 +124,27 @@
     } );
   } );
 
+  // Columns width
+  wp.customize( 'clc-options[columns-width]', function( value ) {
+    value.bind( function( to ) {
+      var customCSS = '',
+          leftWidth,
+          rightWidth;
+      if ( '' !== to && undefined !== to.left && undefined !== to.right ) {
+        leftWidth = ( 100 / 12 )*parseInt( to.left, 10 );
+        rightWidth = ( 100 / 12 )*parseInt( to.right, 10 );
+        customCSS = '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' + leftWidth + '%; }';
+        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' + leftWidth + '%; }';
+
+        customCSS += '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' + rightWidth + '%; }';
+        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' + rightWidth + '%; }';
+
+        $( '#clc-columns-style' ).text( customCSS );
+
+      }
+    } );
+  } );
+
   $( '.clc-preview-event' ).click( function() {
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
   } );
