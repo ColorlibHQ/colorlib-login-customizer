@@ -67,7 +67,7 @@ class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Contro
 	public function content_template() {
 		//@formatter:off ?>
 		<label <# if( data.lite ) { #>class="lite"<# } #>>
-			<input class="clc-color-picker" type="text" <# if( data.default ){ #>placeholder="{{ data.default }}"<# } #> <# if(data.value){ #> value="{{ data.value }}" <# } #> {{{ data.link }}} />
+			<input class="clc-color-picker" type="text" <# if( data.default ){ #>placeholder="{{ data.default }}"<# } #> <# if(data.value){ #> value="{{ data.value }}" <# } #> />
 			<span class="customize-control-title clc-color-picker-title">
 				{{{ data.label }}}
 				<# if( data.default ){ #>

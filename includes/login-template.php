@@ -159,17 +159,18 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<h1>
 				<a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
 					<span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
+					<span id="logo-text"><?php echo $login_header_text ?></span>
 				</a>
 			</h1>
 
 			<form name="loginform" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
 				<div id="clc-loginform" class="clc-preview-event" data-section="clc_form"><span class="dashicons dashicons-edit"></span></div>
 				<p>
-					<label for="user_login"><?php _e( 'Username or Email Address', 'colorlib-login-customizer' ); ?><br />
+					<label for="user_login"><span id="clc-username-label"><?php _e( 'Username or Email Address', 'colorlib-login-customizer' ); ?></span><br />
 					<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
-					<label for="user_pass"><?php _e( 'Password', 'colorlib-login-customizer' ); ?><br />
+					<label for="user_pass"><span id="clc-password-label"><?php _e( 'Password', 'colorlib-login-customizer' ); ?></span><br />
 					<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" /></label>
 				</p>
 				<?php

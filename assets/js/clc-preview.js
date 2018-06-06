@@ -46,12 +46,12 @@
           return '';
         }
 
-      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height' ] ) >= 0 ) {
+      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height', 'font-size' ] ) >= 0 ) {
         line += this.settings[ option ].value + 'px';
       }else if ( 'background-image' === this.settings[ option ].attribute ) {
         line += 'url(' + this.settings[ option ].value + ')';
       }else if ( 'display' === this.settings[ option ].attribute ) {
-        if ( '1' === this.settings[ option ].value ) {
+        if ( this.settings[ option ].value ) {
           line += 'none';
         } else {
           line += 'block';
@@ -79,6 +79,23 @@
     } );
   } );
 
+  // Add class if we have text logo
+  wp.customize( 'clc-options[use-text-logo]', function( value ) {
+    value.bind( function( to ) {
+      if ( to ) {
+        $( 'body' ).addClass( 'clc-text-logo' );
+      } else {
+        $( 'body' ).removeClass( 'clc-text-logo' );
+      }
+    } );
+  } );
+
+  wp.customize( 'clc-options[logo-text]', function( value ) {
+    value.bind( function( to ) {
+      $( '#logo-text' ).text( to );
+    } );
+  } );
+
   /* Column Align */
   wp.customize( 'clc-options[form-column-align]', function( value ) {
     value.bind( function( to ) {
@@ -100,6 +117,48 @@
     value.bind( function( to ) {
       $( 'body' ).removeClass( 'ml-login-horizontal-align-1 ml-login-horizontal-align-2 ml-login-horizontal-align-3' );
       $( 'body' ).addClass( 'ml-login-horizontal-align-' + to );
+    } );
+  } );
+
+  // Custom CSS
+  wp.customize( 'clc-options[custom-css]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-custom-css' ).text( to );
+    } );
+  } );
+
+  // Username label
+  wp.customize( 'clc-options[username-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-username-label' ).text( to );
+    } );
+  } );
+
+  // Password label
+  wp.customize( 'clc-options[password-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-password-label' ).text( to );
+    } );
+  } );
+
+  // Columns width
+  wp.customize( 'clc-options[columns-width]', function( value ) {
+    value.bind( function( to ) {
+      var customCSS = '',
+          leftWidth,
+          rightWidth;
+      if ( '' !== to && undefined !== to.left && undefined !== to.right ) {
+        leftWidth = ( 100 / 12 )*parseInt( to.left, 10 );
+        rightWidth = ( 100 / 12 )*parseInt( to.right, 10 );
+        customCSS = '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' + leftWidth + '%; }';
+        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' + leftWidth + '%; }';
+
+        customCSS += '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' + rightWidth + '%; }';
+        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' + rightWidth + '%; }';
+
+        $( '#clc-columns-style' ).text( customCSS );
+
+      }
     } );
   } );
 

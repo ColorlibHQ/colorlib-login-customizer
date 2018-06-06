@@ -54,7 +54,8 @@
                 var control = this,
                     controlField = control.container.find( 'input.clc-slider' ),
                     controlSlider = control.container.find( 'div.clc-slider' ),
-                    controlSliderData = control.params.choices;
+                    controlSliderData = control.params.choices,
+                    updating = false;
 
                 controlSlider.slider({
                     range: 'min',
@@ -67,9 +68,25 @@
                     },
                     stop: function( event, ui ) {
                         controlField.val( ui.value );
+                        updating = true;
                         control.setting.set( ui.value );
+                        updating = false;
                     }
                 });
+
+                // Whenever the setting's value changes, refresh the preview.
+                control.setting.bind( function( value ) {
+
+                    // Bail if the update came from the control itself.
+                    if ( updating ) {
+                        return;
+                    }
+
+                    controlField.val( value );
+                    controlSlider.slider( 'value', value );
+
+                });
+
             }
         });
 
@@ -105,6 +122,85 @@
             }
         });
 
+        wp.customize.controlConstructor['clc-column-width'] = wp.customize.Control.extend({
+            ready: function() {
+                var control = this,
+                    updating = false;
+                
+                control.values = control.params.value;
+
+                control.container.on( 'click', '.clc-layouts-setup .clc-column > a', function() {
+                    var currentAction = $( this ).data( 'action' );
+
+                    updating = true;
+                    control.updateColumns( currentAction );
+                    updating = false;
+                    
+                });
+
+                // Whenever the setting's value changes, refresh the preview.
+                control.setting.bind( function( value ) {
+
+                    // Bail if the update came from the control itself.
+                    if ( updating ) {
+                        return;
+                    }
+
+                    control.values = value;
+                    control.rederColumns();
+
+                });
+
+            },
+
+            updateColumns: function( increment ) {
+                var incrementElement,
+                    decrementElement,
+                    control = this;
+
+                if ( 11 === control.values[ increment ] ) {
+                    return;
+                }
+
+                if ( 'left' == increment ) {
+                    incrementElement = control.container.find( '.clc-column-left' );
+                    decrementElement = control.container.find( '.clc-column-right' );
+
+                    control.values['left']  += 1;
+                    control.values['right'] -= 1;
+
+                }else{
+                    incrementElement = control.container.find( '.clc-column-right' );
+                    decrementElement = control.container.find( '.clc-column-left' );
+
+                    control.values['right']  += 1;
+                    control.values['left'] -= 1;
+
+                }
+
+                // Update control values
+                control.setting( '' );
+                control.setting( control.values );
+
+                control.rederColumns();
+
+            },
+
+            rederColumns: function() {
+                var control     = this,
+                    leftColumn  = control.container.find( '.clc-column-left' ),
+                    rightColumn = control.container.find( '.clc-column-right' ),
+                    classes     = 'col12 col11 col10 col9 col8 col7 col6 col5 col4 col3 col2 col1';
+
+                leftColumn.removeClass( classes ).addClass( 'col' + control.values['left'] );
+                rightColumn.removeClass( classes ).addClass( 'col' + control.values['right'] );
+
+            }
+
+
+
+        });
+
         wp.customize.controlConstructor['clc-color-picker'] = wp.customize.Control.extend({
             ready: function() {
                 var control = this,
@@ -113,7 +209,7 @@
                     input = $( control.container ).find( '.clc-color-picker' );
 
                 input.minicolors({
-                    format: 'rgb',
+                    format: 'hex',
                     opacity: true,
                     keywords: 'transparent, initial, inherit',
                     change: function( value, opacity ) {
@@ -159,19 +255,45 @@
             });
 
             wp.customize( 'clc-options[columns]', function( value ) {
-
                 value.bind( function( to ) {
                     var alignControl = wp.customize.control( 'clc-options[form-column-align]' ),
                         backgroundControl = wp.customize.control( 'clc-options[custom-background-form]' ),
+                        columnsWidthControl = wp.customize.control( 'clc-options[columns-width]' ),
                         backgroundColorControl = wp.customize.control( 'clc-options[custom-background-color-form]' );
                     if ( '2' === to ) {
                         alignControl.toggle( true );
                         backgroundControl.toggle( true );
                         backgroundColorControl.toggle( true );
+                        columnsWidthControl.toggle( true );
                     } else {
                         alignControl.toggle( false );
                         backgroundControl.toggle( false );
                         backgroundColorControl.toggle( false );
+                        columnsWidthControl.toggle( false );
+                    }
+                });
+            });
+
+            wp.customize( 'clc-options[use-text-logo]', function( value ) {
+                value.bind( function( to ) {
+                    var logoText           = wp.customize.control( 'clc-options[logo-text]' ),
+                        logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+                        logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
+                        logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
+                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' );
+
+                    if ( '1' == to ) {
+                        logoText.toggle( true );
+                        logoTextColor.toggle( true );
+                        logoTextColorHover.toggle( true );
+                        logoTextSize.toggle( true );
+                        logoImage.toggle( false );
+                    }else{
+                        logoText.toggle( false );
+                        logoTextColor.toggle( false );
+                        logoTextColorHover.toggle( false );
+                        logoTextSize.toggle( false );
+                        logoImage.toggle( true );
                     }
                 });
             });
