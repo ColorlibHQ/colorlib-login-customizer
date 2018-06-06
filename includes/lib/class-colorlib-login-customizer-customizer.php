@@ -76,6 +76,10 @@ class Colorlib_Login_Customizer_Customizer {
 								 * Layout
 								 */
 								'columns'                  => '1',
+								'columns-width'            => array(
+									'left'  => 6,
+									'right' => 6,
+								),
 								'form-column-align'        => '3',
 								'form-vertical-align'      => '2',
 								/**
@@ -86,30 +90,38 @@ class Colorlib_Login_Customizer_Customizer {
 								'custom-logo-url'           => '',
 								'custom-logo'               => '',
 								'logo-text-color'           => '#444',
-								'logo-text-size'            => '#00a0d2',
-								'logo-text-color-hover'     => '20',
+								'logo-text-size'            => '20',
+								'logo-text-color-hover'     => '#00a0d2',
 								'logo-width'                => '84',
 								'logo-height'               => '84',
 								/**
 								 * Background section
 								 */
-								'custom-background'         => '',
-								'custom-background-color'   => '#f1f1f1',
+								'custom-background'            => '',
+								'custom-background-form'       => '',
+								'custom-background-color'      => '#f1f1f1',
+								'custom-background-color-form' => '#f1f1f1',
 								/**
 								 * Form section
 								 */
 								'form-width'                => '320',
 								'form-height'               => '297',
 								'form-background-image'     => '',
-								'form-background-color'     => 'rgba(255, 255, 255, 1)',
-								'form-padding'              => '26px 24px 46px',
-								'form-border'               => '',
+								'form-background-color'     => '#ffffff',
+								'form-padding'              => '26px 24px',
+								'form-border'               => '0 none',
+								'form-shadow'               => '0 1px 3px rgba(0,0,0,.13)',
+								'form-border-radius'        => 'unset',
+								'form-field-border-radius'  => 'unset',
+								'form-field-border'         => '1px solid #ddd',
 								'form-field-width'          => '',
-								'form-field-margin'         => '',
+								'form-field-margin'         => '2px 6px 16px 0',
 								'form-field-background'     => '#fbfbfb',
-								'form-field-color'          => '#333333',
+								'form-field-color'          => '#32373c',
 								'form-label-color'          => '#72777c',
 								'hide-extra-links'          => 0,
+								'username-label'            => 'Username or Email Address',
+								'password-label'            => 'Password',
 								/**
 								 * Others section ( misc )
 								 */
@@ -117,11 +129,12 @@ class Colorlib_Login_Customizer_Customizer {
 								'button-background-hover'   => '#008ec2',
 								'button-border-color'       => '#0073aa',
 								'button-border-color-hover' => '#006799',
-								'button-shadow'             => '',
-								'button-text-shadow'        => '',
+								'button-shadow'             => '0 1px 0 #006799',
+								'button-text-shadow'        => '0 -1px 1px #006799, 1px 0 1px #006799, 0 1px 1px #006799, -1px 0 1px #006799',
 								'button-color'              => '#ffffff',
 								'link-color'                => '#555d66',
 								'link-color-hover'          => '#00a0d2',
+								'hide-rememberme'           => false,
 							),
 						),
 						'template-01'  => array(
@@ -427,7 +440,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form padding', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the padding property. Example: 26px 24px 46px 30px', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => '26px 24px 46px',
+					'default'     => '26px 24px',
 				),
 				array(
 					'id'          => 'form-border',
@@ -462,7 +475,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form field margin', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the margin property. Example: 26px 24px 46px 30px', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => '2px 6px 16px 0px',
+					'default'     => '2px 6px 16px 0',
 				),
 				array(
 					'id'          => 'form-field-border',
@@ -490,7 +503,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Form field color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the text color property.', 'colorlib-login-customizer' ),
 					'type'        => 'color',
-					'default'     => '#333333',
+					'default'     => '#32373c',
 				),
 				array(
 					'id'          => 'form-label-color',

@@ -93,6 +93,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 * Logo section
 			 */
 			'hide-logo'                 => 0,
+			'use-text-logo'             => 0,
 			'custom-logo-url'           => '',
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',
