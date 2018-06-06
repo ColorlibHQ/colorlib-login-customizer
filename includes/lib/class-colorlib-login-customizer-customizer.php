@@ -174,7 +174,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'Make sure you set the logo width to match your image.', 'colorlib-login-customizer' ),
 					'default'     => 84,
 					'choices'     => array(
-						'min'  => 50,
+						'min'  => 0,
 						'max'  => 1000,
 						'step' => 5,
 					),
@@ -184,9 +184,9 @@ class Colorlib_Login_Customizer_Customizer {
 					'id'          => 'logo-height',
 					'label'       => esc_html__( 'Logo Height', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'Make sure you set the logo height to match your image.', 'colorlib-login-customizer' ),
-					'default'     => 84,
+					'default'     => 20,
 					'choices'     => array(
-						'min'  => 50,
+						'min'  => 0,
 						'max'  => 1000,
 						'step' => 5,
 					),
