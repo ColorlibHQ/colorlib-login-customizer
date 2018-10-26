@@ -618,6 +618,20 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 'Password',
 				),
 				array(
+					'id'          => 'rememberme-label',
+					'label'       => esc_html__( 'Remember Me label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default remember me text.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Remember Me',
+				),
+				array(
+					'id'          => 'login-label',
+					'label'       => esc_html__( 'Login label', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for the log in button.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Log In',
+				),
+				array(
 					'id'          => 'hide-extra-links',
 					'label'       => esc_html__( 'Hide Extra Links', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'Show/Hide the links under the login form', 'colorlib-login-customizer' ),

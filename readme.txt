@@ -93,7 +93,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
-= 1.2.1 = 
+= 1.2.2 =
+* Added the possibility to change the `Remember Me` and `Log In` texts
+
+= 1.2.1 =
 * Minor tweaks & version bump
 
 = 1.2.0 =
