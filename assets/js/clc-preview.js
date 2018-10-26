@@ -96,6 +96,13 @@
     } );
   } );
 
+  // logo title
+	wp.customize( 'clc-options[logo-title]', function( value ) {
+		value.bind( function( to ) {
+			$( '#clc-logo-link' ).attr( 'title', to );
+		} );
+	} );
+
   /* Column Align */
   wp.customize( 'clc-options[form-column-align]', function( value ) {
     value.bind( function( to ) {

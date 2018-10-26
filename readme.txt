@@ -93,6 +93,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
+= 1.2.3 =
+* Fixed `Logo Url` setting
+* Added `Logo Title` setting
+
 = 1.2.2 =
 * Added the possibility to change the `Remember Me` and `Log In` texts
 

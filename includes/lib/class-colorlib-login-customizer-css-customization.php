@@ -35,7 +35,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
-		add_filter( 'login_headertitle', array( $this, 'logo_text' ), 99 );
+		add_filter( 'login_headertitle', array( $this, 'logo_title' ), 99 );
 
 		//
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
@@ -94,7 +94,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 */
 			'hide-logo'                 => 0,
 			'use-text-logo'             => 0,
-			'custom-logo-url'           => '',
+			'logo-url'           => '',
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',
 			'logo-text-size'            => '20',
@@ -704,19 +704,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	public function logo_url( $url ) {
-		if ( '' != $this->options['custom-logo-url'] ) {
-			return esc_url( $this->options['custom-logo-url'] );
+		if ( '' != $this->options['logo-url'] ) {
+			return esc_url( $this->options['logo-url'] );
 		}
 
 		return $url;
 	}
 
-	public function logo_text( $text ) {
-		if ( isset( $this->options['use-text-logo'] ) && $this->options['use-text-logo'] ) {
-			return wp_kses_post( $this->options['logo-text'] );
+	public function logo_title( $title ) {
+		if ( isset( $this->options['logo-title'] ) ) {
+			return wp_kses_post( $this->options['logo-title'] );
 		}
 
-		return $text;
+		return $title;
 	}
 
 	/**
