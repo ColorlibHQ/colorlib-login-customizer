@@ -141,6 +141,23 @@
     } );
   } );
 
+  // Remember Me label
+  wp.customize( 'clc-options[rememberme-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-rememberme-label' ).text( to );
+    } );
+  } );
+
+  // Login label
+  wp.customize( 'clc-options[login-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#wp-submit' ).val( to );
+    } );
+  } );
+
   // Columns width
   wp.customize( 'clc-options[columns-width]', function( value ) {
     value.bind( function( to ) {

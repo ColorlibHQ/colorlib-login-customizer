@@ -126,7 +126,7 @@
             ready: function() {
                 var control = this,
                     updating = false;
-                
+
                 control.values = control.params.value;
 
                 control.container.on( 'click', '.clc-layouts-setup .clc-column > a', function() {
@@ -135,7 +135,7 @@
                     updating = true;
                     control.updateColumns( currentAction );
                     updating = false;
-                    
+
                 });
 
                 // Whenever the setting's value changes, refresh the preview.
@@ -272,7 +272,24 @@
                         columnsWidthControl.toggle( false );
                     }
                 });
-            });
+			});
+
+			// validation for the login-level setting
+			wp.customize( 'clc-options[login-label]', function ( setting ) {
+				setting.validate = function ( value ) {
+					var code, notification;
+
+					code = 'required';
+					if ( ! value ) {
+						notification = new wp.customize.Notification( code, {message: 'value is empty' } );
+						setting.notifications.add( code, notification );
+					} else {
+						setting.notifications.remove( code );
+					}
+
+					return value;
+				};
+			} );
 
             wp.customize( 'clc-options[use-text-logo]', function( value ) {
                 value.bind( function( to ) {

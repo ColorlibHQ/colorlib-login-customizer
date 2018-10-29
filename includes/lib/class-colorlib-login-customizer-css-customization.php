@@ -37,7 +37,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
 		add_filter( 'login_headertitle', array( $this, 'logo_text' ), 99 );
 
-		// 
+		//
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
 	}
 
@@ -127,6 +127,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'form-field-color'          => '',
 			'username-label'            => 'Username or Email Address',
 			'password-label'            => 'Password',
+			'rememberme-label'          => 'Remember Me',
+			'login-label'               => 'Log In',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
 			/**
@@ -758,6 +760,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_rememberme_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_login_label' ), 99, 3 );
 
 	}
 
@@ -809,6 +813,60 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			return $translated_text;
 		}else{
 			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+
+	/**
+	 * Customizer output for custom remember me text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_rememberme_label( $translated_text, $text, $domain ) {
+		$default = 'Remember Me';
+		$label   = $this->options['rememberme-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+
+	/**
+	 * Customizer output for custom login text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_login_label( $translated_text, $text, $domain ) {
+		$default = 'Log In';
+		$label   = $this->options['login-label'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_attr( $label );
 		}
 
 		return $translated_text;

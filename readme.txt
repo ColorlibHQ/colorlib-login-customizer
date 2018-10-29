@@ -3,7 +3,7 @@ Contributors: colorlibplugins, silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: trunk
+Stable tag: 1.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -93,7 +93,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
-= 1.2.1 = 
+= 1.2.2 =
+* Added the possibility to change the `Remember Me` and `Log In` texts
+
+= 1.2.1 =
 * Minor tweaks & version bump
 
 = 1.2.0 =

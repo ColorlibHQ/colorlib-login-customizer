@@ -181,7 +181,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'login_form' );
 				?>
-				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></label></p>
+				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span id="clc-rememberme-label"><?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></span></label></p>
 				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
 			</form>
 			<p id="nav">
