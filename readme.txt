@@ -3,7 +3,7 @@ Contributors: colorlibplugins, silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
 Tested up to: 4.9
-Stable tag: trunk
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

@@ -94,7 +94,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			 */
 			'hide-logo'                 => 0,
 			'use-text-logo'             => 0,
-			'logo-url'           => '',
+			'logo-url'                  => site_url(),
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',
 			'logo-text-size'            => '20',
@@ -144,6 +144,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'link-color'                => '',
 			'link-color-hover'          => '',
 			'hide-rememberme'           => false,
+			/**
+			 * Custom CSS
+			 */
+			'custom-css'                => '',
 			/**
 			 * Reset value is not dynamic
 			 */

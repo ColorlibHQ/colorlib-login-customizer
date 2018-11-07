@@ -34,7 +34,7 @@ require_once 'includes/class-colorlib-login-customizer-autoloader.php';
  * @return object Colorlib_Login_Customizer
  */
 function colorlib_login_customizer() {
-	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.1' );
+	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.3' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Colorlib_Login_Customizer_Settings::instance( $instance );
