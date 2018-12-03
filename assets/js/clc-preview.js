@@ -96,6 +96,13 @@
     } );
   } );
 
+  // logo title
+	wp.customize( 'clc-options[logo-title]', function( value ) {
+		value.bind( function( to ) {
+			$( '#clc-logo-link' ).attr( 'title', to );
+		} );
+	} );
+
   /* Column Align */
   wp.customize( 'clc-options[form-column-align]', function( value ) {
     value.bind( function( to ) {
@@ -138,6 +145,23 @@
   wp.customize( 'clc-options[password-label]', function( value ) {
     value.bind( function( to ) {
       $( '#clc-password-label' ).text( to );
+    } );
+  } );
+
+  // Remember Me label
+  wp.customize( 'clc-options[rememberme-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-rememberme-label' ).text( to );
+    } );
+  } );
+
+  // Login label
+  wp.customize( 'clc-options[login-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#wp-submit' ).val( to );
     } );
   } );
 
