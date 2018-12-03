@@ -157,7 +157,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 		<div id="login">
 
 			<h1>
-				<a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
+				<a id="clc-logo-link" href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
 					<span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
 					<span id="logo-text"><?php echo $login_header_text ?></span>
 				</a>
@@ -181,7 +181,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'login_form' );
 				?>
-				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></label></p>
+				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span id="clc-rememberme-label"><?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></span></label></p>
 				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
 			</form>
 			<p id="nav">
