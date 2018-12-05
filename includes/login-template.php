@@ -157,7 +157,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 		<div id="login">
 
 			<h1>
-				<a href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
+				<a id="clc-logo-link" href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
 					<span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
 					<span id="logo-text"><?php echo $login_header_text ?></span>
 				</a>
@@ -195,13 +195,17 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 					echo esc_html( $login_link_separator );
 				endif;
 				?>
-				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
+				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
 			</p>
 			<p id="backtoblog">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<?php
-					/* translators: %s: site title */
-					printf( _x( '&larr; Back to %s', 'site', 'colorlib-login-customizer' ), esc_html( get_bloginfo( 'title', 'display' ) ) );
+                    <span  id="clc-back-to-text">
+                    <?php
+                         echo '&larr; '; _e('Back to','colorlib-login-customizer');
+                    ?>
+                    </span>
+                    <?php
+                         echo esc_html( get_bloginfo( 'title', 'display' ) );
 					?>
 				</a>
 			</p>
