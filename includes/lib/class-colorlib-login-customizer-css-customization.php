@@ -130,7 +130,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'password-label'            => 'Password',
 			'rememberme-label'          => 'Remember Me',
 			'lost-password-text'        => 'Lost your password?',
-			'back-to-text'              => 'Back to site',
+			'back-to-text'              => '&larr; Back to %s',
 			'login-label'               => 'Log In',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
@@ -749,7 +749,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		}
 
-		echo '<style type="text/css">.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}</style>';
+		echo '<style type="text/css">.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}.login input[type=text]:focus, .login input[type=search]:focus, .login input[type=radio]:focus, .login input[type=tel]:focus, .login input[type=time]:focus, .login input[type=url]:focus, .login input[type=week]:focus, .login input[type=password]:focus, .login input[type=checkbox]:focus, .login input[type=color]:focus, .login input[type=date]:focus, .login input[type=datetime]:focus, .login input[type=datetime-local]:focus, .login input[type=email]:focus, .login input[type=month]:focus, .login input[type=number]:focus, .login select:focus, .login textarea:focus{ box-shadow: none; }</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
@@ -774,7 +774,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 	public function check_texts() {
 		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_back_to_text' ), 99, 3 );
+		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
 	}
 
 	/**
@@ -892,8 +892,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @param string|string $domain The text domain of the site.
 	 * @return string
 	 */
-	public function change_back_to_text( $translated_text, $text, $domain ) {
-		$default = 'Back to';
+	public function change_back_to_text( $translated_text, $text, $context, $domain ) {
+		$default = '&larr; Back to %s';
 		$label   = $this->options['back-to-text'];
 
 		// Check if is our text
@@ -905,7 +905,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		}else{
-			$translated_text = esc_html( $label );
+			$translated_text = '&larr; ' . esc_html( $label ) . ' %s';
 		}
 
 		return $translated_text;
