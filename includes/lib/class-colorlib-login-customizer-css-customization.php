@@ -131,6 +131,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'rememberme-label'          => 'Remember Me',
 			'lost-password-text'        => 'Lost your password?',
 			'back-to-text'              => '&larr; Back to %s',
+
 			'login-label'               => 'Log In',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
