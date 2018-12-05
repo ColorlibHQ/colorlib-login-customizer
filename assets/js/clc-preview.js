@@ -172,7 +172,7 @@
     // Back to site text
     wp.customize( 'clc-options[back-to-text]', function( value ) {
         value.bind( function( to ) {
-            $( '#clc-back-to-text' ).text( to );
+            $( '#clc-back-to-text' ).html( '&larr; ' + to );
         } );
     } );
 
