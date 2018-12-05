@@ -29,6 +29,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$this->set_options();
 
 		add_action( 'login_head', array( $this, 'check_labels' ) );
+		add_action( 'login_head', array( $this, 'check_texts' ) );
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
 		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
@@ -128,6 +129,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'username-label'            => 'Username or Email Address',
 			'password-label'            => 'Password',
 			'rememberme-label'          => 'Remember Me',
+			'lost-password-text'        => 'Lost your password?',
+			'back-to-text'              => 'Back to site',
 			'login-label'               => 'Log In',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
@@ -769,6 +772,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 	}
 
+	public function check_texts() {
+		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_back_to_text' ), 99, 3 );
+	}
+
 	/**
 	 * Customizer output for custom username label.
 	 *
@@ -843,6 +851,60 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+
+	/**
+	 * Customizer output for custom lost your password text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_lost_password_text( $translated_text, $text, $domain ) {
+		$default = 'Lost your password?';
+		$label   = $this->options['lost-password-text'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
+			$translated_text = esc_html( $label );
+		}
+
+		return $translated_text;
+	}
+
+	/**
+	 * Customizer output for custom back to text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_back_to_text( $translated_text, $text, $domain ) {
+		$default = 'Back to';
+		$label   = $this->options['back-to-text'];
+
+		// Check if is our text
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
+
+		// Check if the label is changed
+		if ( $label === $text ) {
+			return $translated_text;
+		}else{
 			$translated_text = esc_html( $label );
 		}
 
