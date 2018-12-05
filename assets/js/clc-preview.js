@@ -155,7 +155,14 @@
     } );
   } );
 
-  // Login label
+    // Logo url
+    wp.customize( 'clc-options[logo-url]', function( value ) {
+        value.bind( function( to ) {
+            $( 'a#clc-logo-link' ).attr('href', to );
+        } );
+    } );
+
+     // Login label
   wp.customize( 'clc-options[login-label]', function( value ) {
     value.bind( function( to ) {
       if( ! to ) {
