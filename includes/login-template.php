@@ -201,7 +201,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
                     <span  id="clc-back-to-text">
                     <?php
-                         echo '&larr; '; _e('Back to','colorlib-logincustomizer');
+                         echo '&larr; '; _e('Back to','colorlib-login-customizer');
                     ?>
                     </span>
                     <?php
