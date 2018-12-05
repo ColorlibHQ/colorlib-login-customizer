@@ -162,6 +162,20 @@
         } );
     } );
 
+    // Lost password text
+    wp.customize( 'clc-options[lost-password-text]', function( value ) {
+        value.bind( function( to ) {
+            $( '#clc-lost-password-text' ).text( to );
+        } );
+    } );
+
+    // Back to site text
+    wp.customize( 'clc-options[back-to-text]', function( value ) {
+        value.bind( function( to ) {
+            $( '#clc-back-to-text' ).text( to );
+        } );
+    } );
+
      // Login label
   wp.customize( 'clc-options[login-label]', function( value ) {
     value.bind( function( to ) {

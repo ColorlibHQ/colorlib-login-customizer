@@ -136,7 +136,7 @@ class Colorlib_Login_Customizer_Customizer {
 								'link-color'               => '#555d66',
 								'link-color-hover'         => '#00a0d2',
 								'hide-rememberme'          => false,
-								'custom-css'            => '',
+								'custom-css'               => '',
 							),
 						),
 						'template-01' => array(
@@ -147,6 +147,8 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-background-color' => 'rgba(255, 255, 255, 1)',
 								'custom-background'     => esc_url( $this->parent->assets_url ) . 'img/background.jpg',
 								'custom-css'            => '.ml-form-container .submit input[type=\'submit\']{box-shadow:none;}.ml-form-container input[type=\'text\'],.ml-form-container input[type=\'password\']{box-shadow:none;}  ',
+								'lost-password-text'    => 'Lost your password?',
+								'back-to-text'          => 'Back to',
 							),
 						),
 						'template-02' => array(
@@ -630,6 +632,20 @@ class Colorlib_Login_Customizer_Customizer {
 					'description' => esc_html__( 'You can change the default remember me text.', 'colorlib-login-customizer' ),
 					'type'        => 'text',
 					'default'     => 'Remember Me',
+				),
+				array(
+					'id'          => 'lost-password-text',
+					'label'       => esc_html__( 'Lost Password Text', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for "Lost your password" ', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Lost your password?',
+				),
+				array(
+					'id'          => 'back-to-text',
+					'label'       => esc_html__( 'Back to site text', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'You can change the default text for "Back to" site ', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Back to site',
 				),
 				array(
 					'id'          => 'login-label',

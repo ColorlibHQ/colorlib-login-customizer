@@ -195,13 +195,17 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 					echo esc_html( $login_link_separator );
 				endif;
 				?>
-				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
+				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
 			</p>
 			<p id="backtoblog">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
-					<?php
-					/* translators: %s: site title */
-					printf( _x( '&larr; Back to %s', 'site', 'colorlib-login-customizer' ), esc_html( get_bloginfo( 'title', 'display' ) ) );
+                    <span  id="clc-back-to-text">
+                    <?php
+                         echo '&larr; '; _e('Back to','colorlib-logincustomizer');
+                    ?>
+                    </span>
+                    <?php
+                         echo esc_html( get_bloginfo( 'title', 'display' ) );
 					?>
 				</a>
 			</p>
