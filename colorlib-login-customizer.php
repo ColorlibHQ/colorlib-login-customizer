@@ -47,7 +47,7 @@ function clc_check_for_review() {
 	if ( ! is_admin() ) {
 		return;
 	}
-	require_once COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/class-clc-review.php';
+	require_once COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/class-colorlib-login-customizer-review.php';
 
 	CLC_Review::get_instance( array(
 		'slug' => 'colorlib-login-customizer',
