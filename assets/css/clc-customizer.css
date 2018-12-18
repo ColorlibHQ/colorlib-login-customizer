@@ -434,3 +434,7 @@
   -webkit-transition: opacity .2s;
   transition: opacity .2s;
 }
+
+li#customize-control-clc-options-custom-css > .CodeMirror-wrap {
+    height:calc(100vh - 230px);
+}
