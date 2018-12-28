@@ -87,7 +87,6 @@ class Colorlib_Login_Customizer_Customizer {
 								 */
 								'hide-logo'                => 0,
 								'use-text-logo'            => 0,
-								'logo-text'                => '',
 								'logo-url'                 => site_url(),
 								'custom-logo'              => '',
 								'logo-text-color'          => '#444',
@@ -194,7 +193,7 @@ class Colorlib_Login_Customizer_Customizer {
 								 */
 								'hide-logo'               => 0,
 								'use-text-logo'           => 1,
-								'logo-text'               => 'Login to continue',
+								'logo-title'               => 'Login to continue',
 								'logo-url'                => site_url(),
 								'custom-logo'             => '',
 								'logo-text-color'         => '#333',
@@ -230,7 +229,7 @@ class Colorlib_Login_Customizer_Customizer {
 								 */
 								'hide-logo'                => 0,
 								'use-text-logo'            => 1,
-								'logo-text'                => 'Account Login',
+								'logo-title'                => 'Account Login',
 								'logo-url'                 => site_url(),
 								'custom-logo'              => '',
 								'logo-text-color'          => '#333',
@@ -272,12 +271,18 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 0,
 				),
 				array(
-					'id'              => 'logo-text',
-					'label'           => esc_html__( 'Logo text', 'colorlib-login-customizer' ),
-					'description'     => esc_html__( 'This is will be your logo.', 'colorlib-login-customizer' ),
-					'type'            => 'text',
-					'default'         => '',
-					'active_callback' => array( $this, 'check_if_text_logo' ),
+					'id'          => 'logo-url',
+					'label'       => esc_html__( 'Logo URL', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => site_url(),
+				),
+				array(
+					'id'          => 'logo-title',
+					'label'       => esc_html__( 'Logo Title', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'The tooltip that will be displayed when hovering over the logo. Also this is used as Logo text when you select "Use Text Logo"', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => 'Powered by WordPress',
 				),
 				array(
 					'id'              => 'logo-text-color',
@@ -307,20 +312,6 @@ class Colorlib_Login_Customizer_Customizer {
 					),
 					'type'            => 'clc-range-slider',
 					'active_callback' => array( $this, 'check_if_text_logo' ),
-				),
-				array(
-					'id'          => 'logo-url',
-					'label'       => esc_html__( 'Logo URL', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
-					'type'        => 'text',
-					'default'     => site_url(),
-				),
-				array(
-					'id'          => 'logo-title',
-					'label'       => esc_html__( 'Logo Title', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'The tooltip that will be displayed when hovering over the logo.', 'colorlib-login-customizer' ),
-					'type'        => 'text',
-					'default'     => 'Powered by WordPress',
 				),
 				array(
 					'id'              => 'custom-logo',

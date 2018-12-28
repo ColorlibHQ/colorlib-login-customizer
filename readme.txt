@@ -96,6 +96,7 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 = 1.2.6 =
 * Customizer CSS editor full height
 * Apply login form settings to registration form
+* Removed duplicate control for logo text
 
 = 1.2.5 =
 * Remove uninstall feedback

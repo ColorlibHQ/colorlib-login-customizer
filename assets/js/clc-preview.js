@@ -90,7 +90,7 @@
     } );
   } );
 
-  wp.customize( 'clc-options[logo-text]', function( value ) {
+  wp.customize( 'clc-options[logo-title]', function( value ) {
     value.bind( function( to ) {
       $( '#logo-text' ).text( to );
     } );
