@@ -293,20 +293,17 @@
 
             wp.customize( 'clc-options[use-text-logo]', function( value ) {
                 value.bind( function( to ) {
-                    var logoText           = wp.customize.control( 'clc-options[logo-text]' ),
-                        logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+                    var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
                         logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
                         logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
                         logoImage          = wp.customize.control( 'clc-options[custom-logo]' );
 
                     if ( '1' == to ) {
-                        logoText.toggle( true );
                         logoTextColor.toggle( true );
                         logoTextColorHover.toggle( true );
                         logoTextSize.toggle( true );
                         logoImage.toggle( false );
                     }else{
-                        logoText.toggle( false );
                         logoTextColor.toggle( false );
                         logoTextColorHover.toggle( false );
                         logoTextSize.toggle( false );
