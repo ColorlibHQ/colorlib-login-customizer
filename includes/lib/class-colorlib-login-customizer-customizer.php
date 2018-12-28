@@ -332,6 +332,7 @@ class Colorlib_Login_Customizer_Customizer {
 						'step' => 5,
 					),
 					'type'        => 'clc-range-slider',
+					'active_callback' => array( $this, 'check_if_not_text_logo' ),
 				),
 				array(
 					'id'          => 'logo-height',
@@ -344,6 +345,7 @@ class Colorlib_Login_Customizer_Customizer {
 						'step' => 5,
 					),
 					'type'        => 'clc-range-slider',
+					'active_callback' => array( $this, 'check_if_not_text_logo' ),
 				),
 			),
 		);
