@@ -211,7 +211,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-width',
 				),
 			),
-			'#loginform' => array(
+			'#loginform,#registerform' => array(
 				'attributes' => array(
 					'height',
 					'background-image',
@@ -454,7 +454,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 * Set form variables
 		 */
 		$string .= $this->create_css_lines(
-			'#loginform',
+			'#loginform,#registerform',
 			array(
 				'height',
 				'background-image',
