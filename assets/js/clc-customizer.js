@@ -260,6 +260,7 @@
                         backgroundControl = wp.customize.control( 'clc-options[custom-background-form]' ),
                         columnsWidthControl = wp.customize.control( 'clc-options[columns-width]' ),
                         backgroundColorControl = wp.customize.control( 'clc-options[custom-background-color-form]' );
+
                     if ( '2' === to ) {
                         alignControl.toggle( true );
                         backgroundControl.toggle( true );
@@ -296,18 +297,26 @@
                     var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
                         logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
                         logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
-                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' );
+                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
+                        logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
+                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' )
 
                     if ( '1' == to ) {
                         logoTextColor.toggle( true );
                         logoTextColorHover.toggle( true );
                         logoTextSize.toggle( true );
+
                         logoImage.toggle( false );
+                        logoWidth.toggle( false );
+                        logoHeight.toggle( false );
                     }else{
                         logoTextColor.toggle( false );
                         logoTextColorHover.toggle( false );
                         logoTextSize.toggle( false );
+
                         logoImage.toggle( true );
+                        logoWidth.toggle( true );
+                        logoHeight.toggle( true );
                     }
                 });
             });
