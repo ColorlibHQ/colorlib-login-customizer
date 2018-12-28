@@ -260,6 +260,7 @@
                         backgroundControl = wp.customize.control( 'clc-options[custom-background-form]' ),
                         columnsWidthControl = wp.customize.control( 'clc-options[columns-width]' ),
                         backgroundColorControl = wp.customize.control( 'clc-options[custom-background-color-form]' );
+
                     if ( '2' === to ) {
                         alignControl.toggle( true );
                         backgroundControl.toggle( true );
@@ -293,24 +294,29 @@
 
             wp.customize( 'clc-options[use-text-logo]', function( value ) {
                 value.bind( function( to ) {
-                    var logoText           = wp.customize.control( 'clc-options[logo-text]' ),
-                        logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+                    var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
                         logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
                         logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
-                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' );
+                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
+                        logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
+                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' )
 
                     if ( '1' == to ) {
-                        logoText.toggle( true );
                         logoTextColor.toggle( true );
                         logoTextColorHover.toggle( true );
                         logoTextSize.toggle( true );
+
                         logoImage.toggle( false );
+                        logoWidth.toggle( false );
+                        logoHeight.toggle( false );
                     }else{
-                        logoText.toggle( false );
                         logoTextColor.toggle( false );
                         logoTextColorHover.toggle( false );
                         logoTextSize.toggle( false );
+
                         logoImage.toggle( true );
+                        logoWidth.toggle( true );
+                        logoHeight.toggle( true );
                     }
                 });
             });
