@@ -209,7 +209,7 @@ class Colorlib_Login_Customizer_Customizer {
 							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-04/screen.jpg',
 							'options' => array(
 								'form-width'               => '350',
-								'form-height'              => '350',
+								'form-height'              => '450',
 								'form-padding'             => '50px 30px',
 								'columns'                  => '1',
 								'hide-logo'                => '1',
@@ -244,7 +244,7 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-field-border-radius' => '0',
 								'form-field-margin'        => '0',
 								'form-field-border'        => '1px solid #eee',
-								'custom-css'               => ".ml-form-container .submit input[type='submit'] {width: 100%; box-sizing: border-box;display: inline-block;text-align: center;padding: 0 20px;height: 38px;line-height: 1;font-weight: bold;vertical-align: middle; margin-top: 15px;box-shadow:none;} .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 50px; } .login .ml-form-container #backtoblog,.login .ml-form-container #nav{position:absolute;left:0;right:0;margin-right:auto!important;bottom:50px;max-width:100%;text-align:center}.login .ml-form-container #nav{bottom:40px}.ml-form-container #login>h1{position:absolute;top:50px}.ml-form-container input[type='text'],.ml-form-container input[type='password']{box-shadow:none;}",
+								'custom-css'               => ".ml-form-container .submit input[type='submit'] {width: 100%; box-sizing: border-box;display: inline-block;text-align: center;padding: 0 20px;height: 38px;line-height: 1;font-weight: bold;vertical-align: middle; margin-top: 15px;box-shadow:none;} .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 50px; } .login .ml-form-container #backtoblog,.login .ml-form-container #nav{position:absolute;left:0;right:0;margin-right:auto!important;bottom:50px;max-width:100%;text-align:center}.login .ml-form-container #nav{bottom:40px}.ml-form-container #login>h1{position:absolute;top:40px}.login-action-register .ml-form-container #login>h1{top:65px;}.ml-form-container input[type='text'],.ml-form-container input[type='password']{box-shadow:none;}",
 							),
 						),
 					),
