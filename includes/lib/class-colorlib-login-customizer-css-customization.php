@@ -782,7 +782,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
 		//register form add-ons
         add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_register_title_text' ), 99, 3 );
 	}
 
 	/**
