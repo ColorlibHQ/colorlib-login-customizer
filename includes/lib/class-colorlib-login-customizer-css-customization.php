@@ -770,12 +770,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_rememberme_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_login_label' ), 99, 3 );
+		//register form add-ons
+        add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
+        add_filter( 'gettext', array($this, 'change_register_register_label' ),99,3);
 
-	}
+    }
 
 	public function check_texts() {
 		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
 		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
+		//register form add-ons
+        add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_register_title_text' ), 99, 3 );
 	}
 
 	/**
@@ -939,4 +946,138 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $translated_text;
 	}
 
+    /**
+     * Customizer output for custom register username label.
+     *
+     * @param string|string $translated_text The translated text.
+     * @param string|string $text The label we want to replace.
+     * @param string|string $domain The text domain of the site.
+     * @return string
+     */
+    public function change_register_username_label( $translated_text, $text, $domain ) {
+        $default = 'Username';
+        $label   = $this->options['register-username-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    /**
+     * Customizer output for custom register email label.
+     *
+     * @param string|string $translated_text The translated text.
+     * @param string|string $text The label we want to replace.
+     * @param string|string $domain The text domain of the site.
+     * @return string
+     */
+    public function change_register_email_label( $translated_text, $text, $domain ) {
+        $default = 'Email';
+        $label   = $this->options['register-email-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    /**
+     * Customizer output for custom registration confirmation text.
+     *
+     * @param string|string $translated_text The translated text.
+     * @param string|string $text The label we want to replace.
+     * @param string|string $domain The text domain of the site.
+     * @return string
+     */
+    public function change_register_confirmation_text( $translated_text, $text, $domain ) {
+        $default = 'Registration confirmation will be emailed to you.';
+        $label   = $this->options['register-confirmation-email'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    /**
+     * Customizer output for custom register button text.
+     *
+     * @param string|string $translated_text The translated text.
+     * @param string|string $text The label we want to replace.
+     * @param string|string $domain The text domain of the site.
+     * @return string
+     */
+    public function change_register_register_label( $translated_text, $text, $domain ) {
+        $default = 'Register';
+        $label   = $this->options['register-register-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    /**
+     * Customizer output for custom registration title text.
+     *
+     * @param string|string $translated_text The translated text.
+     * @param string|string $text The label we want to replace.
+     * @param string|string $domain The text domain of the site.
+     * @return string
+     */
+    public function change_register_title_text( $translated_text, $text, $domain ) {
+        $default = 'Register For This Site';
+        $label   = $this->options['register-title-text'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
 }

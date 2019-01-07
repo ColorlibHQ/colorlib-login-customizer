@@ -264,6 +264,11 @@ class Colorlib_Login_Customizer {
 			return $new_template;
 		}
 
+        if ( is_customize_preview() && isset( $_REQUEST['colorlib-register-customizer-customization'] ) && is_user_logged_in() ) {
+            $new_template = plugin_dir_path( __FILE__ ) . 'register-template.php';
+            return $new_template;
+        }
+
 		return $template;
 	}
 }
