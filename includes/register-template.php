@@ -143,7 +143,7 @@ do_action( 'login_header' );
         do_action( 'login_form' );
         ?>
         <p id="reg_passmail"><?php _e('Registration confirmation will be emailed to you.','colorlib-login-customizer'); ?></p>
-        <p class="submit"><input type="submit" name="wp-submit" id="wp-register-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
+        <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
     </form>
     <p id="nav">
         <?php
