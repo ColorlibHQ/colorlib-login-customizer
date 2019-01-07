@@ -125,6 +125,13 @@ do_action( 'login_header' );
 
 <div id="login">
 
+    <h1>
+        <a id="clc-logo-link" href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
+            <span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
+            <span id="logo-text"><?php echo $login_header_text ?></span>
+        </a>
+    </h1>
+
     <form name="registerform" id="registerform" action="<?php echo esc_url( wp_registration_url() ); ?>" method="post">
         <p>
             <label for="user_register"><span id="clc-register-sername-label"><?php _e( 'Username', 'colorlib-login-customizer' ); ?></span><br />

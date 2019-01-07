@@ -33,11 +33,9 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
 		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
-
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
-		add_filter( 'login_headertitle', array( $this, 'logo_title' ), 99 );
-
+		add_filter('login_headertitle', array($this, 'logo_title'), 99);
 		//
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
 	}
