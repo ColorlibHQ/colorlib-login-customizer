@@ -662,13 +662,6 @@ class Colorlib_Login_Customizer_Customizer {
             'description' => '',
             'fields'      => array(
                 array(
-                    'id'          => 'register-title-text',
-                    'label'       => esc_html__( 'Title text', 'colorlib-login-customizer' ),
-                    'description' => esc_html__( 'You can change the default text for title label or just delete it.', 'colorlib-login-customizer' ),
-                    'type'        => 'text',
-                    'default'     => 'Register For This Site',
-                ),
-                array(
                     'id'          => 'register-username-label',
                     'label'       => esc_html__( 'Username label', 'colorlib-login-customizer' ),
                     'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
