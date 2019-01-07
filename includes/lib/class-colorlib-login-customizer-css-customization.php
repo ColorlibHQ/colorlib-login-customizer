@@ -1053,31 +1053,4 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
         return $translated_text;
     }
-
-    /**
-     * Customizer output for custom registration title text.
-     *
-     * @param string|string $translated_text The translated text.
-     * @param string|string $text The label we want to replace.
-     * @param string|string $domain The text domain of the site.
-     * @return string
-     */
-    public function change_register_title_text( $translated_text, $text, $domain ) {
-        $default = 'Register For This Site';
-        $label   = $this->options['register-title-text'];
-
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
-
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
-
-        return $translated_text;
-    }
 }
