@@ -170,11 +170,11 @@
     } );
 
     // Back to site text
-    wp.customize( 'clc-options[back-to-text]', function( value ) {
-        value.bind( function( to ) {
-            $( '#clc-back-to-text' ).html( '&larr; ' + to );
-        } );
+  wp.customize( 'clc-options[back-to-text]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-back-to-text' ).html( '&larr; ' + to );
     } );
+  } );
 
      // Login label
   wp.customize( 'clc-options[login-label]', function( value ) {
@@ -185,6 +185,39 @@
       $( '#wp-submit' ).val( to );
     } );
   } );
+
+  // Register username label
+  wp.customize( 'clc-options[register-username-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-register-sername-label' ).html( to );
+    } );
+  } );
+
+  // Register email label
+  wp.customize( 'clc-options[register-email-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#clc-register-email-label' ).html( to );
+    } );
+  } );
+
+  // Register confirmation text
+  wp.customize( 'clc-options[register-confirmation-email]', function( value ) {
+    value.bind( function( to ) {
+      $( '#reg_passmail' ).html( to );
+    } );
+  } );
+
+
+  // Register button text
+  wp.customize( 'clc-options[register-register-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#wp-register-submit' ).val( to );
+    } );
+  } );
+
 
   // Columns width
   wp.customize( 'clc-options[columns-width]', function( value ) {

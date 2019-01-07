@@ -127,11 +127,11 @@ do_action( 'login_header' );
 
     <form name="registerform" id="registerform" action="<?php echo esc_url( wp_registration_url() ); ?>" method="post">
         <p>
-            <label for="user_register"><span id="clc-username-label"><?php _e( 'Username', 'colorlib-login-customizer' ); ?></span><br />
+            <label for="user_register"><span id="clc-register-sername-label"><?php _e( 'Username', 'colorlib-login-customizer' ); ?></span><br />
                 <input type="text" name="log" id="user_register" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
         </p>
         <p>
-            <label for="user_email"><span id="clc-password-label"><?php _e( 'Email', 'colorlib-login-customizer' ); ?></span><br />
+            <label for="user_email"><span id="clc-register-email-label"><?php _e( 'Email', 'colorlib-login-customizer' ); ?></span><br />
                 <input type="email" name="email" id="user_email" class="input" value="" size="20" /></label>
         </p>
         <?php
@@ -142,8 +142,8 @@ do_action( 'login_header' );
          */
         do_action( 'login_form' );
         ?>
-        <p id="reg_passmail"><?php /*_e('Registration confirmation will be emailed to you.','colorlib-login-customizer'); */?></p>
-        <p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
+        <p id="reg_passmail"><?php _e('Registration confirmation will be emailed to you.','colorlib-login-customizer'); ?></p>
+        <p class="submit"><input type="submit" name="wp-submit" id="wp-register-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
     </form>
     <p id="nav">
         <?php
