@@ -17,6 +17,20 @@
             });
         });
 
+        wp.customize.section( 'clc_register-form', function( section ) {
+            section.expanded.bind( function( isExpanding ) {
+                var registerURL = CLCUrls.siteurl + '?colorlib-register-customizer-customization=true';
+                var loginURL = CLCUrls.siteurl + '?colorlib-login-customizer-customization=true';
+
+                // Value of isExpanding will = true if you're entering the section, false if you're leaving it.
+                if ( isExpanding ) {
+                    wp.customize.previewer.previewUrl.set( registerURL );
+                } else {
+                    wp.customize.previewer.previewUrl.set( loginURL );
+                }
+            });
+        });
+
         wp.customize.controlConstructor['clc-templates'] = wp.customize.Control.extend({
             ready: function() {
                 var control = this;
