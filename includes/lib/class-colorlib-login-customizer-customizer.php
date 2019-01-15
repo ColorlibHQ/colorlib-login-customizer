@@ -667,6 +667,7 @@ class Colorlib_Login_Customizer_Customizer {
                     'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
                     'type'        => 'text',
                     'default'     => 'Username',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
                 array(
                     'id'          => 'register-email-label',
@@ -674,6 +675,7 @@ class Colorlib_Login_Customizer_Customizer {
                     'description' => esc_html__( 'You can change the default text for email label or just delete it.', 'colorlib-login-customizer' ),
                     'type'        => 'text',
                     'default'     => 'Email',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
                 array(
                     'id'          => 'register-confirmation-email',
@@ -681,6 +683,7 @@ class Colorlib_Login_Customizer_Customizer {
                     'description' => esc_html__( 'You can change the default registration confirmation text.', 'colorlib-login-customizer' ),
                     'type'        => 'text',
                     'default'     => 'Registration confirmation will be emailed to you.',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
                 array(
                     'id'          => 'register-register-label',
@@ -688,8 +691,10 @@ class Colorlib_Login_Customizer_Customizer {
                     'description' => esc_html__( 'You can change the default text for the register button.', 'colorlib-login-customizer' ),
                     'type'        => 'text',
                     'default'     => 'Register',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
             ),
+
         );
 
 		$settings['general'] = array(
@@ -966,4 +971,12 @@ class Colorlib_Login_Customizer_Customizer {
 
 		return true;
 	}
+
+	public function check_if_user_can_register(){
+	    $user_can_register = get_option('users_can_register');
+	    if($user_can_register == '0'){
+	        return false;
+        }
+	     return true;
+    }
 }

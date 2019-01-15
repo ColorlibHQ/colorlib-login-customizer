@@ -1015,7 +1015,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
     public function change_register_confirmation_text( $translated_text, $text, $domain ) {
         $default = 'Registration confirmation will be emailed to you.';
         $label   = $this->options['register-confirmation-email'];
-
         // Check if is our text
         if ( $default !== $text ) {
             return $translated_text;
@@ -1027,6 +1026,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
         }else{
             $translated_text = esc_html( $label );
         }
+
 
         return $translated_text;
     }
