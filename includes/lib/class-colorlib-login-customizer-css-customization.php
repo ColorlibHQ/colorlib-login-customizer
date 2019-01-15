@@ -133,6 +133,13 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			'login-label'               => 'Log In',
 			'form-label-color'          => '',
 			'hide-extra-links'          => false,
+            /**
+             * Registration section
+             */
+            'register-username-label'     => 'Username',
+			'register-email-label'        => 'Email',
+			'register-register-label'     => 'Register',
+			'register-confirmation-email' => 'Registration confirmation will be emailed to you.',
 			/**
 			 * Others section ( misc )
 			 */
