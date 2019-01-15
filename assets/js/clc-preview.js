@@ -214,7 +214,7 @@
       if( ! to ) {
         return;
       }
-      $( '#wp-register-submit' ).val( to );
+      $( '#wp-submit' ).val( to );
     } );
   } );
 
