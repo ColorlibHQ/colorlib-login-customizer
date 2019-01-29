@@ -266,4 +266,103 @@ class Colorlib_Login_Customizer {
 
 		return $template;
 	}
+
+	public function get_defaults(){
+		return array(
+			/**
+			 * Templates
+			 */
+			'templates'                 => 'default',
+			/**
+			 * Layout
+			 */
+			'columns'                  => '1',
+			'columns-width'            => array(
+				'left'  => 6,
+				'right' => 6,
+			),
+			'form-column-align'        => '3',
+			'form-vertical-align'      => '2',
+			/**
+			 * Logo section
+			 */
+			'hide-logo'                 => 0,
+			'use-text-logo'             => 0,
+			'logo-url'                  => site_url(),
+			'custom-logo'               => '',
+			'logo-text-color'           => '#444',
+			'logo-text-size'            => '20',
+			'logo-text-color-hover'     => '#00a0d2',
+			'logo-width'                => '',
+			'logo-height'               => '',
+			/**
+			 * Background section
+			 */
+			'custom-background'             => '',
+			'custom-background-form'        => '',
+			'custom-background-color'       => '',
+			'custom-background-color-form'  => '',
+			/**
+			 * Form section
+			 */
+			'form-width'                => '',
+			'form-height'               => '',
+			'form-background-image'     => '',
+			'form-background-color'     => '#fff',
+			'form-padding'              => '',
+			'form-border'               => '',
+			'form-border-radius'        => '',
+			'form-shadow'               => '',
+			'form-field-width'          => '',
+			'form-field-margin'         => '',
+			'form-field-border-radius'  => 'unset',
+			'form-field-border'         => '1px solid #ddd',
+			'form-field-background'     => '',
+			'form-field-color'          => '',
+			'username-label'            => 'Username or Email Address',
+			'password-label'            => 'Password',
+			'rememberme-label'          => 'Remember Me',
+			'lost-password-text'        => 'Lost your password?',
+			'back-to-text'              => '&larr; Back to %s',
+			'register-link-label'       => 'Register',
+
+			'login-label'               => 'Log In',
+			'form-label-color'          => '',
+			'hide-extra-links'          => false,
+            /**
+             * Registration section
+             */
+            'register-username-label'     => 'Username',
+			'register-email-label'        => 'Email',
+			'register-button-label'       => 'Register',
+			'register-confirmation-email' => 'Registration confirmation will be emailed to you.',
+			'login-link-label'            => 'Log in',
+			/**
+             * Lost Password
+             */
+			'lostpassword-username-label' => 'Username or Email Address',
+			'lostpassword-button-label'   => 'Get New Password',
+			/**
+			 * Others section ( misc )
+			 */
+			'button-background'         => '',
+			'button-background-hover'   => '',
+			'button-border-color'       => '',
+			'button-border-color-hover' => '',
+			'button-shadow'             => '',
+			'button-text-shadow'        => '',
+			'button-color'              => '',
+			'link-color'                => '',
+			'link-color-hover'          => '',
+			'hide-rememberme'           => false,
+			/**
+			 * Custom CSS
+			 */
+			'custom-css'                => '',
+			/**
+			 * Reset value is not dynamic
+			 */
+			'initial'                   => 'initial',
+		);
+	}
 }

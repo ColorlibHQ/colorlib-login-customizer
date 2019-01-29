@@ -80,6 +80,7 @@ module.exports = function(grunt) {
               '!phpcs.ruleset.xml',
               '!Gruntfile.js',
               '!package.json',
+              '!package-lock.json',
               '!composer.json',
               '!composer.lock',
               '!set_tags.sh',

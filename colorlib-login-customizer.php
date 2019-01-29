@@ -6,7 +6,7 @@
  * Author: Colorlib
  * Author URI: https://colorlib.com/
  * Requires at least: 4.0
- * Tested up to: 5.0
+ * Tested up to: 5.0.3
  *
  * Text Domain: colorlib-login-customizer
  * Domain Path: /languages/
