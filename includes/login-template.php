@@ -7,6 +7,10 @@
  *
  */
 
+$clc_core     = Colorlib_Login_Customizer::instance();
+$clc_defaults = $clc_core->get_defaults();
+$clc_options  = get_option( 'clc-options', array() );
+$clc_options  = wp_parse_args( $clc_options, $clc_defaults );
 
 /**
  * Output the login page header.
@@ -79,6 +83,7 @@ do_action( 'login_init' );
  * @since 2.8.0
  */
 do_action( 'login_form_login' );
+do_action( 'login_form_register' );
 
 /**
  * Filters the separator used between login form navigation links.
@@ -163,7 +168,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				</a>
 			</h1>
 
-			<form name="loginform" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
+			<form name="loginform" class="show-only_login" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
 				<div id="clc-loginform" class="clc-preview-event" data-section="clc_form"><span class="dashicons dashicons-edit"></span></div>
 				<p>
 					<label for="user_login"><span id="clc-username-label"><?php _e( 'Username or Email Address', 'colorlib-login-customizer' ); ?></span><br />
@@ -182,20 +187,64 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				do_action( 'login_form' );
 				?>
 				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span id="clc-rememberme-label"><?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></span></label></p>
-				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
+				<p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
 			</form>
+
+			<form name="registerform" style="display:none" class="show-only_register" id="registerform" action="<?php echo esc_url( wp_registration_url() ); ?>" method="post">
+		        <p>
+		            <label for="user_register"><span id="clc-register-sername-label"><?php _e( 'Username', 'colorlib-login-customizer' ); ?></span><br />
+		                <input type="text" name="log" id="user_register" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
+		        </p>
+		        <p>
+		            <label for="user_email"><span id="clc-register-email-label"><?php _e( 'Email', 'colorlib-login-customizer' ); ?></span><br />
+		                <input type="email" name="email" id="user_email" class="input" value="" size="20" /></label>
+		        </p>
+		        <?php
+		        /**
+		         * Fires following the 'Password' field in the login form.
+		         *
+		         * @since 2.1.0
+		         */
+		        do_action( 'login_form' );
+		        ?>
+		        <p id="reg_passmail"><?php _e('Registration confirmation will be emailed to you.','colorlib-login-customizer'); ?></p>
+		        <p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
+		    </form>
+
+		    <form style="display:none;" class="show-only_lostpassword" name="lostpasswordform" id="lostpasswordform" action="" method="post">
+				<p>
+					<label for="user_login" ><span><?php _e( 'Username or Email Address', 'colorlib-login-customizer' ); ?></span><br />
+					<input type="text" name="user_login" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" autocapitalize="off" /></label>
+				</p>
+				<?php
+				/**
+				 * Fires inside the lostpassword form tags, before the hidden fields.
+				 *
+				 * @since 2.1.0
+				 */
+				do_action( 'lostpassword_form' );
+				?>
+				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Get New Password', 'colorlib-login-customizer' ); ?>" /></p>
+			</form>
+
 			<p id="nav">
 				<?php
 				if ( get_option( 'users_can_register' ) ) :
-					$registration_url = sprintf( '<a href="%s">%s</a>', esc_url( wp_registration_url() ), __( 'Register', 'colorlib-login-customizer' ) );
+					$registration_url = sprintf( '<a id="register-link-label" href="%s" class="show-only_login show-only_lostpassword">%s</a>', esc_url( wp_registration_url() ), $clc_options['register-link-label'] );
+
+
 
 					/** This filter is documented in wp-includes/general-template.php */
 					echo apply_filters( 'register', $registration_url );
 
-					echo esc_html( $login_link_separator );
+					echo '<span style="display:none" class="show-only_lostpassword">'.esc_html( $login_link_separator ).'</span>';
+
+					echo '<a href="#" id="login-link-label" class="show-only_register show-only_lostpassword" style="display:none">' . $clc_options['login-link-label'] . '</a>';
+
+					echo '<span class="show-only_register show-only_login">'.esc_html( $login_link_separator ).'</span>';
 				endif;
 				?>
-				<a href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
+				<a class="show-only_register show-only_login" href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php _e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
 			</p>
 			<p id="backtoblog">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">
