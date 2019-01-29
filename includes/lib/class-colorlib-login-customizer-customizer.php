@@ -487,7 +487,7 @@ class Colorlib_Login_Customizer_Customizer {
 		);
 
 		$settings['form'] = array(
-			'title'       => esc_html__( 'Login Form options', 'colorlib-login-customizer' ),
+			'title'       => esc_html__( 'General Form options', 'colorlib-login-customizer' ),
 			'description' => '',
 			'fields'      => array(
 				array(
@@ -606,6 +606,34 @@ class Colorlib_Login_Customizer_Customizer {
                     'default'     => '#72777c',
                 ),
                 array(
+                    'id'          => 'lost-password-text',
+                    'label'       => esc_html__( 'Lost Password Text', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for "Lost your password" ', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Lost your password?',
+                ),
+                array(
+                    'id'          => 'back-to-text',
+                    'label'       => esc_html__( 'Back to site text', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for "Back to" site ', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Back to site',
+                ),
+                array(
+                    'id'          => 'hide-extra-links',
+                    'label'       => esc_html__( 'Hide Extra Links', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'Show/Hide the links under the login form', 'colorlib-login-customizer' ),
+                    'type'        => 'clc-toggle',
+                    'default'     => 0,
+                ),
+			),
+		);
+
+		$settings['login-form'] = array(
+			'title'       => esc_html__( 'Login Form Texts', 'colorlib-login-customizer' ),
+            'description' => '',
+            'fields'      => array(
+            	array(
                     'id'          => 'username-label',
                     'label'       => esc_html__( 'Username label', 'colorlib-login-customizer' ),
                     'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
@@ -627,20 +655,6 @@ class Colorlib_Login_Customizer_Customizer {
                     'default'     => 'Remember Me',
                 ),
                 array(
-                    'id'          => 'lost-password-text',
-                    'label'       => esc_html__( 'Lost Password Text', 'colorlib-login-customizer' ),
-                    'description' => esc_html__( 'You can change the default text for "Lost your password" ', 'colorlib-login-customizer' ),
-                    'type'        => 'text',
-                    'default'     => 'Lost your password?',
-                ),
-                array(
-                    'id'          => 'back-to-text',
-                    'label'       => esc_html__( 'Back to site text', 'colorlib-login-customizer' ),
-                    'description' => esc_html__( 'You can change the default text for "Back to" site ', 'colorlib-login-customizer' ),
-                    'type'        => 'text',
-                    'default'     => 'Back to site',
-                ),
-                array(
                     'id'          => 'login-label',
                     'label'       => esc_html__( 'Login label', 'colorlib-login-customizer' ),
                     'description' => esc_html__( 'You can change the default text for the log in button.', 'colorlib-login-customizer' ),
@@ -648,14 +662,15 @@ class Colorlib_Login_Customizer_Customizer {
                     'default'     => 'Log In',
                 ),
                 array(
-                    'id'          => 'hide-extra-links',
-                    'label'       => esc_html__( 'Hide Extra Links', 'colorlib-login-customizer' ),
-                    'description' => esc_html__( 'Show/Hide the links under the login form', 'colorlib-login-customizer' ),
-                    'type'        => 'clc-toggle',
-                    'default'     => 0,
+                    'id'          => 'register-link-label',
+                    'label'       => esc_html__( 'Register link', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for the register link at the end of the form.', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Register',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
-			),
-		);
+            ),
+        );
 
         $settings['register-form'] = array(
             'title'       => esc_html__( 'Register Form Texts', 'colorlib-login-customizer' ),
@@ -686,12 +701,41 @@ class Colorlib_Login_Customizer_Customizer {
                     'active_callback' => array( $this, 'check_if_user_can_register' ),
                 ),
                 array(
-                    'id'          => 'register-register-label',
-                    'label'       => esc_html__( 'Register label', 'colorlib-login-customizer' ),
+                    'id'          => 'register-button-label',
+                    'label'       => esc_html__( 'Button label', 'colorlib-login-customizer' ),
                     'description' => esc_html__( 'You can change the default text for the register button.', 'colorlib-login-customizer' ),
                     'type'        => 'text',
                     'default'     => 'Register',
                     'active_callback' => array( $this, 'check_if_user_can_register' ),
+                ),
+                array(
+                    'id'          => 'login-link-label',
+                    'label'       => esc_html__( 'Login link', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for the login link at the end of the form.', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Log in',
+                    'active_callback' => array( $this, 'check_if_user_can_register' ),
+                ),
+            ),
+        );
+
+        $settings['lostpassword-form'] = array(
+            'title'       => esc_html__( 'Lost Password Form Texts', 'colorlib-login-customizer' ),
+            'description' => '',
+            'fields'      => array(
+                array(
+                    'id'          => 'lostpassword-username-label',
+                    'label'       => esc_html__( 'Username label', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for username label or just delete it.', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Username or Email Address',
+                ),
+                array(
+                    'id'          => 'lostpassword-button-label',
+                    'label'       => esc_html__( 'Button label', 'colorlib-login-customizer' ),
+                    'description' => esc_html__( 'You can change the default text for the lost password button.', 'colorlib-login-customizer' ),
+                    'type'        => 'text',
+                    'default'     => 'Get New Password',
                 ),
             ),
 

@@ -20,16 +20,23 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 */
 	private $base = '';
 
+	private $defaults;
+
 	/**
 	 * Colorlib_Login_Customizer_CSS_Customization constructor.
 	 */
 	public function __construct() {
 		$plugin         = Colorlib_Login_Customizer::instance();
 		$this->key_name = $plugin->key_name;
+		$this->defaults = $plugin->get_defaults();
 		$this->set_options();
 
-		add_action( 'login_head', array( $this, 'check_labels' ) );
-		add_action( 'login_head', array( $this, 'check_texts' ) );
+		add_action( 'login_init', array( $this, 'check_general_texts' ) );
+
+		add_action( 'login_form_login', array( $this, 'check_login_texts' ) );
+		add_action( 'login_form_register', array( $this, 'check_register_texts' ) );
+		add_action( 'login_form_lostpassword', array( $this, 'check_lostpasswords_texts' ) );
+
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
 		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
@@ -72,98 +79,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	public function set_options() {
 
 		$options = get_option( $this->key_name, array() );
-
-		$defaults = array(
-			/**
-			 * Templates
-			 */
-			'templates'                 => 'default',
-			/**
-			 * Layout
-			 */
-			'columns'                  => '1',
-			'columns-width'            => array(
-				'left'  => 6,
-				'right' => 6,
-			),
-			'form-column-align'        => '3',
-			'form-vertical-align'      => '2',
-			/**
-			 * Logo section
-			 */
-			'hide-logo'                 => 0,
-			'use-text-logo'             => 0,
-			'logo-url'                  => site_url(),
-			'custom-logo'               => '',
-			'logo-text-color'           => '#444',
-			'logo-text-size'            => '20',
-			'logo-text-color-hover'     => '#00a0d2',
-			'logo-width'                => '',
-			'logo-height'               => '',
-			/**
-			 * Background section
-			 */
-			'custom-background'             => '',
-			'custom-background-form'        => '',
-			'custom-background-color'       => '',
-			'custom-background-color-form'  => '',
-			/**
-			 * Form section
-			 */
-			'form-width'                => '',
-			'form-height'               => '',
-			'form-background-image'     => '',
-			'form-background-color'     => '#fff',
-			'form-padding'              => '',
-			'form-border'               => '',
-			'form-border-radius'        => '',
-			'form-shadow'               => '',
-			'form-field-width'          => '',
-			'form-field-margin'         => '',
-			'form-field-border-radius'  => 'unset',
-			'form-field-border'         => '1px solid #ddd',
-			'form-field-background'     => '',
-			'form-field-color'          => '',
-			'username-label'            => 'Username or Email Address',
-			'password-label'            => 'Password',
-			'rememberme-label'          => 'Remember Me',
-			'lost-password-text'        => 'Lost your password?',
-			'back-to-text'              => '&larr; Back to %s',
-
-			'login-label'               => 'Log In',
-			'form-label-color'          => '',
-			'hide-extra-links'          => false,
-            /**
-             * Registration section
-             */
-            'register-username-label'     => 'Username',
-			'register-email-label'        => 'Email',
-			'register-register-label'     => 'Register',
-			'register-confirmation-email' => 'Registration confirmation will be emailed to you.',
-			/**
-			 * Others section ( misc )
-			 */
-			'button-background'         => '',
-			'button-background-hover'   => '',
-			'button-border-color'       => '',
-			'button-border-color-hover' => '',
-			'button-shadow'             => '',
-			'button-text-shadow'        => '',
-			'button-color'              => '',
-			'link-color'                => '',
-			'link-color-hover'          => '',
-			'hide-rememberme'           => false,
-			/**
-			 * Custom CSS
-			 */
-			'custom-css'                => '',
-			/**
-			 * Reset value is not dynamic
-			 */
-			'initial'                   => 'initial',
-		);
-
-		$this->options = wp_parse_args( $options, $defaults );
+		$this->options = wp_parse_args( $options, $this->defaults );
 
 		$this->selectors = array(
 			'.wp-core-ui .button-primary.focus, .wp-core-ui .button-primary.hover, .wp-core-ui .button-primary:focus, .wp-core-ui .button-primary:hover' => array(
@@ -216,7 +132,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-width',
 				),
 			),
-			'#loginform,#registerform' => array(
+			'#loginform,#registerform,#lostpasswordform' => array(
 				'attributes' => array(
 					'height',
 					'background-image',
@@ -459,7 +375,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 * Set form variables
 		 */
 		$string .= $this->create_css_lines(
-			'#loginform,#registerform',
+			'#loginform,#registerform,#lostpasswordform',
 			array(
 				'height',
 				'background-image',
@@ -755,7 +671,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		}
 
-		echo '<style type="text/css">#registerform #wp-submit{float:none;margin-top:15px;}.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset;width:auto !important;height: auto !important; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform,#registerform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}.login input[type=text]:focus, .login input[type=search]:focus, .login input[type=radio]:focus, .login input[type=tel]:focus, .login input[type=time]:focus, .login input[type=url]:focus, .login input[type=week]:focus, .login input[type=password]:focus, .login input[type=checkbox]:focus, .login input[type=color]:focus, .login input[type=date]:focus, .login input[type=datetime]:focus, .login input[type=datetime-local]:focus, .login input[type=email]:focus, .login input[type=month]:focus, .login input[type=number]:focus, .login select:focus, .login textarea:focus{ box-shadow: none; }</style>';
+		echo '<style type="text/css">#registerform #wp-submit{float:none;margin-top:15px;}.login.clc-text-logo h1 a{ background-image: none !important;text-indent: unset;width:auto !important;height: auto !important; }#login form p label br{display:none}body:not( .ml-half-screen ) .ml-form-container{background:transparent !important;}.login h1 a{background-position: center;background-size:contain !important;}.ml-container #login{ position:relative;padding: 0;width:100%;max-width:320px;margin:0;}#loginform,#registerform,#lostpasswordform{box-sizing: border-box;max-height: 100%;background-position: center;background-repeat: no-repeat;background-size: cover;}.ml-container{position:relative;min-height:100vh;display:flex;height:100%;min-width:100%;}.ml-container .ml-extra-div{background-position:center;background-size:cover;background-repeat:no-repeat}body .ml-form-container{display:flex;align-items:center;justify-content:center}body:not( .ml-half-screen ) .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%}body:not( .ml-half-screen ) .ml-container .ml-form-container{width:100%;min-height:100vh}body.ml-half-screen .ml-container{flex-wrap:wrap}body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{width:50%}body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{width:100%;flex-basis:50%;}body.ml-half-screen.ml-login-align-2 .ml-container{flex-direction:column-reverse}body.ml-half-screen.ml-login-align-4 .ml-container{flex-direction:column}body.ml-half-screen.ml-login-align-1 .ml-container{flex-direction:row-reverse}body.ml-login-vertical-align-1 .ml-form-container{align-items:flex-start}body.ml-login-vertical-align-3 .ml-form-container{align-items:flex-end}body.ml-login-horizontal-align-1 .ml-form-container{justify-content:flex-start}body.ml-login-horizontal-align-3 .ml-form-container{justify-content:flex-end}@media only screen and (max-width: 768px) {body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{width:100%;}body .ml-container .ml-extra-div{position:absolute;top:0;left:0;width:100%;height:100%;}}.login input[type=text]:focus, .login input[type=search]:focus, .login input[type=radio]:focus, .login input[type=tel]:focus, .login input[type=time]:focus, .login input[type=url]:focus, .login input[type=week]:focus, .login input[type=password]:focus, .login input[type=checkbox]:focus, .login input[type=color]:focus, .login input[type=date]:focus, .login input[type=datetime]:focus, .login input[type=datetime-local]:focus, .login input[type=email]:focus, .login input[type=month]:focus, .login input[type=number]:focus, .login select:focus, .login textarea:focus{ box-shadow: none; }</style>';
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
@@ -769,25 +685,47 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		echo '</div></div>';
 	}
 
-	public function check_labels() {
+	// Check general texts
+	public function check_general_texts(){
+
+		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
+		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
+
+	}
+
+	// Check Login page texts
+	public function check_login_texts(){
 
 		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_rememberme_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_login_label' ), 99, 3 );
-		//register form add-ons
-        add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
-        add_filter( 'gettext', array($this, 'change_register_register_label' ),99,3);
+		add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
 
-    }
-
-	public function check_texts() {
-		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
-		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
-		//register form add-ons
-        add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
 	}
+
+    // Check Register page texts
+    public function check_register_texts(){
+
+    	add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_register_register_label' ),99,3);
+        add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
+
+	}
+
+	// Check Lost Password page texts
+    public function check_lostpasswords_texts(){
+
+    	add_filter( 'gettext', array( $this, 'change_lostpasswords_username_label' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_lostpasswords_button_label' ), 99, 3 );
+
+        add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
+        add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
+
+	}
+
 
 	/**
 	 * Customizer output for custom username label.
@@ -1041,7 +979,83 @@ class Colorlib_Login_Customizer_CSS_Customization {
      */
     public function change_register_register_label( $translated_text, $text, $domain ) {
         $default = 'Register';
-        $label   = $this->options['register-register-label'];
+        $label   = $this->options['register-button-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    public function change_login_register_link_text( $translated_text, $text, $domain ) {
+        $default = 'Log in';
+        $label   = $this->options['login-link-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    public function change_register_login_link_text( $translated_text, $text, $domain ) {
+        $default = 'Register';
+        $label   = $this->options['register-link-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    public function change_lostpasswords_username_label( $translated_text, $text, $domain ) {
+        $default = 'Username or Email Address';
+        $label   = $this->options['lostpassword-username-label'];
+
+        // Check if is our text
+        if ( $default !== $text ) {
+            return $translated_text;
+        }
+
+        // Check if the label is changed
+        if ( $label === $text ) {
+            return $translated_text;
+        }else{
+            $translated_text = esc_html( $label );
+        }
+
+        return $translated_text;
+    }
+
+    public function change_lostpasswords_button_label( $translated_text, $text, $domain ) {
+        $default = 'Get New Password';
+        $label   = $this->options['lostpassword-button-label'];
 
         // Check if is our text
         if ( $default !== $text ) {

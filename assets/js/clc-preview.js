@@ -182,7 +182,7 @@
       if( ! to ) {
         return;
       }
-      $( '#wp-submit' ).val( to );
+      $( '#loginform input[name="wp-submit"]' ).val( to );
     } );
   } );
 
@@ -209,12 +209,49 @@
 
 
   // Register button text
-  wp.customize( 'clc-options[register-register-label]', function( value ) {
+  wp.customize( 'clc-options[register-button-label]', function( value ) {
     value.bind( function( to ) {
       if( ! to ) {
         return;
       }
-      $( '#wp-submit' ).val( to );
+      $( '#registerform input[name="wp-submit"]' ).val( to );
+    } );
+  } );
+
+  // Register link text
+  wp.customize( 'clc-options[register-link-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#register-link-label' ).text( to );
+    } );
+  } );
+
+  // Login link text
+  wp.customize( 'clc-options[login-link-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#login-link-label' ).text( to );
+    } );
+  } );
+
+  // Lost password button text
+  wp.customize( 'clc-options[lostpassword-button-label]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      $( '#lostpasswordform input[name="wp-submit"]' ).val( to );
+    } );
+  } );
+
+  // Username label
+  wp.customize( 'clc-options[lostpassword-username-label]', function( value ) {
+    value.bind( function( to ) {
+      $( '#lostpasswordform label span' ).text( to );
     } );
   } );
 
@@ -242,6 +279,24 @@
 
   $( '.clc-preview-event' ).click( function() {
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
+  } );
+
+  wp.customize.bind( 'preview-ready', function() {
+    wp.customize.preview.bind( 'change-form', function( form ) {
+      if ( 'register' == form ) {
+        $('.show-only_login').hide();
+        $('.show-only_lostpassword').hide();
+        $('.show-only_register').show();
+      }else if( 'lostpassword' == form ){
+        $('.show-only_login').hide();
+        $('.show-only_register').hide();
+        $('.show-only_lostpassword').show();
+      }else{
+        $('.show-only_register').hide();
+        $('.show-only_lostpassword').hide();
+        $('.show-only_login').show();
+      }
+    } );
   } );
 
 })( jQuery );
