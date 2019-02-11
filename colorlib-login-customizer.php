@@ -1,19 +1,33 @@
 <?php
-/*
- * Plugin Name: Colorlib Login Customizer
- * Version: 1.2.7
- * Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
- * Author: Colorlib
- * Author URI: https://colorlib.com/
- * Requires at least: 4.0
- * Tested up to: 5.0.3
- *
- * Text Domain: colorlib-login-customizer
- * Domain Path: /languages/
- *
- * @package WordPress
- * @author Colorlib
- * @since 1.0.0
+/**
+* Plugin Name: Colorlib Login Customizer
+* Version: 1.2.7
+* Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
+* Author: Colorlib
+* Author URI: https://colorlib.com/
+* Tested up to: 5.0.3
+* Requires: 4.6 or higher
+* License: GPLv3 or later
+* License URI: http://www.gnu.org/licenses/gpl-3.0.html
+* Requires PHP: 5.6
+* Text Domain: colorlib-login-customizer
+* Domain Path: /languages
+*
+* Copyright 2018-2019 Colorlib office@colorlib.com
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License, version 3, as
+* published by the Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
