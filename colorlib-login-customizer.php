@@ -13,7 +13,7 @@
 * Text Domain: colorlib-login-customizer
 * Domain Path: /languages
 *
-* Copyright 2018-2019 Colorlib office@colorlib.com
+* Copyright 2018-2019 Colorlib support@colorlib.com
 *
 * This program is free software; you can redistribute it and/or modify
 * it under the terms of the GNU General Public License, version 3, as
