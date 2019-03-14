@@ -1,11 +1,10 @@
 === Custom Login Page Customizer by Colorlib ===
-Contributors: colorlibplugins, silkalns
+Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
-Tested up to: 5.1
-Requires PHP: 5.6
-Stable tag: 1.2.7
-License: GPLv3 or later
+Tested up to: 5.1.1
+Stable tag: 1.2.8
+License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
 Colorlib Login Customizer by Colorlib is a plugin that helps you personalize your login form directly from the Customizer.
@@ -93,6 +92,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.2.8 =
+* Responsive view fixes
+* Updated plugin headers
 
 = 1.2.7 =
 * Added options to edit register form
