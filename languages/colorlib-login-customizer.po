@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Colorlib Login Customizer package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Colorlib Login Customizer 1.2.7\n"
+"Project-Id-Version: Colorlib Login Customizer 1.2.8\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/colorlib-login-customizer\n"
 "POT-Creation-Date: 2019-01-29 12:08:27+00:00\n"
