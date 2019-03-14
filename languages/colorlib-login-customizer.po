@@ -1,11 +1,11 @@
 # Copyright (C) 2019 Colorlib
-# This file is distributed under the same license as the Colorlib Login Customizer package.
+# This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Colorlib Login Customizer 1.2.7\n"
+"Project-Id-Version: Colorlib Login Customizer 1.2.8\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/colorlib-login-customizer\n"
-"POT-Creation-Date: 2019-01-29 12:08:27+00:00\n"
+"POT-Creation-Date: 2019-03-14 13:33:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
