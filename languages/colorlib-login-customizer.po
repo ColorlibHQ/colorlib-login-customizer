@@ -2,7 +2,7 @@
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Colorlib Login Customizer 1.2.8\n"
+"Project-Id-Version: Colorlib Login Customizer 1.2.9\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/colorlib-login-customizer\n"
 "POT-Creation-Date: 2019-03-14 13:33:29+00:00\n"
