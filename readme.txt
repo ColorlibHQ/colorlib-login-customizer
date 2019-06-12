@@ -96,6 +96,7 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 = 1.3.0 =
 * Added possibility to add links inside certain form texts
 * Updated deprecated filter login_headertitle
+* Added option to change login page title
 
 = 1.2.9 =
 * Update toggles design
