@@ -43,6 +43,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
 		add_filter('login_headertext', array($this, 'logo_title'), 99);
+		add_filter('login_title', array($this, 'login_page_title'), 99);
 		//
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
 	}
@@ -643,6 +644,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	public function logo_title( $title ) {
 		if ( isset( $this->options['logo-title'] ) ) {
 			return wp_kses_post( $this->options['logo-title'] );
+		}
+
+		return $title;
+	}
+
+	public function login_page_title($title){
+		if ( isset( $this->options['login-page-title'] ) ) {
+			return esc_html( $this->options['login-page-title'] );
 		}
 
 		return $title;
