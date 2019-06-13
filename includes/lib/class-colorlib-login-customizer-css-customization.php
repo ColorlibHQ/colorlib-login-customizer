@@ -42,7 +42,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
-		add_filter('login_headertitle', array($this, 'logo_title'), 99);
+		add_filter('login_headertext', array($this, 'logo_title'), 99);
+		add_filter('login_title', array($this, 'login_page_title'), 99);
 		//
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
 	}
@@ -648,6 +649,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $title;
 	}
 
+	public function login_page_title($title){
+		if ( isset( $this->options['login-page-title'] ) ) {
+			return esc_html( $this->options['login-page-title'] );
+		}
+
+		return $title;
+	}
+
 	/**
 	 * Output the inline CSS
 	 */
@@ -962,7 +971,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
         if ( $label === $text ) {
             return $translated_text;
         }else{
-            $translated_text = esc_html( $label );
+            $translated_text = wp_kses_post( $label );
         }
 
 
