@@ -285,6 +285,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 'Powered by WordPress',
 				),
 				array(
+					'id'          => 'login-page-title',
+					'label'       => esc_html__( 'Login Page Title', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Login page title that is shown when you access the admin login page.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '',
+				),
+				array(
 					'id'              => 'logo-text-color',
 					'label'           => esc_html__( 'Logo text color', 'colorlib-login-customizer' ),
 					'description'     => esc_html__( 'This will change the color text property.', 'colorlib-login-customizer' ),
