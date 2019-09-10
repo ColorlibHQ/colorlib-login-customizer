@@ -918,7 +918,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
         if ( $label === $text ) {
             return $translated_text;
         }else{
-            $translated_text = esc_html( $label );
+            $translated_text = wp_kses_post( $label );
         }
 
         return $translated_text;
