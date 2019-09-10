@@ -137,7 +137,7 @@
   // Username label
   wp.customize( 'clc-options[username-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#clc-username-label' ).text( to );
+      $( '#clc-username-label' ).html( to );
     } );
   } );
 
@@ -251,7 +251,7 @@
   // Username label
   wp.customize( 'clc-options[lostpassword-username-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#lostpasswordform label span' ).text( to );
+      $( '#lostpasswordform label span' ).html( to );
     } );
   } );
 

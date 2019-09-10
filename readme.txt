@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
-Tested up to: 5.1.1
-Stable tag: 1.2.9
+Tested up to: 5.2
+Stable tag: 1.2.92
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,6 +92,14 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.2.92 =
+* Update for possibility to add links inside certain form texts
+
+= 1.2.91 =
+* Added possibility to add links inside certain form texts
+* Updated deprecated filter login_headertitle
+* Added option to change login page title
 
 = 1.2.9 =
 * Update toggles design
