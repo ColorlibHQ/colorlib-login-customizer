@@ -60,18 +60,18 @@ class CLC_Review {
 
 		$options  = get_option( 'clc-options' );
 		$option   = isset( $options['givemereview'] ) ? $options['givemereview'] : '';
-		$currDate = date( 'Y-m-d' );
+
 		if ( 'already-rated' == $option ) {
 			return false;
 		}
 
-		if ( $this->value == $option ) {
-			return false;
-		}
+        if ($this->value == $option && '' != $option) {
+            return false;
+        }
 
 		if ( is_array( $this->when ) ) {
 			foreach ( $this->when as $et ) {
-				if ( date( 'Y-m-d', strtotime( $currDate . ' +' . $et . ' days' ) ) == $this->value ) {
+				if ( $et == $this->value ) {
 					return true;
 				}
 
@@ -122,7 +122,7 @@ class CLC_Review {
 		$options = get_option( 'clc-options', array() );
 
 		if ( isset( $_POST['epsilon-review'] ) ) {
-			$options['givemereview'] = 'already-rated';
+			$options['givemereview'] = "already-rated";
 		} else {
 			$options['givemereview'] = $this->value;
 		}
