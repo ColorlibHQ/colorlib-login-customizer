@@ -1,11 +1,11 @@
 <?php
 /**
 * Plugin Name: Colorlib Login Customizer
-* Version: 1.2.94
+* Version: 1.2.95
 * Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
 * Author: Colorlib
 * Author URI: https://colorlib.com/
-* Tested up to: 5.2
+* Tested up to: 5.3
 * Requires: 4.6 or higher
 * License: GPLv3 or later
 * License URI: http://www.gnu.org/licenses/gpl-3.0.html
