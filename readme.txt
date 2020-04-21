@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
-Tested up to: 5.3
-Stable tag: 1.2.95
+Tested up to: 5.4
+Stable tag: 1.2.96
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,6 +92,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.2.96 =
+* Compatibility fix with All In One WP Security plugin
+* Customizer toggle bug fix
 
 = 1.2.95 =
 * Review request bug fix
