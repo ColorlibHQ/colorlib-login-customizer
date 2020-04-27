@@ -157,9 +157,10 @@ class CLC_Review {
                         security: '<?php echo $ajax_nonce; ?>',
                     };
 
-                    if ('epsilon-rated' === id) {
+                    if ('epsilon-rated' === id || 'epsilon-rate' === id) {
                         data['epsilon-review'] = 1;
                     }
+
 
                     $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
                         $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
