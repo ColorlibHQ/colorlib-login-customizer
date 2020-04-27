@@ -46,7 +46,7 @@ class CLC_Review {
 			return;
 		}
 
-		add_action( 'wp_ajax_epsilon_review', array( $this, 'ajax' ) );
+		add_action( 'wp_ajax_clc_epsilon_review', array( $this, 'ajax' ) );
 
 		if ( $this->check() ) {
 			add_action( 'admin_notices', array( $this, 'five_star_wp_rate_notice' ) );
@@ -153,7 +153,7 @@ class CLC_Review {
                     evt.preventDefault();
 
                     var data = {
-                        action: 'epsilon_review',
+                        action: 'clc_epsilon_review',
                         security: '<?php echo $ajax_nonce; ?>',
                     };
 
@@ -177,7 +177,7 @@ class CLC_Review {
 	            $('#colorlib-login-customizer-epsilon-review-notice .notice-dismiss').click(function(){
 
 		            var data = {
-			            action: 'epsilon_review',
+			            action: 'clc_epsilon_review',
 			            security: '<?php echo $ajax_nonce; ?>',
 		            };
 
