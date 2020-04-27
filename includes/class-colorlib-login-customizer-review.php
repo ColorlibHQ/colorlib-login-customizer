@@ -174,6 +174,21 @@ class CLC_Review {
 
                 });
 
+	            $('#colorlib-login-customizer-epsilon-review-notice .notice-dismiss').click(function(){
+
+		            var data = {
+			            action: 'epsilon_review',
+			            security: '<?php echo $ajax_nonce; ?>',
+		            };
+
+		            $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
+			            $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
+				            $(this).remove();
+			            });
+
+		            });
+	            });
+
             });
 		</script>
 
