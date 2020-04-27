@@ -96,6 +96,7 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 = 1.2.96 =
 * Compatibility fix with All In One WP Security plugin
 * Customizer toggle bug fix
+* Review dismiss fix
 
 = 1.2.95 =
 * Review request bug fix
