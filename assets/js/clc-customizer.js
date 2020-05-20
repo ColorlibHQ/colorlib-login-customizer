@@ -343,6 +343,60 @@
                 });
             });
 
+            wp.customize( 'clc-options[hide-logo]', function( value ) {
+                value.bind( function( to ) {
+                    var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+                        logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
+                        logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
+                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
+                        logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
+                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
+                        useTextLogo        = wp.customize.control( 'clc-options[use-text-logo]' ),
+                        logoUrl            = wp.customize.control( 'clc-options[logo-url]' ),
+                        logoTitle          = wp.customize.control( 'clc-options[logo-title]' );
+
+                    if ( to ) {
+
+                        logoTitle.toggle( false );
+                        logoUrl.toggle( false );
+                        useTextLogo.toggle( false );
+                        logoTextColor.toggle( false );
+                        logoTextColorHover.toggle( false );
+                        logoTextSize.toggle( false );
+                        logoImage.toggle( false );
+                        logoWidth.toggle( false );
+                        logoHeight.toggle( false );
+
+                    }else{
+
+                        useTextLogo.toggle( true );
+                        logoTitle.toggle( true );
+                        logoUrl.toggle( true );
+
+                        if(useTextLogo.setting._value){
+
+                            logoTextColor.toggle( true );
+                            logoTextColorHover.toggle( true );
+                            logoTextSize.toggle( true );
+
+                            logoImage.toggle( false );
+                            logoWidth.toggle( false );
+                            logoHeight.toggle( false );
+
+                        } else {
+
+                            logoTextColor.toggle( false );
+                            logoTextColorHover.toggle( false );
+                            logoTextSize.toggle( false );
+
+                            logoImage.toggle( true );
+                            logoWidth.toggle( true );
+                            logoHeight.toggle( true );
+                        }
+                    }
+                });
+            });
+
         });
 
     }
