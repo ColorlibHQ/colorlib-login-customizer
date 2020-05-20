@@ -321,7 +321,12 @@
                         logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
                         logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
                         logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
-                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' )
+                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
+                        bothLogo           = wp.customize.control( 'clc-options[use-both-logo]' );
+
+                    if(bothLogo.setting._value){
+                        return;
+                    }
 
                     if ( '1' == to ) {
                         logoTextColor.toggle( true );
@@ -343,6 +348,50 @@
                 });
             });
 
+            wp.customize( 'clc-options[use-both-logo]', function( value ) {
+                value.bind( function( to ) {
+                    var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+                        logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
+                        logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
+                        logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
+                        logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
+                        logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
+                        textLogo           = wp.customize.control( 'clc-options[use-text-logo]' );
+
+
+                    if ( !to ) {
+
+                        if(textLogo.setting._value){
+
+                            logoTextColor.toggle( true );
+                            logoTextColorHover.toggle( true );
+                            logoTextSize.toggle( true );
+
+                            logoImage.toggle( false );
+                            logoWidth.toggle( false );
+                            logoHeight.toggle( false );
+                        } else {
+                            logoTextColor.toggle( false );
+                            logoTextColorHover.toggle( false );
+                            logoTextSize.toggle( false );
+
+                            logoImage.toggle( true );
+                            logoWidth.toggle( true );
+                            logoHeight.toggle( true );
+
+                        }
+                    }else{
+                        logoTextColor.toggle( true );
+                        logoTextColorHover.toggle( true );
+                        logoTextSize.toggle( true );
+
+                        logoImage.toggle( true );
+                        logoWidth.toggle( true );
+                        logoHeight.toggle( true );
+                    }
+                });
+            });
+
             wp.customize( 'clc-options[hide-logo]', function( value ) {
                 value.bind( function( to ) {
                     var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
@@ -353,7 +402,8 @@
                         logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
                         useTextLogo        = wp.customize.control( 'clc-options[use-text-logo]' ),
                         logoUrl            = wp.customize.control( 'clc-options[logo-url]' ),
-                        logoTitle          = wp.customize.control( 'clc-options[logo-title]' );
+                        logoTitle          = wp.customize.control( 'clc-options[logo-title]' ),
+                        bothLogo           = wp.customize.control( 'clc-options[use-both-logo]' );
 
                     if ( to ) {
 
@@ -366,12 +416,26 @@
                         logoImage.toggle( false );
                         logoWidth.toggle( false );
                         logoHeight.toggle( false );
+                        bothLogo.toggle( false );
 
                     }else{
 
                         useTextLogo.toggle( true );
                         logoTitle.toggle( true );
                         logoUrl.toggle( true );
+                        bothLogo.toggle( true );
+
+                        if(bothLogo.setting._value){
+
+                            logoTextColor.toggle( true );
+                            logoTextColorHover.toggle( true );
+                            logoTextSize.toggle( true );
+                            logoImage.toggle( true );
+                            logoWidth.toggle( true );
+                            logoHeight.toggle( true );
+
+                            return;
+                        }
 
                         if(useTextLogo.setting._value){
 

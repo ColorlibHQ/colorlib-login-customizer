@@ -90,6 +90,17 @@
     } );
   } );
 
+  // Add class if we have both logo
+  wp.customize( 'clc-options[use-both-logo]', function ( value ) {
+    value.bind( function ( to ) {
+      if ( to ) {
+        $( 'body' ).addClass( 'clc-both-logo' );
+      } else {
+        $( 'body' ).removeClass( 'clc-both-logo' );
+      }
+    } );
+  } );
+
   wp.customize( 'clc-options[logo-title]', function( value ) {
     value.bind( function( to ) {
       $( '#logo-text' ).text( to );
@@ -235,6 +246,19 @@
         return;
       }
       $( '#login-link-label' ).text( to );
+    } );
+  } );
+
+  // Login link text
+  wp.customize( 'clc-options[login-width]', function( value ) {
+    value.bind( function( to ) {
+      if( ! to ) {
+        return;
+      }
+      console.log(to);
+      $( '.login.clc-both-logo h1 a' ).css({
+        'background-size' : to + 'px'
+      });
     } );
   } );
 

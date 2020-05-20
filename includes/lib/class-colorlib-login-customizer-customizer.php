@@ -271,6 +271,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => 0,
 				),
 				array(
+					'id'          => 'use-both-logo',
+					'label'       => esc_html__( 'Use Image & Text Logo', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Use both image and text logo', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+				),
+				array(
 					'id'          => 'logo-url',
 					'label'       => esc_html__( 'Logo URL', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
@@ -1010,13 +1017,17 @@ class Colorlib_Login_Customizer_Customizer {
 			return true;
 		}
 
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-both-logo]' )->value() ) {
+			return true;
+		}
+
 		return false;
 	}
 
 	public function check_if_not_text_logo( $control ) {
 		$options = get_option( 'clc-options', array() );
 
-		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() ) {
+		if ( 1 == $control->manager->get_setting( 'clc-options[use-text-logo]' )->value() && 1 !=  $control->manager->get_setting( 'clc-options[use-both-logo]' )->value()) {
 			return false;
 		}
 
