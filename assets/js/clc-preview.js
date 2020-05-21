@@ -260,7 +260,7 @@
 
       var h_size = wp.customize( 'clc-options[logo-height]' )._value + 'px ';
       var pad_t = ( 30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
-      var mar_top = ( 0 - 70 - parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
+      var mar_top = ( 0 - (30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) )) + 'px ';
       var w_size = to + 'px ';
 
       console.log(w_size);
@@ -285,7 +285,7 @@
       var h_size = to + 'px';
 
       $( '.login.clc-both-logo h1 a' ).css( {
-        'margin-top':      ( 0 - 70 - parseInt(to) ) + 'px',
+        'margin-top':      ( 0 - (30 + parseInt(to)) ) + 'px',
         'background-size': w_size + h_size,
         'padding-top':     ( 30 + parseInt(to) ) + 'px'
       } );
