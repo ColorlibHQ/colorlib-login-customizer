@@ -249,16 +249,46 @@
     } );
   } );
 
-  // Login link text
-  wp.customize( 'clc-options[login-width]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
+  // Logo width
+  wp.customize( 'clc-options[logo-width]', function ( value ) {
+
+    value.bind( function ( to ) {
+      if ( !to ) {
         return;
       }
-      console.log(to);
-      $( '.login.clc-both-logo h1 a' ).css({
-        'background-size' : to + 'px'
-      });
+
+
+      var h_size = wp.customize( 'clc-options[logo-height]' )._value + 'px ';
+      var pad_t = ( 30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
+      var mar_top = ( 0 - 70 - parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
+      var w_size = to + 'px ';
+
+      console.log(w_size);
+
+      $( '.login.clc-both-logo h1 a' ).css( {
+        'margin-top':      mar_top,
+        'background-size': w_size + h_size,
+        'padding-top':     pad_t
+      } );
+    } );
+  } );
+
+  // Logo height
+  wp.customize( 'clc-options[logo-height]', function ( value ) {
+
+    value.bind( function ( to ) {
+      if ( !to ) {
+        return;
+      }
+
+      var w_size = wp.customize( 'clc-options[logo-width]' )._value + 'px ';
+      var h_size = to + 'px';
+
+      $( '.login.clc-both-logo h1 a' ).css( {
+        'margin-top':      ( 0 - 70 - parseInt(to) ) + 'px',
+        'background-size': w_size + h_size,
+        'padding-top':     ( 30 + parseInt(to) ) + 'px'
+      } );
     } );
   } );
 

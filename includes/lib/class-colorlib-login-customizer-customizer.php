@@ -273,7 +273,7 @@ class Colorlib_Login_Customizer_Customizer {
 				array(
 					'id'          => 'use-both-logo',
 					'label'       => esc_html__( 'Use Image & Text Logo', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'Use both image and text logo', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Use both image and text logo. In order for this to work properly, please set both height and width to the logo image dimensions.', 'colorlib-login-customizer' ),
 					'type'        => 'clc-toggle',
 					'default'     => 0,
 				),
