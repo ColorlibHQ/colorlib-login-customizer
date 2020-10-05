@@ -48,6 +48,7 @@
 
       if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height', 'font-size' ] ) >= 0 ) {
         line += this.settings[ option ].value + 'px';
+
       }else if ( 'background-image' === this.settings[ option ].attribute ) {
         line += 'url(' + this.settings[ option ].value + ')';
       }else if ( 'display' === this.settings[ option ].attribute ) {
@@ -261,8 +262,6 @@
       var pad_t = ( 30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
       var mar_top = ( 0 - (30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) )) + 'px ';
       var w_size = to + 'px ';
-
-      console.log(w_size);
 
       $( '.login.clc-both-logo h1 a' ).css( {
         'margin-top':      mar_top,

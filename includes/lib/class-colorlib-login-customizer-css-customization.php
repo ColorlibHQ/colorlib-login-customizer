@@ -213,7 +213,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'logo-height',
 				),
 			),
-			'.login.clc-text-logo h1 a' => array(
+			'.login.clc-text-logo h1 a,.login.clc-both-logo h1 a' => array(
 				'attributes' => array(
 					'color',
 					'font-size',
@@ -507,6 +507,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'logo-height',
 			)
 		);
+
+		$string .= $this->create_css_lines(
+			'.login.clc-both-logo h1 a',
+			array(
+				'background-image',
+				'background-size',
+			),
+			array(
+				'custom-logo',
+				'logo-width',
+			)
+		);
+
 
 		$string .= $this->create_css_lines(
 			'.login.clc-text-logo h1 a',
