@@ -291,8 +291,7 @@ class Colorlib_Login_Customizer {
 			/**
 			 * Logo section
 			 */
-			'hide-logo'                 => 0,
-			'use-text-logo'             => 0,
+			'logo-settings'             => 'show-image-only',
 			'logo-url'                  => site_url(),
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',
