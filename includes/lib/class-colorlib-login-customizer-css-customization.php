@@ -580,12 +580,26 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$i = 0;
 		foreach ( $options as $option ) {
 			if ( ! empty( $this->options[ $option ] ) ) {
-				$valued[ $properties[ $i ] ] = $this->options[ $option ];
+				$val = $this->options[ $option ];
+
+				// 3 toggle buttons were replaced with one select, so we need to make sure
+				// h1 displays correctly
+				if ( 'logo-settings' == $option ) {
+
+					if ( 'hide-logo' == $val ) {
+						$val = '1';
+					} else {
+						$val = '0';
+					}
+				}
+
+				$valued[ $properties[ $i ] ] = $val;
 			}
 			$i ++;
 		}
 
 		if ( ! empty( $valued ) ) {
+
 			$string .= $selector . '{' . "\n";
 
 			foreach ( $valued as $index => $value ) {
@@ -655,7 +669,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			$classes[] = 'clc-text-logo';
 		}
 
-		if ( isset( $this->options['use-both-logo'] ) && $this->options['use-both-logo'] ) {
+		if ( isset( $this->options['logo-settings'] ) && 'use-both' == $this->options['logo-settings'] ) {
 			$classes[] = 'clc-text-logo clc-both-logo';
 		}
 

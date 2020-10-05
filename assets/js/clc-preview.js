@@ -51,10 +51,20 @@
       }else if ( 'background-image' === this.settings[ option ].attribute ) {
         line += 'url(' + this.settings[ option ].value + ')';
       }else if ( 'display' === this.settings[ option ].attribute ) {
-        if ( this.settings[ option ].value ) {
-          line += 'none';
+        // We replaced toggle with select so we need to make sure
+        // h1 displays correctly
+        if ( 'clc-options[logo-settings]' != this.settings[option].name ) {
+          if ( this.settings[option].value ) {
+            line += 'none';
+          } else {
+            line += 'block';
+          }
         } else {
-          line += 'block';
+          if ( 'hide-logo' === this.settings[option].value ) {
+            line += 'none';
+          } else {
+            line += 'block';
+          }
         }
       } else {
         line += this.settings[ option ].value;
@@ -86,6 +96,8 @@
         $( 'body' ).removeClass( 'clc-both-logo' ).addClass( 'clc-text-logo' );
       } else if ( 'use-both' === value ) {
         $( 'body' ).removeClass( 'clc-text-logo' ).addClass( 'clc-both-logo' );
+      } else {
+        $( 'body' ).removeClass( 'clc-text-logo clc-both-logo');
       }
     } );
   } );
@@ -107,24 +119,21 @@
   /* Column Align */
   wp.customize( 'clc-options[form-column-align]', function( value ) {
     value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-align-1 ml-login-align-2 ml-login-align-3 ml-login-align-4' );
-      $( 'body' ).addClass( 'ml-login-align-' + to );
+      $( 'body' ).removeClass( 'ml-login-align-1 ml-login-align-2 ml-login-align-3 ml-login-align-4' ).addClass( 'ml-login-align-' + to );
     } );
   } );
 
   /* Column Vertical Align */
   wp.customize( 'clc-options[form-vertical-align]', function( value ) {
     value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-vertical-align-1 ml-login-vertical-align-2 ml-login-vertical-align-3' );
-      $( 'body' ).addClass( 'ml-login-vertical-align-' + to );
+      $( 'body' ).removeClass( 'ml-login-vertical-align-1 ml-login-vertical-align-2 ml-login-vertical-align-3' ).addClass( 'ml-login-vertical-align-' + to );
     } );
   } );
 
   /* Column Horizontal Align */
   wp.customize( 'clc-options[form-horizontal-align]', function( value ) {
     value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-horizontal-align-1 ml-login-horizontal-align-2 ml-login-horizontal-align-3' );
-      $( 'body' ).addClass( 'ml-login-horizontal-align-' + to );
+      $( 'body' ).removeClass( 'ml-login-horizontal-align-1 ml-login-horizontal-align-2 ml-login-horizontal-align-3' ).addClass( 'ml-login-horizontal-align-' + to );
     } );
   } );
 
