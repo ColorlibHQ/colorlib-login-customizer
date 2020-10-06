@@ -174,7 +174,6 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-width'              => '430',
 								'form-height'             => '350',
 								'form-column-align'       => '3',
-								'logo-settings'           => 'hide-logo',
 								'hide-extra-links'        => '1',
 								'custom-background-color' => '#f7f7f7',
 								'custom-background'       => esc_url( $this->parent->assets_url ) . 'img/tpl-03/bg.jpg',
@@ -210,12 +209,10 @@ class Colorlib_Login_Customizer_Customizer {
 								'form-height'              => '450',
 								'form-padding'             => '50px 30px',
 								'columns'                  => '1',
-								'logo-settings'            => 'hide-logo',
 								'hide-extra-links'         => 0,
 								'custom-background-color'  => '#e9faff',
 								'custom-background'        => '',
 								'form-background-color'    => 'rgba(255,255,255,1)',
-								'form-shadow'              => 'none',
 								'form-field-background'    => '#FFF',
 								'button-background'        => '#4272d7',
 								'button-background-hover'  => '#333333',
@@ -237,7 +234,6 @@ class Colorlib_Login_Customizer_Customizer {
 								'username-label'           => '',
 								'password-label'           => '',
 								'form-shadow'              => '0 3px 20px 0px rgba(0, 0, 0, 0.1)',
-								'custom-css'               => '',
 								'form-field-border-radius' => '0',
 								'form-field-margin'        => '0',
 								'form-field-border'        => '1px solid #eee',
@@ -993,7 +989,7 @@ class Colorlib_Login_Customizer_Customizer {
 
 	// Active callbacks
 	public function check_two_column_layout( $control ) {
-		$options = get_option( 'clc-options', array() );
+		//$options = get_option( 'clc-options', array() );
 
 		if ( '2' == $control->manager->get_setting( 'clc-options[columns]' )->value() ) {
 			return true;
@@ -1003,7 +999,6 @@ class Colorlib_Login_Customizer_Customizer {
 	}
 
 	public function check_if_text_logo( $control ) {
-		$options = get_option( 'clc-options', array() );
 
 		if ( 'show-text-only' == $control->manager->get_setting( 'clc-options[logo-settings]' )->value() || 'use-both' == $control->manager->get_setting( 'clc-options[logo-settings]' )->value() ) {
 			return true;
@@ -1013,7 +1008,6 @@ class Colorlib_Login_Customizer_Customizer {
 	}
 
 	public function check_if_not_text_logo( $control ) {
-		$options = get_option( 'clc-options', array() );
 
 		if ( 'show-text-only' == $control->manager->get_setting( 'clc-options[logo-settings]' )->value() ) {
 			return false;

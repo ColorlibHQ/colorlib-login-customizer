@@ -39,6 +39,7 @@ define( 'COLORLIB_LOGIN_CUSTOMIZER_SITE', rtrim( ABSPATH, '\\/' ) );
 
 // Load plugin class files
 require_once 'includes/class-colorlib-login-customizer-autoloader.php';
+require_once 'includes/class-colorlib-login-customizer-backwards-compatibility.php';
 
 /**
  * Returns the main instance of Colorlib_Login_Customizer to prevent the need to use globals.
