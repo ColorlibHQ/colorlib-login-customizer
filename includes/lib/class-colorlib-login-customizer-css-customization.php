@@ -82,7 +82,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	public function set_options() {
 
 		$options = get_option( $this->key_name, array() );
-		$this->options = apply_filters('clc_backwards_compatibility_options',wp_parse_args( $options, $this->defaults ));
+		$this->options = wp_parse_args( $options, $this->defaults );
 
 		$this->selectors = array(
 			'.wp-core-ui .button-primary.focus, .wp-core-ui .button-primary.hover, .wp-core-ui .button-primary:focus, .wp-core-ui .button-primary:hover' => array(

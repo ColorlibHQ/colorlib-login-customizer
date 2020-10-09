@@ -26,15 +26,14 @@ class CLC_Backwards_Compatibility {
 	 */
 	public function logo_settings_compatibility($options){
 
-		if ( isset( $options['logo-settings'] ) ) {
-			return $options;
-		}
 
-		if ( isset( $options['hide-logo'] ) && '1' == $options['hide-logo'] ) {
+		if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
 			$options['logo-settings'] = 'hide-logo';
+			unset($options['hide-logo']);
 		} else {
-			if ( isset( $options['use-text-only'] ) && '1' == $options['use-text-only'] ) {
+			if ( isset( $options['use-text-logo'] ) && $options['use-text-logo'] ) {
 				$options['logo-settings'] = 'show-text-only';
+				unset($options['use-text-logo']);
 			} else {
 				$options['logo-settings'] = 'show-image-only';
 			}
