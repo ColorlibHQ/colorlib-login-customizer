@@ -29,11 +29,9 @@ class CLC_Backwards_Compatibility {
 
 		if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
 			$options['logo-settings'] = 'hide-logo';
-			unset($options['hide-logo']);
 		} else {
 			if ( isset( $options['use-text-logo'] ) && $options['use-text-logo'] ) {
 				$options['logo-settings'] = 'show-text-only';
-				unset($options['use-text-logo']);
 			} else {
 				$options['logo-settings'] = 'show-image-only';
 			}
