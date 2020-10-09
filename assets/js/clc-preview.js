@@ -39,7 +39,7 @@
     generateCSSLine: function( option ) {
         var line = this.settings[ option ].attribute + ':';
 
-        if ( '' === this.settings[ option ].value ) {
+        if ( '' === this.settings[ option ].value && 'custom-logo' !== option ) {
           return '';
         }
         if ( undefined === this.settings[ option ].attribute || undefined === this.settings[ option ].value ) {
@@ -49,9 +49,13 @@
       if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height', 'font-size' ] ) >= 0 ) {
         line += this.settings[ option ].value + 'px';
 
-      }else if ( 'background-image' === this.settings[ option ].attribute ) {
-        line += 'url(' + this.settings[ option ].value + ')';
-      }else if ( 'display' === this.settings[ option ].attribute ) {
+      } else if ( 'background-image' === this.settings[option].attribute ) {
+        if ( this.settings[option].value.length ) {
+          line += 'url(' + this.settings[option].value + ') !important;';
+        } else {
+          line += 'url(wp-admin/images/wordpress-logo.svg) !important;';
+        }
+      } else if ( 'display' === this.settings[option].attribute ) {
         // We replaced toggle with select so we need to make sure
         // h1 displays correctly
         if ( 'clc-options[logo-settings]' != this.settings[option].name ) {
