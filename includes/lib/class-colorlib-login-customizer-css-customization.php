@@ -119,7 +119,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'link-color',
 				),
 			),
-			'.login #backtoblog a:hover, .login #nav a:hover, .login h1 a:hover' => array(
+			'.login #backtoblog a:hover, .login #nav a:hover, .login h1 a:hover,.login.clc-both-logo #backtoblog a:hover, .login.clc-both-logo #nav a:hover, .login.clc-both-logo h1 a:hover' => array(
 				'attributes' => array(
 					'color',
 				),
