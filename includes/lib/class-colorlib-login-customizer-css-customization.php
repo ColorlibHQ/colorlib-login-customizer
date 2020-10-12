@@ -223,7 +223,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'logo-text-size',
 				),
 			),
-			'.login.clc-text-logo h1 a:hover' => array(
+			'.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover' => array(
 				'attributes' => array(
 					'color',
 				),
@@ -557,7 +557,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		);*/
 
 		$string .= $this->create_css_lines(
-			'.login.clc-text-logo h1 a:hover',
+			'.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover',
 			array(
 				'color',
 			),
