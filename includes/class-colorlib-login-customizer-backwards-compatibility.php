@@ -26,18 +26,22 @@ class CLC_Backwards_Compatibility {
 	 */
 	public function logo_settings_compatibility($options){
 
-
-		if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
-			$options['logo-settings'] = 'hide-logo';
-		} else {
-			if ( isset( $options['use-text-logo'] ) && $options['use-text-logo'] ) {
-				$options['logo-settings'] = 'show-text-only';
+		if ( !isset( $options['logo-settings'] ) ) {
+			if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
+				$options['logo-settings'] = 'hide-logo';
 			} else {
-				$options['logo-settings'] = 'show-image-only';
+				if ( isset( $options['use-text-logo'] ) && $options['use-text-logo'] ) {
+					$options['logo-settings'] = 'show-text-only';
+				} else {
+					$options['logo-settings'] = 'show-image-only';
+				}
 			}
-		}
 
-		return $options;
+			return $options;
+		}
+		// If we don't have to update anything return false
+		// So that the update_option function won't trigger
+		return false;
 	}
 
 	/**
