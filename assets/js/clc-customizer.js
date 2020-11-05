@@ -324,7 +324,7 @@
 					    logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
 					    logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
 					    logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
-					    logoTitle         = wp.customize.control( 'clc-options[logo-url]' ),
+					    logoTitle         = wp.customize.control( 'clc-options[logo-title]' ),
 					    logoURL         = wp.customize.control( 'clc-options[logo-url]' );
 
 					if ( 'hide-logo' === value ) {
