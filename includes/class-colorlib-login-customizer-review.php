@@ -46,7 +46,7 @@ class CLC_Review {
 			return;
 		}
 
-		add_action( 'wp_ajax_epsilon_review', array( $this, 'ajax' ) );
+		add_action( 'wp_ajax_clc_epsilon_review', array( $this, 'ajax' ) );
 
 		if ( $this->check() ) {
 			add_action( 'admin_notices', array( $this, 'five_star_wp_rate_notice' ) );
@@ -60,18 +60,18 @@ class CLC_Review {
 
 		$options  = get_option( 'clc-options' );
 		$option   = isset( $options['givemereview'] ) ? $options['givemereview'] : '';
-		$currDate = date( 'Y-m-d' );
+
 		if ( 'already-rated' == $option ) {
 			return false;
 		}
 
-		if ( $this->value == $option ) {
-			return false;
-		}
+        if ($this->value == $option && '' != $option) {
+            return false;
+        }
 
 		if ( is_array( $this->when ) ) {
 			foreach ( $this->when as $et ) {
-				if ( date( 'Y-m-d', strtotime( $currDate . ' +' . $et . ' days' ) ) == $this->value ) {
+				if ( $et == $this->value ) {
 					return true;
 				}
 
@@ -122,7 +122,7 @@ class CLC_Review {
 		$options = get_option( 'clc-options', array() );
 
 		if ( isset( $_POST['epsilon-review'] ) ) {
-			$options['givemereview'] = 'already-rated';
+			$options['givemereview'] = "already-rated";
 		} else {
 			$options['givemereview'] = $this->value;
 		}
@@ -153,13 +153,14 @@ class CLC_Review {
                     evt.preventDefault();
 
                     var data = {
-                        action: 'epsilon_review',
+                        action: 'clc_epsilon_review',
                         security: '<?php echo $ajax_nonce; ?>',
                     };
 
-                    if ('epsilon-rated' === id) {
+                    if ('epsilon-rated' === id || 'epsilon-rate' === id) {
                         data['epsilon-review'] = 1;
                     }
+
 
                     $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
                         $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
@@ -173,6 +174,21 @@ class CLC_Review {
                     });
 
                 });
+
+	            $('#colorlib-login-customizer-epsilon-review-notice .notice-dismiss').click(function(){
+
+		            var data = {
+			            action: 'clc_epsilon_review',
+			            security: '<?php echo $ajax_nonce; ?>',
+		            };
+
+		            $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
+			            $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
+				            $(this).remove();
+			            });
+
+		            });
+	            });
 
             });
 		</script>

@@ -124,6 +124,9 @@ class Colorlib_Login_Customizer {
 		// Generate plugins css
 		add_action( 'init', array( $this, 'load_customizer_css' ) );
 
+		// Compatibility fix with All In One WP Security
+        add_action('init', array($this, 'clc_aio_wp_security_comp_fix'));
+
 	} // End __construct ()
 
 	/**
@@ -146,6 +149,7 @@ class Colorlib_Login_Customizer {
 	 * @return void
 	 */
 	public function redirect_customizer() {
+
 		if ( ! empty( $_GET['page'] ) ) { // Input var okay.
 			if ( 'colorlib-login-customizer_settings' === $_GET['page'] ) { // Input var okay.
 
@@ -158,6 +162,7 @@ class Colorlib_Login_Customizer {
 				);
 
 				wp_safe_redirect( $url );
+
 			}
 		}
 	}
@@ -237,11 +242,15 @@ class Colorlib_Login_Customizer {
 
 		// Backward compatibility
 		$options = get_option( $this->key_name, array() );
-		if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
-			$options['templates'] = 'default';
-			$options['columns'] = 2;
+		if ( $options ) {
+			if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
+				$options['templates'] = 'default';
+				$options['columns']   = 2;
+			}
+
 			update_option( $this->key_name, $options );
 		}
+
 	} // End install ()
 
 	/**
@@ -286,8 +295,7 @@ class Colorlib_Login_Customizer {
 			/**
 			 * Logo section
 			 */
-			'hide-logo'                 => 0,
-			'use-text-logo'             => 0,
+			'logo-settings'             => 'show-image-only',
 			'logo-url'                  => site_url(),
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',
@@ -365,4 +373,40 @@ class Colorlib_Login_Customizer {
 			'initial'                   => 'initial',
 		);
 	}
+
+    /**
+     * All In One WP Security customizer fix
+     *
+     * @since 1.2.96
+     */
+    public function clc_aio_wp_security_comp_fix() {
+
+        if ( ! is_customize_preview() ){
+            return;
+        }
+
+        if ( ! class_exists( 'AIO_WP_Security' ) ){
+            return;
+        }
+
+        global $aio_wp_security;
+
+        if( ! is_a( $aio_wp_security, 'AIO_WP_Security' ) ) {
+            return;
+        }
+
+        if( remove_action( 'wp_loaded', array( $aio_wp_security, 'aiowps_wp_loaded_handler' ) ) ) {
+            add_filter( 'option_aio_wp_security_configs', array( $this, 'clc_aio_wp_security_filter_options' ) );
+        }
+    }
+
+    /**
+     * Filter options aio_wp_security_configs.
+     *
+     * @since 1.2.96
+     */
+    public function clc_aio_wp_security_filter_options( $option ) {
+        unset( $option['aiowps_enable_rename_login_page'] );
+        return $option;
+    }
 }

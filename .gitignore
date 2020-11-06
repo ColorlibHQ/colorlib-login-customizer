@@ -3,3 +3,4 @@ node_modules/*
 colorlib-login-customizer.zip
 .DS_Store
 package-lock.json
+.standard.json
