@@ -11,10 +11,9 @@ class CLC_Backwards_Compatibility {
 	function __construct() {
 
 		// Backwards compatibility to ver. 1.2.96
+		// Add action to admin init so we can update the options if needed
 		// Filter clc_backwards_compatibility_front for front-end
-		// Filter clc_backwards_compatibility_options for setting options
-
-		add_filter( 'clc_backwards_compatibility_options', array( $this, 'logo_settings_compatibility' ), 16, 1 );
+		add_action( 'admin_init', array( $this, 'backwards_update_options' ), 25 );
 		add_filter( 'clc_backwards_compatibility_front', array( $this, 'logo_settings_compatibility' ), 16, 1 );
 
 	}
@@ -24,7 +23,7 @@ class CLC_Backwards_Compatibility {
 	 *
 	 * @return mixed
 	 */
-	public function logo_settings_compatibility($options){
+	public function logo_settings_compatibility( $options ) {
 
 		if ( !isset( $options['logo-settings'] ) ) {
 			if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
@@ -42,6 +41,28 @@ class CLC_Backwards_Compatibility {
 		// If we don't have to update anything return false
 		// So that the update_option function won't trigger
 		return false;
+	}
+
+	/**
+	 * Update our options on admin init if needed
+	 */
+	public function backwards_update_options(){
+		// Backwards compatibility on admin_init
+		$options = get_option( 'clc-options', array() );
+
+		if ( !isset( $options['logo-settings'] ) ) {
+			if ( isset( $options['hide-logo'] ) && $options['hide-logo'] ) {
+				$options['logo-settings'] = 'hide-logo';
+			} else {
+				if ( isset( $options['use-text-logo'] ) && $options['use-text-logo'] ) {
+					$options['logo-settings'] = 'show-text-only';
+				} else {
+					$options['logo-settings'] = 'show-image-only';
+				}
+			}
+
+			update_option( 'clc-options', $options );
+		}
 	}
 
 	/**

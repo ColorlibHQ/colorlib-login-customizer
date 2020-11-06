@@ -150,13 +150,6 @@ class Colorlib_Login_Customizer {
 	 */
 	public function redirect_customizer() {
 
-		// Backwards compatibility on admin_init
-		$options = apply_filters( 'clc_backwards_compatibility_options', get_option( $this->key_name, array() ) );
-
-		if ( $options ) {
-			update_option( $this->key_name, $options );
-		}
-
 		if ( ! empty( $_GET['page'] ) ) { // Input var okay.
 			if ( 'colorlib-login-customizer_settings' === $_GET['page'] ) { // Input var okay.
 
