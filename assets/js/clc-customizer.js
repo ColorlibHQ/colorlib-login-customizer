@@ -17,6 +17,69 @@
 			} );
 		} );
 
+		wp.customize.section( 'clc_logo', function ( section ) {
+			section.expanded.bind( function ( isExpanding ) {
+				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
+				if ( isExpanding ) {
+					var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
+					    logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
+					    logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
+					    logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
+					    logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
+					    logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
+					    logoTitle          = wp.customize.control( 'clc-options[logo-title]' ),
+					    logoURL            = wp.customize.control( 'clc-options[logo-url]' ),
+					    logo_type          = wp.customize.control( 'clc-options[logo-settings]' );
+
+					if ( 'hide-logo' === logo_type.settings.default._value ) {
+						logoTextColor.toggle( false );
+						logoTextColorHover.toggle( false );
+						logoTextSize.toggle( false );
+						logoImage.toggle( false );
+						logoWidth.toggle( false );
+						logoHeight.toggle( false );
+						logoURL.toggle( false );
+						logoTitle.toggle( false );
+
+						return;
+
+					} else {
+						logoTitle.toggle( true );
+					}
+
+					if ( 'show-text-only' === logo_type.settings.default._value ) {
+						logoTextColor.toggle( true );
+						logoTextColorHover.toggle( true );
+						logoTextSize.toggle( true );
+						logoURL.toggle( true );
+
+						logoImage.toggle( false );
+						logoWidth.toggle( false );
+						logoHeight.toggle( false );
+					} else if ( 'show-image-ony' === logo_type.settings.default._value ) {
+						logoTextColor.toggle( false );
+						logoTextColorHover.toggle( false );
+						logoTextSize.toggle( false );
+
+						logoURL.toggle( true );
+						logoImage.toggle( true );
+						logoWidth.toggle( true );
+						logoHeight.toggle( true );
+					} else {
+						logoTextColor.toggle( true );
+						logoTextColorHover.toggle( true );
+						logoTextSize.toggle( true );
+						logoImage.toggle( true );
+						logoWidth.toggle( true );
+						logoHeight.toggle( true );
+						logoURL.toggle( true );
+					}
+				} else {
+
+				}
+			} );
+		} );
+
 		wp.customize.section( 'clc_register-form', function ( section ) {
 			section.expanded.bind( function ( isExpanding ) {
 				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
@@ -267,6 +330,7 @@
 
 		// Listen for previewer events
 		wp.customize.bind( 'ready', function () {
+
 			wp.customize.previewer.bind( 'clc-focus-section', function ( sectionName ) {
 				var section = wp.customize.section( sectionName );
 
