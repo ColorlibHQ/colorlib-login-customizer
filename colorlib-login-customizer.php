@@ -39,6 +39,7 @@ define( 'COLORLIB_LOGIN_CUSTOMIZER_SITE', rtrim( ABSPATH, '\\/' ) );
 
 // Load plugin class files
 require_once 'includes/class-colorlib-login-customizer-autoloader.php';
+require_once 'includes/class-colorlib-login-customizer-backwards-compatibility.php';
 
 /**
  * Returns the main instance of Colorlib_Login_Customizer to prevent the need to use globals.
@@ -47,7 +48,7 @@ require_once 'includes/class-colorlib-login-customizer-autoloader.php';
  * @return object Colorlib_Login_Customizer
  */
 function colorlib_login_customizer() {
-	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.92' );
+	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.97' );
 
     if (is_null($instance->settings)) {
         $instance->settings = Colorlib_Login_Customizer_Settings::instance($instance);

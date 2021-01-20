@@ -242,11 +242,15 @@ class Colorlib_Login_Customizer {
 
 		// Backward compatibility
 		$options = get_option( $this->key_name, array() );
-		if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
-			$options['templates'] = 'default';
-			$options['columns'] = 2;
+		if ( $options ) {
+			if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
+				$options['templates'] = 'default';
+				$options['columns']   = 2;
+			}
+
 			update_option( $this->key_name, $options );
 		}
+
 	} // End install ()
 
 	/**
@@ -291,8 +295,7 @@ class Colorlib_Login_Customizer {
 			/**
 			 * Logo section
 			 */
-			'hide-logo'                 => 0,
-			'use-text-logo'             => 0,
+			'logo-settings'             => 'show-image-only',
 			'logo-url'                  => site_url(),
 			'custom-logo'               => '',
 			'logo-text-color'           => '#444',

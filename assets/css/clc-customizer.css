@@ -1,3 +1,7 @@
+#sub-accordion-section-clc_logo select {
+    max-width:100%;
+}
+
 .customize-control-clc-range-slider input[type="text"] {
     border: none;
     text-align: center;

@@ -10,15 +10,15 @@
 $clc_core     = Colorlib_Login_Customizer::instance();
 $clc_defaults = $clc_core->get_defaults();
 $clc_options  = get_option( 'clc-options', array() );
-$clc_options  = wp_parse_args( $clc_options, $clc_defaults );
+$clc_options  = apply_filters( 'clc_backwards_compatibility_front', wp_parse_args( $clc_options, $clc_defaults ) );
 
 /**
  * Output the login page header.
  *
- * @param string   $title    Optional. WordPress login Page title to display in the `<title>` element.
+ * @param string $title      Optional. WordPress login Page title to display in the `<title>` element.
  *                           Default 'Log In'.
- * @param string   $message  Optional. Message to display in header. Default empty.
- * @param WP_Error $wp_error Optional. The error to pass. Default empty.
+ * @param string $message    Optional. Message to display in header. Default empty.
+ * @param string $wp_error   Optional. The error to pass. Default empty.
  */
 function clc_login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 
