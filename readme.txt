@@ -93,6 +93,9 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
+= 1.2.99 =
+* Fixed an issue where the link color hover pallete would not display properly (https://github.com/ColorlibHQ/colorlib-login-customizer/issues/139)
+
 = 1.2.98 =
 * Compatibility with jQuery 3.0
 

@@ -37,7 +37,7 @@
 
 /* Panel */
 .minicolors-panel {
-  position: absolute;
+  position: relative;
   width: 173px;
   background: white;
   border: solid 1px #CCC;
