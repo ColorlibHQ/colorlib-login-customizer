@@ -345,8 +345,16 @@ body .epsilon-toggle > input.epsilon-toggle__input[type=checkbox]:checked + .eps
     .clc-color-picker-title .clc-color-picker-default:hover, .clc-color-picker-title .clc-color-picker-default:focus {
       color: #55AAD3; }
 
+.customize-control-clc-color-picker .minicolors-position-bottom .minicolors-panel {
+    top:15px;
+}
+
+.customize-control-clc-color-picker .minicolors-panel {
+    position:relative;
+}
+
 .minicolors-theme-default {
-  display: block !important; }
+  /*display: block !important;*/ }
   .minicolors-theme-default .clc-color-picker {
     z-index: 100;
     position: absolute;
