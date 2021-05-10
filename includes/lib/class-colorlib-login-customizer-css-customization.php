@@ -757,10 +757,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-logo-style">' . $logo_css . '</style>';
 		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
+		echo '<style type="text/css" id="clc-custom-background-link"> body .ml-container .ml-extra-div .clc-custom-background-link {display:block; width:100%; height:100%;} </style>';
 	}
 
 	public function add_extra_div() {
-		echo '<div class="ml-container"><div class="ml-extra-div"></div><div class="ml-form-container">';
+
+		$options = get_option( 'clc-options');
+
+		if( isset( $options['custom-background'] ) && '' != $options['custom-background'] && isset( $options['custom-background-link'] ) && '' != $options['custom-background-link']  ) {
+			echo '<div class="ml-container"><div class="ml-extra-div"><a class="clc-custom-background-link" href="' . $options['custom-background-link'] . '"></a></div><div class="ml-form-container">';
+		} else {
+
+			echo '<div class="ml-container"><div class="ml-extra-div"></a></div><div class="ml-form-container">';
+		}
 	}
 
 	public function close_extra_div() {

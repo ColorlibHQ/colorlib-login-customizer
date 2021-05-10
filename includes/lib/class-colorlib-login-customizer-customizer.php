@@ -467,6 +467,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '',
 				),
 				array(
+					'id'              => 'custom-background-link',
+					'label'           => esc_html__( 'Background Image Link', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'This will add a link on the background image.', 'colorlib-login-customizer' ),
+					'type'            => 'text',
+					'default'         => '',
+				),
+				array(
 					'id'              => 'custom-background-color-form',
 					'label'           => esc_html__( 'Form Column background color', 'colorlib-login-customizer' ),
 					'description'     => esc_html__( 'This will change the background color property.', 'colorlib-login-customizer' ),

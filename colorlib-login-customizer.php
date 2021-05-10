@@ -48,7 +48,7 @@ require_once 'includes/class-colorlib-login-customizer-backwards-compatibility.p
  * @return object Colorlib_Login_Customizer
  */
 function colorlib_login_customizer() {
-	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.2.99' );
+	$instance = Colorlib_Login_Customizer::instance( __FILE__, '1.3.00' );
 
     if (is_null($instance->settings)) {
         $instance->settings = Colorlib_Login_Customizer_Settings::instance($instance);
