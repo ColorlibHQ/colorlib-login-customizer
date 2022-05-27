@@ -307,6 +307,7 @@ class Colorlib_Login_Customizer {
 			 * Background section
 			 */
 			'custom-background'             => '',
+			'custom-background-link'        => '',
 			'custom-background-form'        => '',
 			'custom-background-color'       => '',
 			'custom-background-color-form'  => '',

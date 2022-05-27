@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
-Tested up to: 5.5
-Stable tag: 1.2.97
+Tested up to: 6.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,6 +92,16 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.3.00 - 10.05.2021 =
+Added : Background image link ( https://github.com/ColorlibHQ/colorlib-login-customizer/issues/115 )
+
+= 1.2.99 - 08.04.2021=
+Fixed: An issue where the link color hover pallete would not display properly (https://github.com/ColorlibHQ/colorlib-login-customizer/issues/139)
+Fixed: An issue where the logo would be outside of the login box on a selected template ( https://github.com/ColorlibHQ/colorlib-login-customizer/issues/134)
+
+= 1.2.98 =
+* Compatibility with jQuery 3.0
 
 = 1.2.97 =
 * Hide logo settings if hide logo is toggled on
