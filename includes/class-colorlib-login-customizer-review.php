@@ -101,8 +101,8 @@ class CLC_Review {
 		$url = sprintf( $this->link, $this->slug );
 
 		?>
-		<div id="<?php echo $this->slug ?>-epsilon-review-notice" class="notice notice-success is-dismissible">
-			<p><?php echo sprintf( wp_kses_post( $this->messages['notice'] ), $this->value ); ?></p>
+		<div id="<?php echo esc_attr( $this->slug ); ?>-epsilon-review-notice" class="notice notice-success is-dismissible">
+			<p><?php echo sprintf( wp_kses_post( $this->messages['notice'] ), absint( $this->value ) ); ?></p>
 			<p class="actions">
 				<a id="epsilon-rate" href="<?php echo esc_url( $url ) ?>"
 				   class="button button-primary epsilon-review-button"><?php echo esc_html( $this->messages['rate'] ); ?></a>
@@ -162,8 +162,8 @@ class CLC_Review {
                     }
 
 
-                    $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
-                        $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
+                    $.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ) ?>', data, function (response) {
+                        $('#<?php echo esc_attr( $this->slug); ?>-epsilon-review-notice').slideUp('fast', function () {
                             $(this).remove();
                         });
 
@@ -182,8 +182,8 @@ class CLC_Review {
 			            security: '<?php echo $ajax_nonce; ?>',
 		            };
 
-		            $.post('<?php echo admin_url( 'admin-ajax.php' ) ?>', data, function (response) {
-			            $('#<?php echo $this->slug ?>-epsilon-review-notice').slideUp('fast', function () {
+		            $.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ) ?>', data, function (response) {
+			            $('#<?php echo esc_attr( $this->slug ); ?>-epsilon-review-notice').slideUp('fast', function () {
 				            $(this).remove();
 			            });
 

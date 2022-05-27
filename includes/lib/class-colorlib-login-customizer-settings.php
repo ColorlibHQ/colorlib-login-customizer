@@ -100,7 +100,7 @@ class Colorlib_Login_Customizer_Settings {
 		$html .= '<a href="' . get_admin_url() . 'customize.php?url=' . wp_login_url() . '" id="submit" class="button button-primary">' . __( 'Start Customizing!', 'colorlib-login-customizer' ) . '</a>';
 		$html .= '</div>' . "\n";
 
-		echo $html;
+		echo wp_kses_post( $html );
 	}
 
 	/**
@@ -127,7 +127,7 @@ class Colorlib_Login_Customizer_Settings {
 	 * @since 1.0.0
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->parent->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), esc_html( $this->parent->_version ) );
 	} // End __clone()
 
 	/**
@@ -136,7 +136,7 @@ class Colorlib_Login_Customizer_Settings {
 	 * @since 1.0.0
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->parent->_version );
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), esc_html( $this->parent->_version ) );
 	} // End __wakeup()
 
 }
