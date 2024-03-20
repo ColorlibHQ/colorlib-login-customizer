@@ -87,6 +87,24 @@ class Colorlib_Login_Customizer {
 	public $script_suffix;
 
 	/**
+	 * Prefix base of plugin.
+	 *
+	 * @var     string
+	 * @access  public
+	 * @since   1.3.2
+	 */
+	public $base;
+
+	/**
+	 * CLC WP options name
+	 *
+	 * @var     string
+	 * @access  public
+	 * @since   1.3.2
+	 */
+	public $key_name;
+
+	/**
 	 * Constructor function.
 	 *
 	 * @access  public

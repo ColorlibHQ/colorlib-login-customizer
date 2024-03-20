@@ -15,10 +15,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @var array
 	 */
 	private $selectors = array();
+	
 	/**
-	 * @var string
+	 * CLC WP options name
+	 *
+	 * @var     string
+	 * @access  public
+	 * @since   1.3.2
 	 */
-	private $base = '';
+	public $key_name;
 
 	private $defaults;
 

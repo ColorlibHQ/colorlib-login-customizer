@@ -93,6 +93,9 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
+= 1.3.2 - TBD =
+Fixed: Php 8 deprecations ( [#169](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/169) )
+
 = 1.3.1 - 08.02.2022 =
 Fixed: Form placement ( https://wordpress.org/support/topic/the-login-area-doesnt-center-fix-not-working/ )
 
