@@ -27,16 +27,21 @@
           self = this;
       $.each( self.selectors, function( index, selector ) {
         var cssLine = index + '{';
-        $.each( selector, function( index, option ) {
+        $.each( selector, function( indexi, option ) {
           cssLine = cssLine + self.generateCSSLine( option );
+          if( 'custom-background-color' == option ){
+            console.log( 'custom-background-color');
+            console.log( cssLine );
+          }
         });
         style = style + cssLine + '}';
       });
-
+     
       self.style.html( style );
 
     },
     generateCSSLine: function( option ) {
+
         var line = this.settings[ option ].attribute + ':';
 
         if ( '' === this.settings[ option ].value && 'custom-logo' !== option ) {
@@ -75,7 +80,7 @@
         line += this.settings[ option ].value;
       }
       line += ';';
-
+ 
       return line;
     }
   };
