@@ -98,6 +98,7 @@ Fixed: Php 8 deprecations ( [#169](https://github.com/ColorlibHQ/colorlib-login-
 Fixed: "Remember me" label not aligned properly for users display( [#166](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/166) )
 Fixed: Form alignment options switched( [#165](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/165) )
 Fixed: The live preview doesn’t show "Register" link ( [#163](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/163) )
+Fixed: Updated deprecated jquery & updated minicolors js library ( [#159](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/159) )
 
 
 = 1.3.1 - 08.02.2022 =
