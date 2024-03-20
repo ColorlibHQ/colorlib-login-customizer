@@ -102,8 +102,7 @@ Fixed: Updated deprecated jquery & updated minicolors js library ( [#159](https:
 Fixed: Added plugin name in "Rate us" notice. ( [#149](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/149) )
 Fixed: Show image only on tempalte no.4 does not display the logo image. ( [#135](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/135) )
 Fixed: Background color that will not apply on half page form templates ( [#136](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/136) )
-
-
+Fixed: Vertical scrollable login, reset and register forms ( [#131](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/131) )
 
 = 1.3.1 - 08.02.2022 =
 Fixed: Form placement ( https://wordpress.org/support/topic/the-login-area-doesnt-center-fix-not-working/ )

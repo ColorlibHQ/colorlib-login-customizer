@@ -1229,6 +1229,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
+			overflow-y: visible;
 		}
 		.ml-container{
 			position:relative;
