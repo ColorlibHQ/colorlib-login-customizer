@@ -100,6 +100,7 @@ Fixed: Form alignment options switched( [#165](https://github.com/ColorlibHQ/col
 Fixed: The live preview doesn’t show "Register" link ( [#163](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/163) )
 Fixed: Updated deprecated jquery & updated minicolors js library ( [#159](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/159) )
 Fixed: Added plugin name in "Rate us" notice. ( [#149](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/149) )
+Fixed: Show image only on tempalte no.4 does not display the logo image. ( [#135](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/135) )
 
 
 = 1.3.1 - 08.02.2022 =
