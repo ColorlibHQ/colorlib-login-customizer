@@ -27,12 +27,8 @@
           self = this;
       $.each( self.selectors, function( index, selector ) {
         var cssLine = index + '{';
-        $.each( selector, function( indexi, option ) {
+        $.each( selector, function( index, option ) {
           cssLine = cssLine + self.generateCSSLine( option );
-          if( 'custom-background-color' == option ){
-            console.log( 'custom-background-color');
-            console.log( cssLine );
-          }
         });
         style = style + cssLine + '}';
       });
