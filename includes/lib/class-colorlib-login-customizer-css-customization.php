@@ -1294,6 +1294,9 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{
 				width:50% !important;
 			}
+			.login h1 a{
+				max-width: 100%;
+			}
 		}
 		.login input[type=text]:focus, .login input[type=search]:focus, .login input[type=radio]:focus, .login input[type=tel]:focus, .login input[type=time]:focus, .login input[type=url]:focus, .login input[type=week]:focus, .login input[type=password]:focus, .login input[type=checkbox]:focus, .login input[type=color]:focus, .login input[type=date]:focus, .login input[type=datetime]:focus, .login input[type=datetime-local]:focus, .login input[type=email]:focus, .login input[type=month]:focus, .login input[type=number]:focus, .login select:focus, .login textarea:focus{
 			 box-shadow: none;
