@@ -1190,6 +1190,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
         return $translated_text;
     }
 
+	/**
+	 * Get the base CSS for the login page
+	 *
+	 * @return string
+	 * @since 1.3.2
+	 */
 	private function get_base_css() {
 		return '
 		.language-switcher{
