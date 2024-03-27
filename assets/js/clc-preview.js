@@ -32,11 +32,12 @@
         });
         style = style + cssLine + '}';
       });
-
+     
       self.style.html( style );
 
     },
     generateCSSLine: function( option ) {
+
         var line = this.settings[ option ].attribute + ':';
 
         if ( '' === this.settings[ option ].value && 'custom-logo' !== option ) {
@@ -75,7 +76,7 @@
         line += this.settings[ option ].value;
       }
       line += ';';
-
+ 
       return line;
     }
   };
@@ -333,7 +334,7 @@
     } );
   } );
 
-  $( '.clc-preview-event' ).click( function() {
+  $( '.clc-preview-event' ).on( 'click', function() {
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
   } );
 

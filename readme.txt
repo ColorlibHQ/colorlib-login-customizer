@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
 Requires at least: 4.7
-Tested up to: 6.0
-Stable tag: 1.3.0
+Tested up to: 6.5
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -92,6 +92,21 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
 
 == Changelog ==
+
+= 1.3.2 - 27.03.2024 =
+Fixed: Php 8 deprecations ( [#169](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/169) )
+Fixed: "Remember me" label not aligned properly for users display( [#166](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/166) )
+Fixed: Form alignment options switched( [#165](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/165) )
+Fixed: The live preview doesn’t show "Register" link ( [#163](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/163) )
+Fixed: Updated deprecated jquery & updated minicolors js library ( [#159](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/159) )
+Fixed: Added plugin name in "Rate us" notice. ( [#149](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/149) )
+Fixed: Show image only on tempalte no.4 does not display the logo image. ( [#135](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/135) )
+Fixed: Background color that will not apply on half page form templates ( [#136](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/136) )
+Fixed: Vertical scrollable login, reset and register forms ( [#131](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/131) )
+Fixed: Bigger logos on mobile/small tablet devices stretching the login page. ( [#43](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/43) )
+
+= 1.3.1 - 08.02.2022 =
+Fixed: Form placement ( https://wordpress.org/support/topic/the-login-area-doesnt-center-fix-not-working/ )
 
 = 1.3.00 - 10.05.2021 =
 Added : Background image link ( https://github.com/ColorlibHQ/colorlib-login-customizer/issues/115 )

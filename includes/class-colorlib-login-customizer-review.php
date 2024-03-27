@@ -19,7 +19,7 @@ class CLC_Review {
 		$this->value = $this->value();
 
 		$this->messages = array(
-			'notice'  => __( "Hey, I noticed you have installed our plugin for %s day(s) - that's awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress? Just to help us spread the word and boost our motivation.", 'colorlib-login-customizer' ),
+			'notice'  => __( "Hey, I noticed you have installed our Colorlib Login Customizer plugin for %s day(s) - that's awesome! Could you please do me a BIG favor and give it a 5-star rating on WordPress? Just to help us spread the word and boost our motivation.", 'colorlib-login-customizer' ),
 			'rate'    => __( 'Ok, you deserve it', 'colorlib-login-customizer' ),
 			'rated'   => __( 'I already did', 'colorlib-login-customizer' ),
 			'no_rate' => __( 'No, not good enough', 'colorlib-login-customizer' ),

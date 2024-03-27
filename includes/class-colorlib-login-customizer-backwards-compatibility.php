@@ -35,12 +35,8 @@ class CLC_Backwards_Compatibility {
 					$options['logo-settings'] = 'show-image-only';
 				}
 			}
-
-			return $options;
 		}
-		// If we don't have to update anything return false
-		// So that the update_option function won't trigger
-		return false;
+		return $options;
 	}
 
 	/**
