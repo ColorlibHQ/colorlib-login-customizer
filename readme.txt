@@ -93,6 +93,10 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 
 == Changelog ==
 
+= 1.3.3 - 29.01.2025 =
+Fixed: Textdomain fix for wordpress 6.7+ ( [#179](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/179) )
+Fixed: Deprecated: Hook login_headertitle ( [#178](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/178) )
+
 = 1.3.2 - 27.03.2024 =
 Fixed: Php 8 deprecations ( [#169](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/169) )
 Fixed: "Remember me" label not aligned properly for users display( [#166](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/166) )
