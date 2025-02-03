@@ -136,7 +136,6 @@ class Colorlib_Login_Customizer {
 		add_filter( 'template_include', array( $this, 'change_template_if_necessary' ), 99 );
 
 		// Handle localisation
-		$this->load_plugin_textdomain();
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
 
 		// Generate plugins css
@@ -195,22 +194,6 @@ class Colorlib_Login_Customizer {
 	public function load_localisation() {
 		load_plugin_textdomain( 'colorlib-login-customizer', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
 	} // End load_localisation ()
-
-	/**
-	 * Load plugin textdomain
-	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
-	 */
-	public function load_plugin_textdomain() {
-		$domain = 'colorlib-login-customizer';
-
-		$locale = apply_filters( 'plugin_locale', get_locale(), $domain );
-
-		load_textdomain( $domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo' );
-		load_plugin_textdomain( $domain, false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
-	} // End load_plugin_textdomain ()
 
 	/**
 	 * Main Colorlib_Login_Customizer Instance
