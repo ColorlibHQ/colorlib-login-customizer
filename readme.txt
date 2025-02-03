@@ -1,6 +1,6 @@
 === Custom Login Page Customizer by Colorlib ===
 Contributors: silkalns
-Tags: customize login, login, custom login, customize wordpress login, wordpress login, customizer, custom admin, login logo, logo, login customizer, custom wp-login
+Tags: customize login, login, custom login, customize wordpress login, wordpress login
 Requires at least: 4.7
 Tested up to: 6.7
 Stable tag: 1.3.3
