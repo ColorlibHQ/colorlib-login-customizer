@@ -2,7 +2,7 @@
 Contributors: silkalns
 Tags: customize login, login, custom login, customize wordpress login, wordpress login
 Requires at least: 4.7
-Tested up to: 6.8
+Tested up to: 6.9
 Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
