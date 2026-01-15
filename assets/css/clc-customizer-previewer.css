@@ -36,10 +36,31 @@
 	left: 0;
 	top: 0;
 	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-indent: 0;
+	background-image: none !important;
+	background-size: auto;
+}
+.login h1 a .clc-preview-event > span {
+	margin-top: 0;
 }
 .login:not(.clc-both-logo) h1 a #logo-text {
 	display: none;
 }
 .login.clc-text-logo h1 a #logo-text{
 	display: block;
+}
+
+/* Fix password field width in customizer preview to match username field */
+.login form p label input[type="password"],
+.login form p label input[type="text"],
+.login form p label input[type="email"],
+.login form .input {
+	width: 100% !important;
+	box-sizing: border-box !important;
+}
+.login form p label {
+	display: block !important;
 }

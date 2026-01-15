@@ -132,46 +132,7 @@
 			}
 		} );
 
-		wp.customize.controlConstructor['clc-range-slider'] = wp.customize.Control.extend( {
-			ready: function () {
-				var control           = this,
-				    controlField      = control.container.find( 'input.clc-slider' ),
-				    controlSlider     = control.container.find( 'div.clc-slider' ),
-				    controlSliderData = control.params.choices,
-				    updating          = false;
-
-				controlSlider.slider( {
-					range: 'min',
-					min:   controlSliderData.min,
-					max:   controlSliderData.max,
-					step:  controlSliderData.step,
-					value: controlField.val(),
-					slide: function ( event, ui ) {
-						controlField.val( ui.value ).keyup();
-					},
-					stop:  function ( event, ui ) {
-						controlField.val( ui.value );
-						updating = true;
-						control.setting.set( ui.value );
-						updating = false;
-					}
-				} );
-
-				// Whenever the setting's value changes, refresh the preview.
-				control.setting.bind( function ( value ) {
-
-					// Bail if the update came from the control itself.
-					if ( updating ) {
-						return;
-					}
-
-					controlField.val( value );
-					controlSlider.slider( 'value', value );
-
-				} );
-
-			}
-		} );
+		// Range slider now uses native HTML5 range input - no custom JS needed.
 
 		wp.customize.controlConstructor['clc-button-group'] = wp.customize.Control.extend( {
 			ready: function () {
@@ -283,48 +244,7 @@
 
 		} );
 
-		wp.customize.controlConstructor['clc-color-picker'] = wp.customize.Control.extend( {
-			ready: function () {
-				var control  = this,
-				    updating = false,
-				    clear    = control.container.find( 'a.clc-color-picker-default' ),
-				    input    = $( control.container ).find( '.clc-color-picker' );
-
-				input.minicolors( {
-					format:   'hex',
-					opacity:  true,
-					keywords: 'transparent, initial, inherit',
-					change:   function ( value, opacity ) {
-						updating = true;
-						control.setting.set( input.minicolors( 'rgbaString' ) );
-						updating = false;
-					}
-				} );
-
-				if ( clear.length > 0 ) {
-					clear.on( 'click', function ( e ) {
-						var defaultValue = $( this ).attr( 'data-default' );
-						e.preventDefault();
-
-						input.minicolors( 'value', defaultValue );
-						updating = true;
-						control.setting.set( defaultValue );
-						updating = false;
-					} );
-				}
-
-				// Whenever the setting's value changes, refresh the preview.
-				control.setting.bind( function ( value ) {
-
-					// Bail if the update came from the control itself.
-					if ( updating ) {
-						return;
-					}
-					input.minicolors( 'value', value );
-
-				} );
-			}
-		} );
+		// Color picker now uses WordPress built-in WP_Customize_Color_Control - no custom JS needed.
 
 		// Listen for previewer events
 		wp.customize.bind( 'ready', function () {

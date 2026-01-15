@@ -1,10 +1,20 @@
 <?php
+/**
+ * Custom color picker control for the Customizer.
+ *
+ * @deprecated 2.0.0 Use WP_Customize_Color_Control instead.
+ * @package Colorlib_Login_Customizer
+ */
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * Class Colorlib_Login_Customizer_Control_Color_Picker
+ * Color picker control class.
+ *
+ * @deprecated 2.0.0 This class is no longer used internally. WP_Customize_Color_Control is used instead.
+ *                   Kept for backwards compatibility with any code that may extend this class.
  */
 class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Control {
 	/**

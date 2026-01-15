@@ -3,7 +3,7 @@ Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 2.0.0
+Stable tag: 2.1.0
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -27,7 +27,7 @@ Your login page is often the first thing clients and team members see. A branded
 
 **Live Customizer Preview** – See every change instantly before saving. No guesswork, no refreshing.
 
-**Ready-Made Templates** – Choose from professionally designed login page templates and customize them to match your brand.
+**Ready-Made Templates** – Choose from 9 professionally designed login page templates including modern gradients, glassmorphism, dark themes, and split-screen layouts.
 
 **Complete Logo Control** – Upload your custom logo, adjust dimensions, or use text-based branding. Link your logo to any URL.
 
@@ -182,6 +182,18 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 
 == Changelog ==
 
+= 2.1.0 =
+* New: Added 5 new professionally designed login page templates:
+  - Gradient Sunset – Modern vibrant purple-pink gradient with rounded form
+  - Dark Professional – Sleek dark theme for corporate/professional sites
+  - Glassmorphism – Trendy glass effect with blur and transparency
+  - Geometric Bold – Two-column layout with bold amber geometric CSS shapes
+  - Minimal Clean – Ultra-minimal design with maximum whitespace
+* Fix: Password field width now matches username field width consistently
+* Fix: Password visibility toggle (eye icon) properly centered in input field
+* Enhancement: All new templates use CSS-only effects (no additional images required)
+* Enhancement: Templates work consistently in both Customizer preview and live login page
+
 = 2.0.0 =
 * **BREAKING CHANGE**: Minimum PHP version is now 8.0 (was 5.6)
 * **BREAKING CHANGE**: Minimum WordPress version is now 6.0 (was 4.6)
@@ -199,6 +211,9 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 * Compatibility: Hide Astra theme style guide overlay on login page to prevent visual conflicts
 * Enhancement: Added sanitize_callback to all Customizer settings for proper input validation
 * Enhancement: Replaced custom toggle control with standard WordPress checkbox
+* Enhancement: Replaced custom color picker with WordPress built-in WP_Customize_Color_Control
+* Enhancement: Replaced custom range slider with native HTML5 range input
+* Performance: Removed jQuery minicolors dependency (~39KB savings)
 * Code: Added Composer for dependency management
 * Code: Updated PHPCS ruleset for modern WordPress standards
 

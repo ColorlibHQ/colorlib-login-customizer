@@ -1,14 +1,23 @@
 <?php
+/**
+ * Custom range slider control for the Customizer.
+ *
+ * @deprecated 2.0.0 Use native HTML5 range input instead.
+ * @package Colorlib_Login_Customizer
+ */
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * Slider control
+ * Range slider control class.
+ *
+ * @deprecated 2.0.0 This class is no longer used internally. Native HTML5 range input is used instead.
+ *                   Kept for backwards compatibility with any code that may extend this class.
  *
  * @since  1.0.0
  * @access public
- *
  */
 class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Control {
 	/**

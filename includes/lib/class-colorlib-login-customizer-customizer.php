@@ -240,6 +240,196 @@ class Colorlib_Login_Customizer_Customizer {
 								'custom-css'               => ".ml-form-container .submit input[type='submit'] {width: 100%; box-sizing: border-box;display: inline-block;text-align: center;padding: 0 20px;height: 38px;line-height: 1;font-weight: bold;vertical-align: middle; margin-top: 15px;box-shadow:none;} .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 50px; } .login .ml-form-container #backtoblog,.login .ml-form-container #nav{position:absolute;left:0;right:0;margin-right:auto!important;bottom:50px;max-width:100%;text-align:center}.login .ml-form-container #nav{bottom:40px}.ml-form-container #login>h1{position:absolute;top:40px;width:100%;}.login-action-register .ml-form-container #login>h1{top:65px;}.ml-form-container input[type='text'],.ml-form-container input[type='password']{box-shadow:none;}",
 							),
 						),
+						/**
+						 * Template 05: Gradient Sunset
+						 * Modern & vibrant with warm orange-pink gradient background
+						 */
+						'template-05' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-05/screen.jpg',
+							'options' => array(
+								'columns'                  => '1',
+								'form-width'               => '380',
+								'form-height'              => 'auto',
+								'form-padding'             => '40px 35px',
+								'form-background-color'    => 'rgba(255, 255, 255, 0.95)',
+								'form-border-radius'       => '16px',
+								'form-shadow'              => '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+								'form-field-background'    => '#f8f9fa',
+								'form-field-border'        => '2px solid #e9ecef',
+								'form-field-border-radius' => '8px',
+								'form-field-margin'        => '0 0 20px 0',
+								'button-background'        => '#ff6b6b',
+								'button-background-hover'  => '#ee5a5a',
+								'button-border-color'      => '#ff6b6b',
+								'button-border-color-hover' => '#ee5a5a',
+								'button-shadow'            => 'none',
+								'button-text-shadow'       => 'none',
+								'link-color'               => '#495057',
+								'link-color-hover'         => '#ff6b6b',
+								'logo-settings'            => 'show-text-only',
+								'logo-title'               => 'Welcome Back',
+								'logo-text-color'          => '#212529',
+								'logo-text-size'           => '28',
+								'logo-text-color-hover'    => '#ff6b6b',
+								'custom-css'               => "body.login { background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); min-height: 100vh; } .ml-form-container .submit input[type='submit'] { width: 100%; border-radius: 8px; height: 48px; font-size: 16px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 14px 0 rgba(255, 107, 107, 0.39); transition: all 0.3s ease; } .ml-form-container .submit input[type='submit']:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 107, 107, 0.5); } .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 48px; font-size: 15px; padding: 12px 16px; box-shadow: none; transition: border-color 0.3s ease; } .ml-form-container input[type='text']:focus, .ml-form-container input[type='password']:focus { border-color: #667eea; outline: none; } .login label { font-weight: 500; color: #495057; }",
+							),
+						),
+						/**
+						 * Template 06: Dark Professional
+						 * Sleek dark theme for corporate/professional sites
+						 */
+						'template-06' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-06/screen.jpg',
+							'options' => array(
+								'columns'                   => '1',
+								'custom-background-color'   => '#0f0f23',
+								'form-width'                => '400',
+								'form-height'               => 'auto',
+								'form-padding'              => '45px 40px',
+								'form-background-color'     => '#1a1a2e',
+								'form-border-radius'        => '4px',
+								'form-border'               => '1px solid #2d2d44',
+								'form-shadow'               => '0 0 40px rgba(0, 0, 0, 0.5)',
+								'form-field-background'     => '#16162a',
+								'form-field-border'         => '1px solid #2d2d44',
+								'form-field-border-radius'  => '4px',
+								'form-field-color'          => '#e4e4e7',
+								'form-field-margin'         => '0 0 20px 0',
+								'form-label-color'          => '#a1a1aa',
+								'button-background'         => '#6366f1',
+								'button-background-hover'   => '#4f46e5',
+								'button-border-color'       => '#6366f1',
+								'button-border-color-hover' => '#4f46e5',
+								'button-shadow'             => 'none',
+								'button-text-shadow'        => 'none',
+								'link-color'                => '#71717a',
+								'link-color-hover'          => '#6366f1',
+								'logo-settings'             => 'show-text-only',
+								'logo-title'                => 'Sign In',
+								'logo-text-color'           => '#fafafa',
+								'logo-text-size'            => '24',
+								'logo-text-color-hover'     => '#6366f1',
+								'custom-css'                => ".ml-form-container .submit input[type='submit'] { width: 100%; border-radius: 4px; height: 46px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: none; transition: all 0.2s ease; } .ml-form-container .submit input[type='submit']:hover { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); } .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 46px; font-size: 14px; color: #e4e4e7; box-shadow: none; } .ml-form-container input[type='text']::placeholder, .ml-form-container input[type='password']::placeholder { color: #52525b; } .login #backtoblog a, .login #nav a { color: #71717a; } .login #backtoblog a:hover, .login #nav a:hover { color: #6366f1; }",
+							),
+						),
+						/**
+						 * Template 07: Glassmorphism
+						 * Modern glass effect with blur and transparency
+						 */
+						'template-07' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-07/screen.jpg',
+							'options' => array(
+								'columns'                   => '1',
+								'form-width'                => '380',
+								'form-height'               => 'auto',
+								'form-padding'              => '40px 35px',
+								'form-background-color'     => 'rgba(255, 255, 255, 0.15)',
+								'form-border-radius'        => '20px',
+								'form-border'               => '1px solid rgba(255, 255, 255, 0.3)',
+								'form-shadow'               => '0 8px 32px rgba(0, 0, 0, 0.1)',
+								'form-field-background'     => 'rgba(255, 255, 255, 0.2)',
+								'form-field-border'         => '1px solid rgba(255, 255, 255, 0.3)',
+								'form-field-border-radius'  => '10px',
+								'form-field-color'          => '#1f2937',
+								'form-field-margin'         => '0 0 18px 0',
+								'form-label-color'          => '#374151',
+								'button-background'         => 'rgba(59, 130, 246, 0.9)',
+								'button-background-hover'   => 'rgba(37, 99, 235, 1)',
+								'button-border-color'       => 'transparent',
+								'button-border-color-hover' => 'transparent',
+								'button-shadow'             => 'none',
+								'button-text-shadow'        => 'none',
+								'link-color'                => '#4b5563',
+								'link-color-hover'          => '#3b82f6',
+								'logo-settings'             => 'show-text-only',
+								'logo-title'                => 'Login',
+								'logo-text-color'           => '#1f2937',
+								'logo-text-size'            => '32',
+								'logo-text-color-hover'     => '#3b82f6',
+								'custom-css'                => "body.login { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); min-height: 100vh; } #login { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); } .ml-form-container .submit input[type='submit'] { width: 100%; border-radius: 10px; height: 48px; font-size: 15px; font-weight: 600; box-shadow: none; backdrop-filter: blur(4px); transition: all 0.3s ease; } .ml-form-container .submit input[type='submit']:hover { transform: scale(1.02); } .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 48px; font-size: 15px; backdrop-filter: blur(4px); box-shadow: none; } .ml-form-container input[type='text']:focus, .ml-form-container input[type='password']:focus { background: rgba(255, 255, 255, 0.35); border-color: rgba(59, 130, 246, 0.5); outline: none; }",
+							),
+						),
+						/**
+						 * Template 08: Geometric Bold
+						 * Bold colors with geometric CSS shapes - two column layout
+						 */
+						'template-08' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-08/screen.jpg',
+							'options' => array(
+								'columns'                   => '2',
+								'columns-width'             => array(
+									'left'  => 6,
+									'right' => 6,
+								),
+								'form-column-align'         => '3',
+								'custom-background-color'   => '#fbbf24',
+								'custom-background-color-form' => '#ffffff',
+								'form-width'                => '320',
+								'form-height'               => 'auto',
+								'form-padding'              => '40px 30px',
+								'form-background-color'     => 'transparent',
+								'form-border-radius'        => '0',
+								'form-shadow'               => 'none',
+								'form-field-background'     => '#ffffff',
+								'form-field-border'         => '2px solid #e5e7eb',
+								'form-field-border-radius'  => '0',
+								'form-field-color'          => '#111827',
+								'form-field-margin'         => '0 0 20px 0',
+								'form-label-color'          => '#6b7280',
+								'button-background'         => '#111827',
+								'button-background-hover'   => '#fbbf24',
+								'button-border-color'       => '#111827',
+								'button-border-color-hover' => '#fbbf24',
+								'button-shadow'             => 'none',
+								'button-text-shadow'        => 'none',
+								'button-color'              => '#ffffff',
+								'link-color'                => '#6b7280',
+								'link-color-hover'          => '#111827',
+								'logo-settings'             => 'show-text-only',
+								'logo-title'                => 'Welcome Back',
+								'logo-text-color'           => '#111827',
+								'logo-text-size'            => '24',
+								'logo-text-color-hover'     => '#fbbf24',
+								'hide-extra-links'          => '0',
+								'custom-css'                => ".ml-extra-div { position: relative; overflow: hidden; } .ml-extra-div::before { content: ''; position: absolute; top: -50%; left: -50%; width: 100%; height: 100%; background: #f59e0b; transform: rotate(-12deg); } .ml-extra-div::after { content: ''; position: absolute; bottom: -30%; right: -20%; width: 80%; height: 80%; background: #fcd34d; border-radius: 50%; } .login .submit input[type='submit'] { width: 100%; border-radius: 0; height: 48px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; box-shadow: none; } .login input[type='text'], .login input[type='password'], .login input[type='email'] { box-shadow: none !important; } .login input[type='text']:focus, .login input[type='password']:focus, .login input[type='email']:focus { border-color: #fbbf24 !important; outline: none; } .login label { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }",
+							),
+						),
+						/**
+						 * Template 09: Minimal Clean
+						 * Ultra-minimal design with maximum whitespace
+						 */
+						'template-09' => array(
+							'url'     => esc_url( $this->parent->assets_url ) . 'img/tpl-09/screen.jpg',
+							'options' => array(
+								'columns'                   => '1',
+								'custom-background-color'   => '#ffffff',
+								'form-width'                => '320',
+								'form-height'               => 'auto',
+								'form-padding'              => '0',
+								'form-background-color'     => 'transparent',
+								'form-border-radius'        => '0',
+								'form-shadow'               => 'none',
+								'form-border'               => 'none',
+								'form-field-background'     => '#ffffff',
+								'form-field-border'         => '1px solid #d1d5db',
+								'form-field-border-radius'  => '6px',
+								'form-field-color'          => '#111827',
+								'form-field-margin'         => '0 0 16px 0',
+								'form-label-color'          => '#374151',
+								'button-background'         => '#111827',
+								'button-background-hover'   => '#374151',
+								'button-border-color'       => '#111827',
+								'button-border-color-hover' => '#374151',
+								'button-shadow'             => 'none',
+								'button-text-shadow'        => 'none',
+								'button-color'              => '#ffffff',
+								'link-color'                => '#6b7280',
+								'link-color-hover'          => '#111827',
+								'logo-settings'             => 'hide-logo',
+								'hide-rememberme'           => '1',
+								'custom-css'                => "body.login { display: flex; align-items: center; justify-content: center; } .ml-form-container .submit input[type='submit'] { width: 100%; border-radius: 6px; height: 44px; font-size: 14px; font-weight: 500; box-shadow: none; transition: background-color 0.2s ease; } .ml-form-container input[type='text'], .ml-form-container input[type='password'] { height: 44px; font-size: 14px; box-shadow: none; } .ml-form-container input[type='text']:focus, .ml-form-container input[type='password']:focus { border-color: #111827; outline: none; box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1); } .login label { font-size: 14px; font-weight: 500; margin-bottom: 6px; } .login #nav, .login #backtoblog { text-align: center; margin-top: 20px; } .login #nav a, .login #backtoblog a { font-size: 13px; }",
+							),
+						),
 					),
 				),
 			),
@@ -983,14 +1173,22 @@ class Colorlib_Login_Customizer_Customizer {
 						);
 						break;
 					case 'color':
+						// Use WordPress built-in color control instead of custom minicolors-based picker.
 						$manager->add_control(
-							new Colorlib_Login_Customizer_Control_Color_Picker( $manager, $key_name, $control_args )
+							new WP_Customize_Color_Control( $manager, $key_name, $control_args )
 						);
 						break;
 					case 'clc-range-slider':
-						$manager->add_control(
-							new Colorlib_Login_Customizer_Range_Slider_Control( $manager, $key_name, $control_args )
-						);
+						// Use native HTML5 range input instead of jQuery UI slider.
+						$control_args['type'] = 'range';
+						if ( isset( $setting['choices'] ) ) {
+							$control_args['input_attrs'] = array(
+								'min'  => $setting['choices']['min'] ?? 0,
+								'max'  => $setting['choices']['max'] ?? 100,
+								'step' => $setting['choices']['step'] ?? 1,
+							);
+						}
+						$manager->add_control( $key_name, $control_args );
 						break;
 					case 'clc-templates':
 						$manager->add_control(
@@ -1043,18 +1241,11 @@ class Colorlib_Login_Customizer_Customizer {
 	 * Dependencies: Customizer Controls script (core)
 	 */
 	public function customizer_enqueue_scripts() {
-		wp_enqueue_style( 'colorlib-login-customizer-minicolors-styles', esc_url( $this->parent->assets_url ) . 'css/jquery.minicolors.css' );
 		wp_enqueue_style( 'colorlib-login-customizer-styles', esc_url( $this->parent->assets_url ) . 'css/clc-customizer.css' );
-		wp_enqueue_script(
-			'colorlib-login-customizer-minicolors-script', esc_url( $this->parent->assets_url ) . 'js/jquery.minicolors.js', array(
-				'jquery',
-			), false, true
-		);
 		wp_enqueue_script(
 			'colorlib-login-customizer-script', esc_url( $this->parent->assets_url ) . 'js/clc-customizer.js', array(
 				'jquery',
 				'customize-controls',
-				'colorlib-login-customizer-minicolors-script',
 			), false, true
 		);
 

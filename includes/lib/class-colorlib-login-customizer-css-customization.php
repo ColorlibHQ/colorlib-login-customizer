@@ -429,7 +429,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 * Set form field variables
 		 */
 		$string .= $this->create_css_lines(
-			'.login form .input, .login input[type="text"]',
+			'.login form .input, .login input[type="text"], .login input[type="password"]',
 			array(
 				'max-width',
 				'margin',
@@ -1275,6 +1275,53 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			background-position: center;
 			background-repeat: no-repeat;
 			background-size: cover;
+		}
+		/* Fix password field width to match username field */
+		.login form .input,
+		.login input[type="text"],
+		.login input[type="password"],
+		.login input[type="email"]{
+			width: 100% !important;
+			box-sizing: border-box !important;
+		}
+		.login .user-pass-wrap{
+			display: block !important;
+		}
+		.login .user-pass-wrap > label{
+			display: block !important;
+		}
+		.login .wp-pwd{
+			position: relative !important;
+			display: block !important;
+		}
+		.login .wp-pwd input[type="password"]{
+			width: 100% !important;
+			padding-right: 50px !important;
+			box-sizing: border-box !important;
+		}
+		.login .wp-pwd .wp-hide-pw{
+			position: absolute !important;
+			right: 0 !important;
+			top: 35% !important;
+			transform: translateY(-50%) !important;
+			height: auto !important;
+			width: 44px !important;
+			padding: 0 !important;
+			margin: 0 !important;
+			display: flex !important;
+			align-items: center !important;
+			justify-content: center !important;
+			background: transparent !important;
+			border: none !important;
+			box-shadow: none !important;
+			cursor: pointer !important;
+			z-index: 10 !important;
+		}
+		.login .wp-pwd .wp-hide-pw .dashicons{
+			position: static !important;
+			top: auto !important;
+			margin: 0 !important;
+			padding: 0 !important;
 		}
 		.ml-container{
 			position:relative;
