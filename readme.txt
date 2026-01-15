@@ -1,87 +1,107 @@
-=== Custom Login Page Customizer by Colorlib ===
+=== Custom Login Page Customizer ===
 Contributors: silkalns
-Tags: customize login, login, custom login, customize wordpress login, wordpress login
-Requires at least: 4.7
+Tags: login customizer, custom login page, login page, login form, white label login
+Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.3.4
+Stable tag: 2.0.0
+Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Colorlib Login Customizer by Colorlib is a plugin that helps you personalize your login form directly from the Customizer.
+Customize your WordPress login page with live preview. Change logo, background, colors, and form styling without coding.
 
 == Description ==
 
-Custom Login Page Customizer by Colorlib is an awesome and intuitive login page plugin that helps you personalize your login page and login form directly from the Customizer. Custom Login Page Customizer fully supports the Live Customizer feature and you can see all the changes in real time on your login page and edit them.
+**Custom Login Page Customizer** transforms your default WordPress login page into a branded, professional experience that matches your website. Perfect for agencies, freelancers, and businesses who want to impress clients and users from their very first interaction.
 
-All this plugin’s tools and options can be found by going to Appearance > Customize > Custom Login Page Customizer. There you have templates you can use on your login page, custom login page logo, custom login page background options, custom login page form customizations, login form custom width, login form padding and borders, and more all leading to you having a brand new and custom login page.
+= Why Customize Your Login Page? =
 
-Custom Login Page Customizer is without doubt one of the easiest to use WordPress plugins that allows the customization of the login page and login form. It was designed and developed to be powerful and user friendly so it can be enjoyed by both beginner and advanced developers. With Custom Login Page Customizer you can build a custom login page and custom login form in a matter of seconds, unlike some other login customizer plugins. Custom Login Page Customizer marks the end of a boring and bland login page and login form as you will be able to fine tune every aspect of the form to match your style and view and create a unique and custom login page.
+Your login page is often the first thing clients and team members see. A branded login page:
 
-Build and personalize your WordPress login page and login form from start to finish. Custom Login Page Customizer has the following features:
+* **Builds trust** – Professional appearance increases user confidence
+* **Reinforces your brand** – Consistent branding across every touchpoint
+* **Impresses clients** – White-label your WordPress sites for a polished look
+* **Takes seconds** – No coding required, instant live preview
 
-•	Custom login page logo options: you can add a custom login page logo and set up its height and weight.
-•	Custom login page and login form background options: from here you can upload a background image or change the background’s color.
-•	Custom login form options: you can change the login form’s width and height, add a background image, change the background color, add padding and borders, and change the login form’s field background color, width, and margin.
-•	Miscellaneous: in here you will find the options to change the login form button’s background, color, hover state, border, shadow, and the link’s color and hover color.
+= Key Features =
 
-Custom Login Page Customizer by Colorlib detailed features:
+**Live Customizer Preview** – See every change instantly before saving. No guesswork, no refreshing.
 
--	Custom login page templates
--	Hide/show login logo from login page
--	Show/hide the logo text from login page
--	Custom logo on login page
--	Change logo width on login page
--	Change logo height on login page
--	Change number of columns on your login page
--	Customize width of the columns on your login page
--	Change login form column alignment
--	Customize login form vertical alignment
--	Customize login form horizontal alignment
--	Customize background color on the login page
--	Add a custom background image on login page
--	Customize login form column background color
--	Add a custom background image for login form column
--	Customize login form width
--	Customize login form width
--	Add custom background image for login form
--	Customize the background color for login form
--	Customize login form border radius
--	Customize login form fields’ width
--	Customize login form fields’ margin
--	Customize login form fields’ border
--	Customize login form fields’ border radius
--	Customize login form fields’ background color
--	Customize login form fields’ text color
--	Customize login form fields’ label color
--	Customize login form username label
--	Customize login form password label
--	Show/hide the links on login page under the login form
--	Customize login form button background color
--	Customize login form button hover background color
--	Customize login form button border color
--	Customize login form button border color on hover
--	Customize login form button shadow
--	Customize login form button text shadow
--	Customize login form links color
--	Customize login form links color on hover
--	Hide/Show ‘Remember me?’ option on login form
--	Custom CSS option to customize further the login form and login page
+**Ready-Made Templates** – Choose from professionally designed login page templates and customize them to match your brand.
 
-Build and personalize your WordPress login form from start to finish. Colorlib Login Customizer has the following features:
+**Complete Logo Control** – Upload your custom logo, adjust dimensions, or use text-based branding. Link your logo to any URL.
 
--    Logo options: you can add a custom logo and set up its height and weight.
--    Background options: from here you can upload a background image or change the background’s color.
--    Form options: you can change the form’s width and height, add a background image, change the background color, add padding and borders, and change the form’s field background color, width, and margin.
--    Miscellaneous: in here you will find the options to change the button’s background, color, hover state, border, shadow, and the link’s color and hover color.
+**Background Customization** – Add custom background images, solid colors, or gradients to create stunning login pages.
 
-= Further Reading =
+**Form Styling** – Customize every aspect of your login form including width, padding, borders, border radius, field colors, and button styles.
 
-This plugin is developed and maintained by Colorlib. Which is well know for their free <a href="https://colorlib.com/wp/themes/" target="_blank"></a>WordPress themes. However, now they are looking to extend their presence in plugin development and believe that Colorlib Login Customizer is a great way to start.
+**Button & Link Styling** – Match your brand colors with customizable button backgrounds, hover states, shadows, and link colors.
 
-If you are new to WordPress and want to learn more we have got you covered. Colorlib will teach you how to <a href="https://colorlib.com/">start a blog</a> or <a href="https://colorlib.com/wp/how-to-make-a-website/">create a website</a> and much more. If you are already familiar with WordPress you likely want to learn how to make it faster and more reliable. That's when you want to look into hosting and more specifically <a href="http://colorlib.com/wp/wordpress-hosting">WordPress hosting</a>.
+**Custom CSS** – Advanced users can add custom CSS for pixel-perfect control.
 
-If you enjoy using Colorlib Login Customizer for WordPress please leave a [positive feedback](https://wordpress.org/support/plugin/colorlib-login-customiezr/reviews/?filter=5). We are committed to make it the best Login Customizer plugin for WordPress.
+**Multi-Column Layouts** – Create split-screen login pages with customizable column widths and alignments.
 
+**Registration & Password Forms** – Customize the registration form and lost password form to match your login page styling.
+
+= Perfect For =
+
+* **Web Agencies** – White-label client sites with branded login pages
+* **Freelancers** – Deliver polished, professional WordPress sites
+* **Membership Sites** – Create welcoming login experiences for members
+* **Corporate Intranets** – Reinforce company branding for employee portals
+* **WooCommerce Stores** – Brand your customer account login pages
+* **Multisite Networks** – Customize login pages across your network
+
+= How It Works =
+
+1. Install and activate the plugin
+2. Go to **Appearance → Customize → Custom Login Page Customizer**
+3. Customize your login page with live preview
+4. Click Publish – done!
+
+= Detailed Customization Options =
+
+**Logo Section**
+- Custom logo image upload
+- Logo width and height control
+- Logo URL customization
+- Text-only or image-only options
+- Logo text color and hover color
+
+**Background Section**
+- Custom background image
+- Background color picker
+- Form column background options
+
+**Form Section**
+- Form width and height
+- Form background color and image
+- Padding and border controls
+- Border radius for rounded corners
+- Field width, margin, and styling
+- Label text customization
+- Field background and text colors
+
+**Button Section**
+- Background color and hover color
+- Border color and hover border color
+- Button shadow and text shadow
+- Submit button text customization
+
+**Links Section**
+- Link color and hover color
+- Show/hide navigation links
+- Show/hide "Remember Me" checkbox
+
+= Documentation & Support =
+
+Need help? Visit our [support forum](https://wordpress.org/support/plugin/colorlib-login-customizer/) for assistance.
+
+= About Colorlib =
+
+This plugin is developed by [Colorlib](https://colorlib.com/), creators of popular free WordPress themes downloaded by millions. We are committed to building high-quality, user-friendly WordPress plugins.
+
+If you enjoy Custom Login Page Customizer, please leave a [5-star review](https://wordpress.org/support/plugin/colorlib-login-customizer/reviews/?filter=5). Your feedback helps us improve!
 
 == Installation ==
 
@@ -89,9 +109,98 @@ If you enjoy using Colorlib Login Customizer for WordPress please leave a [posit
 2. Unzip the zip file contents.
 3. Upload the `colorlib-login-customizer` folder to the `/wp-content/plugins/` directory.
 4. Activate the plugin through the 'Plugins' menu in WordPress.
-5. A new sub menu item `Colorlib Login Customizer` will appear in your main Settings menu.
+5. Go to **Appearance → Customize → Custom Login Page Customizer** to start customizing.
+
+== Frequently Asked Questions ==
+
+= How do I access the login page customizer? =
+
+After activating the plugin, go to **Appearance → Customize** in your WordPress admin. You'll see a new section called "Custom Login Page Customizer" where you can customize your login page with live preview.
+
+= Will this plugin work with my theme? =
+
+Yes! Custom Login Page Customizer works independently of your theme. It only modifies the WordPress login page (wp-login.php), so it's compatible with any WordPress theme.
+
+= Can I add my own logo to the login page? =
+
+Absolutely. Go to the Logo section in the customizer to upload your custom logo. You can also adjust the logo width, height, and link URL. You can choose to display just the image, just text, or both.
+
+= How do I change the login page background? =
+
+In the customizer, navigate to the Background section. You can upload a custom background image or set a solid background color. There are also options for the form column background if you're using a multi-column layout.
+
+= Does this work with custom login URLs from security plugins? =
+
+Yes, Custom Login Page Customizer is compatible with security plugins that change the login URL, including All In One WP Security, WPS Hide Login, and similar plugins. Your customizations will appear on your custom login URL.
+
+= Can I customize the registration and lost password pages too? =
+
+Yes! The plugin includes options to customize the registration form and lost password form. Your styling will be applied consistently across all login-related pages.
+
+= Is the plugin compatible with WordPress Multisite? =
+
+Yes, Custom Login Page Customizer works with WordPress Multisite. You can customize the login page for your entire network or individual sites depending on your configuration.
+
+= Will my customizations be lost if I update the plugin? =
+
+No. All your customizations are saved in the WordPress database, separate from the plugin files. Your settings will be preserved through plugin updates.
+
+= Can I add custom CSS to the login page? =
+
+Yes, there's a Custom CSS section where you can add your own CSS code for advanced styling. This is perfect for fine-tuning specific elements or adding custom effects.
+
+= How do I reset the login page to default? =
+
+You can reset individual settings by clearing the values in the customizer. To completely reset all settings, you can deactivate and delete the plugin, then reinstall it.
+
+= Does this plugin slow down my website? =
+
+No. Custom Login Page Customizer only loads its styles and scripts on the WordPress login page. It has zero impact on your website's front-end performance.
+
+= Is the plugin translation ready? =
+
+Yes, Custom Login Page Customizer is fully translation ready and includes a POT file for translators. It's already translated into several languages.
+
+= Can I use this plugin to white-label WordPress for clients? =
+
+Yes! This plugin is perfect for agencies and freelancers who want to white-label WordPress login pages for clients. Remove the WordPress branding and add your client's logo and brand colors.
+
+= What PHP version is required? =
+
+Custom Login Page Customizer requires PHP 8.0 or higher. This ensures optimal performance and security. If you're running an older PHP version, please contact your hosting provider to upgrade.
+
+= Where can I get support if I have issues? =
+
+For support, please visit the [WordPress.org support forum](https://wordpress.org/support/plugin/colorlib-login-customizer/). We actively monitor and respond to support requests.
+
+== Screenshots ==
+
+1. Login page with custom background and logo
+2. Customizer panel with live preview
+3. Form styling options
+4. Template selection
 
 == Changelog ==
+
+= 2.0.0 =
+* **BREAKING CHANGE**: Minimum PHP version is now 8.0 (was 5.6)
+* **BREAKING CHANGE**: Minimum WordPress version is now 6.0 (was 4.6)
+* Security: Fixed XSS vulnerabilities in login template output
+* Security: Added proper escaping for all user-generated content
+* Security: Added CSS sanitization to prevent injection attacks
+* Security: Added capability checks for customizer preview
+* Enhancement: Added strict type declarations throughout codebase
+* Enhancement: Modernized PHP code with PHP 8.0+ features
+* Enhancement: Added proper uninstall cleanup to remove all plugin data
+* Enhancement: Added input validation and sanitization functions
+* Enhancement: Updated CI/CD to test PHP 8.0, 8.1, 8.2, 8.3
+* Fix: JavaScript typo 'show-image-ony' corrected to 'show-image-only'
+* Fix: Removed unused constant COLORLIB_LOGIN_CUSTOMIZER_SITE
+* Compatibility: Hide Astra theme style guide overlay on login page to prevent visual conflicts
+* Enhancement: Added sanitize_callback to all Customizer settings for proper input validation
+* Enhancement: Replaced custom toggle control with standard WordPress checkbox
+* Code: Added Composer for dependency management
+* Code: Updated PHPCS ruleset for modern WordPress standards
 
 = 1.3.4 - 05.06.2025 =
 Fixed: Textdomain fix for wordpress 6.8+ ( [#179](https://github.com/ColorlibHQ/colorlib-login-customizer/issues/179) )

@@ -1,34 +1,47 @@
 <?php
+declare( strict_types=1 );
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Class Colorlib_Login_Customizer_Customization
+ * Class Colorlib_Login_Customizer_CSS_Customization
+ *
+ * Handles CSS generation and text customization for the login page.
  */
 class Colorlib_Login_Customizer_CSS_Customization {
-	/**
-	 * @var array
-	 */
-	private $options = array();
-	/**
-	 * @var array
-	 */
-	private $selectors = array();
 
 	/**
-	 * CLC WP options name
+	 * Plugin options.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.3.2
+	 * @var array<string, mixed>
 	 */
-	public $key_name;
-
-	private $defaults;
+	private array $options = array();
 
 	/**
-	 * Colorlib_Login_Customizer_CSS_Customization constructor.
+	 * CSS selectors mapping.
+	 *
+	 * @var array<string, array<string, array<int, string>>>
+	 */
+	private array $selectors = array();
+
+	/**
+	 * CLC WP options name.
+	 *
+	 * @var string
+	 */
+	public string $key_name;
+
+	/**
+	 * Default options.
+	 *
+	 * @var array<string, mixed>
+	 */
+	private array $defaults;
+
+	/**
+	 * Constructor.
 	 */
 	public function __construct() {
 		$plugin         = Colorlib_Login_Customizer::instance();
@@ -622,14 +635,9 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				$val = $this->options[ $option ];
 
 				// 3 toggle buttons were replaced with one select, so we need to make sure
-				// h1 displays correctly
-				if ( 'logo-settings' == $option ) {
-
-					if ( 'hide-logo' == $val ) {
-						$val = '1';
-					} else {
-						$val = '0';
-					}
+				// h1 displays correctly.
+				if ( 'logo-settings' === $option ) {
+					$val = ( 'hide-logo' === $val ) ? '1' : '0';
 				}
 
 				$valued[ $properties[ $i ] ] = $val;
@@ -687,9 +695,34 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $value;
 	}
 
+	/**
+	 * Sanitize CSS input to prevent injection attacks.
+	 *
+	 * @param string $css Raw CSS input.
+	 * @return string Sanitized CSS.
+	 */
+	private function sanitize_css( string $css ): string {
+		if ( empty( $css ) ) {
+			return '';
+		}
+
+		// Remove any potential script injections
+		$css = wp_strip_all_tags( $css );
+
+		// Remove potentially dangerous CSS expressions and behaviors
+		$css = preg_replace( '/expression\s*\(/i', '', $css );
+		$css = preg_replace( '/javascript\s*:/i', '', $css );
+		$css = preg_replace( '/behavior\s*:/i', '', $css );
+		$css = preg_replace( '/-moz-binding\s*:/i', '', $css );
+		$css = preg_replace( '/@import/i', '', $css );
+		$css = preg_replace( '/url\s*\(\s*["\']?\s*data:/i', 'url(', $css );
+
+		return $css;
+	}
+
 	public function body_class( $classes ) {
 
-		if ( '2' == $this->options['columns'] ) {
+		if ( '2' === $this->options['columns'] ) {
 			$classes[] = 'ml-half-screen';
 			if ( isset( $this->options['form-column-align'] ) ) {
 				$classes[] = 'ml-login-align-' . esc_attr( $this->options['form-column-align'] );
@@ -716,7 +749,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	public function logo_url( $url ) {
-		if ( '' != $this->options['logo-url'] ) {
+		if ( '' !== $this->options['logo-url'] ) {
 			return esc_url( $this->options['logo-url'] );
 		}
 
@@ -740,15 +773,16 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
-	 * Output the inline CSS
+	 * Output the inline CSS.
+	 *
+	 * @return void
 	 */
-	public function generate_css() {
-		$instance    = Colorlib_Login_Customizer::instance();
+	public function generate_css(): void {
 		$css         = $this->create_css();
 		$custom_css  = $this->options['custom-css'];
 		$columns_css = '';
 
-		if ( 2 == $this->options['columns'] ) {
+		if ( 2 === (int) $this->options['columns'] ) {
 			$widths = $this->options['columns-width'];
 
 			$left_width = ( 100 / 12 )*absint( $widths['left'] );
@@ -781,19 +815,18 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
 		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
 		echo '<style type="text/css" id="clc-logo-style">' . $logo_css . '</style>';
-		echo '<style type="text/css" id="clc-custom-css">' . $custom_css . '</style>';
+		echo '<style type="text/css" id="clc-custom-css">' . $this->sanitize_css( $custom_css ) . '</style>';
 		echo '<style type="text/css" id="clc-custom-background-link"> body .ml-container .ml-extra-div .clc-custom-background-link {display:block; width:100%; height:100%;} </style>';
 	}
 
 	public function add_extra_div() {
 
-		$options = get_option( 'clc-options');
+		$options = get_option( 'clc-options' );
 
-		if( isset( $options['custom-background'] ) && '' != $options['custom-background'] && isset( $options['custom-background-link'] ) && '' != $options['custom-background-link']  ) {
-			echo '<div class="ml-container"><div class="ml-extra-div"><a class="clc-custom-background-link" href="' . $options['custom-background-link'] . '"></a></div><div class="ml-form-container">';
+		if ( isset( $options['custom-background'] ) && '' !== $options['custom-background'] && isset( $options['custom-background-link'] ) && '' !== $options['custom-background-link'] ) {
+			echo '<div class="ml-container"><div class="ml-extra-div"><a class="clc-custom-background-link" href="' . esc_url( $options['custom-background-link'] ) . '"></a></div><div class="ml-form-container">';
 		} else {
-
-			echo '<div class="ml-container"><div class="ml-extra-div"></a></div><div class="ml-form-container">';
+			echo '<div class="ml-container"><div class="ml-extra-div"></div><div class="ml-form-container">';
 		}
 	}
 
@@ -1198,6 +1231,13 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 */
 	private function get_base_css() {
 		return '
+		/* Hide third-party theme customizer overlays (Astra, etc.) */
+		.ast-style-guide-wrapper,
+		.ast-quick-tour-body,
+		.ast-close-tour,
+		.ast-tour-inner-wrap {
+			display: none !important;
+		}
 		.language-switcher{
 			z-index:9;
 			margin:0;

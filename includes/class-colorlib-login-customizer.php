@@ -1,116 +1,96 @@
 <?php
+declare( strict_types=1 );
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
-};
+}
 
 class Colorlib_Login_Customizer {
 
 	/**
 	 * The single instance of Colorlib_Login_Customizer.
 	 *
-	 * @var    object
-	 * @access   private
-	 * @since    1.0.0
+	 * @var self|null
 	 */
-	private static $_instance = null;
+	private static ?self $_instance = null;
 
 	/**
 	 * Settings class object
 	 *
-	 * @var     object
-	 * @access  public
-	 * @since   1.0.0
+	 * @var Colorlib_Login_Customizer_Settings|null
 	 */
-	public $settings = null;
+	public ?Colorlib_Login_Customizer_Settings $settings = null;
 
 	/**
 	 * The version number.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $_version;
+	public string $_version;
 
 	/**
 	 * The token.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $_token;
+	public string $_token;
 
 	/**
 	 * The main plugin file.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $file;
+	public string $file;
 
 	/**
 	 * The main plugin directory.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $dir;
+	public string $dir;
 
 	/**
 	 * The plugin assets directory.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $assets_dir;
+	public string $assets_dir;
 
 	/**
 	 * The plugin assets URL.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $assets_url;
+	public string $assets_url;
 
 	/**
 	 * Suffix for Javascripts.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.0.0
+	 * @var string
 	 */
-	public $script_suffix;
+	public string $script_suffix;
 
 	/**
 	 * Prefix base of plugin.
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.3.2
+	 * @var string
 	 */
-	public $base;
+	public string $base;
 
 	/**
 	 * CLC WP options name
 	 *
-	 * @var     string
-	 * @access  public
-	 * @since   1.3.2
+	 * @var string
 	 */
-	public $key_name;
+	public string $key_name;
 
 	/**
 	 * Constructor function.
 	 *
-	 * @access  public
-	 * @since   1.0.0
+	 * @param string $file    Main plugin file path.
+	 * @param string $version Plugin version.
 	 */
-	public function __construct( $file = '', $version = '1.0.0' ) {
+	public function __construct( string $file = '', string $version = '1.0.0' ) {
 		$this->_version = $version;
 		$this->_token   = 'colorlib-login-customizer';
 		$this->base     = 'clc_';
@@ -147,137 +127,143 @@ class Colorlib_Login_Customizer {
 	} // End __construct ()
 
 	/**
-	 * Load the customizer controls
+	 * Load the customizer controls.
 	 *
-	 * @param $manager
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @return void
 	 */
-	public function load_customizer( $manager ) {
+	public function load_customizer( WP_Customize_Manager $manager ): void {
 		new Colorlib_Login_Customizer_Customizer( $this, $manager );
 	}
 
-	public function load_customizer_css() {
+	/**
+	 * Load customizer CSS generation.
+	 *
+	 * @return void
+	 */
+	public function load_customizer_css(): void {
 		new Colorlib_Login_Customizer_CSS_Customization();
 	}
 
 	/**
 	 * Hook to redirect the page for the Customizer.
 	 *
-	 * @access public
 	 * @return void
 	 */
-	public function redirect_customizer() {
+	public function redirect_customizer(): void {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not required for page redirect.
+		if ( ! empty( $_GET['page'] ) && 'colorlib-login-customizer_settings' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			$url = add_query_arg(
+				array(
+					'autofocus[panel]' => 'clc_main_panel',
+				),
+				admin_url( 'customize.php' )
+			);
 
-		if ( ! empty( $_GET['page'] ) ) { // Input var okay.
-			if ( 'colorlib-login-customizer_settings' === $_GET['page'] ) { // Input var okay.
-
-				// Generate the redirect url.
-				$url = add_query_arg(
-					array(
-						'autofocus[panel]' => 'clc_main_panel',
-					),
-					admin_url( 'customize.php' )
-				);
-
-				wp_safe_redirect( $url );
-
-			}
+			wp_safe_redirect( $url );
+			exit;
 		}
 	}
 
 	/**
-	 * Load plugin localisation
+	 * Load plugin localisation.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @return void
 	 */
-	public function load_localisation() {
+	public function load_localisation(): void {
 		load_plugin_textdomain( 'colorlib-login-customizer', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
-	} // End load_localisation ()
+	}
 
 	/**
 	 * Main Colorlib_Login_Customizer Instance
 	 *
 	 * Ensures only one instance of Colorlib_Login_Customizer is loaded or can be loaded.
 	 *
-	 * @since 1.0.0
-	 * @static
-	 * @see   Colorlib_Login_Customizer()
-	 * @return Main Colorlib_Login_Customizer instance
+	 * @param string $file    Main plugin file path.
+	 * @param string $version Plugin version.
+	 * @return self Main Colorlib_Login_Customizer instance.
 	 */
-	public static function instance( $file = '', $version = '1.0.0' ) {
+	public static function instance( string $file = '', string $version = '1.0.0' ): self {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self( $file, $version );
 		}
 
 		return self::$_instance;
-	} // End instance ()
+	}
 
 	/**
 	 * Cloning is forbidden.
 	 *
-	 * @since 1.0.0
+	 * @return void
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->_version );
-	} // End __clone ()
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Cloning is forbidden.', 'colorlib-login-customizer' ), esc_html( $this->_version ) );
+	}
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 *
-	 * @since 1.0.0
+	 * @return void
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'colorlib-login-customizer' ), $this->_version );
-	} // End __wakeup ()
+		_doing_it_wrong( __FUNCTION__, esc_html__( 'Unserializing is forbidden.', 'colorlib-login-customizer' ), esc_html( $this->_version ) );
+	}
 
 	/**
 	 * Installation. Runs on activation.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @return void
 	 */
-	public function install() {
+	public function install(): void {
 		$this->_log_version_number();
 
-		// Backward compatibility
+		// Backward compatibility.
 		$options = get_option( $this->key_name, array() );
 		if ( $options ) {
-			if ( isset( $options['templates'] ) && '01' == $options['templates'] ) {
+			if ( isset( $options['templates'] ) && '01' === $options['templates'] ) {
 				$options['templates'] = 'default';
 				$options['columns']   = 2;
 			}
 
 			update_option( $this->key_name, $options );
 		}
-
-	} // End install ()
+	}
 
 	/**
 	 * Log the plugin version number.
 	 *
-	 * @access  public
-	 * @since   1.0.0
-	 * @return  void
+	 * @return void
 	 */
-	private function _log_version_number() {
+	private function _log_version_number(): void {
 		update_option( $this->_token . '_version', $this->_version );
-	} // End _log_version_number ()
+	}
 
 
-	// Let's hack a little bit
-	public function change_template_if_necessary( $template ) {
-
-		if ( is_customize_preview() && isset( $_REQUEST['colorlib-login-customizer-customization'] ) && is_user_logged_in() ) {
-			$new_template = plugin_dir_path( __FILE__ ) . 'login-template.php';
-			return $new_template;
+	/**
+	 * Change template to custom login template when in customizer preview.
+	 *
+	 * @param string $template Current template path.
+	 * @return string Modified template path.
+	 */
+	public function change_template_if_necessary( string $template ): string {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Customizer preview context.
+		if ( is_customize_preview()
+			&& isset( $_GET['colorlib-login-customizer-customization'] )
+			&& is_user_logged_in()
+			&& current_user_can( 'edit_theme_options' )
+		) {
+			return plugin_dir_path( __FILE__ ) . 'login-template.php';
 		}
 
 		return $template;
 	}
 
-	public function get_defaults(){
+	/**
+	 * Get default options for the plugin.
+	 *
+	 * @return array<string, mixed> Default options array.
+	 */
+	public function get_defaults(): array {
 		return array(
 			/**
 			 * Templates
@@ -376,39 +362,39 @@ class Colorlib_Login_Customizer {
 		);
 	}
 
-    /**
-     * All In One WP Security customizer fix
-     *
-     * @since 1.2.96
-     */
-    public function clc_aio_wp_security_comp_fix() {
+	/**
+	 * All In One WP Security customizer fix.
+	 *
+	 * @return void
+	 */
+	public function clc_aio_wp_security_comp_fix(): void {
+		if ( ! is_customize_preview() ) {
+			return;
+		}
 
-        if ( ! is_customize_preview() ){
-            return;
-        }
+		if ( ! class_exists( 'AIO_WP_Security' ) ) {
+			return;
+		}
 
-        if ( ! class_exists( 'AIO_WP_Security' ) ){
-            return;
-        }
+		global $aio_wp_security;
 
-        global $aio_wp_security;
+		if ( ! is_a( $aio_wp_security, 'AIO_WP_Security' ) ) {
+			return;
+		}
 
-        if( ! is_a( $aio_wp_security, 'AIO_WP_Security' ) ) {
-            return;
-        }
+		if ( remove_action( 'wp_loaded', array( $aio_wp_security, 'aiowps_wp_loaded_handler' ) ) ) {
+			add_filter( 'option_aio_wp_security_configs', array( $this, 'clc_aio_wp_security_filter_options' ) );
+		}
+	}
 
-        if( remove_action( 'wp_loaded', array( $aio_wp_security, 'aiowps_wp_loaded_handler' ) ) ) {
-            add_filter( 'option_aio_wp_security_configs', array( $this, 'clc_aio_wp_security_filter_options' ) );
-        }
-    }
-
-    /**
-     * Filter options aio_wp_security_configs.
-     *
-     * @since 1.2.96
-     */
-    public function clc_aio_wp_security_filter_options( $option ) {
-        unset( $option['aiowps_enable_rename_login_page'] );
-        return $option;
-    }
+	/**
+	 * Filter options aio_wp_security_configs.
+	 *
+	 * @param array<string, mixed> $option Options array.
+	 * @return array<string, mixed> Filtered options.
+	 */
+	public function clc_aio_wp_security_filter_options( array $option ): array {
+		unset( $option['aiowps_enable_rename_login_page'] );
+		return $option;
+	}
 }

@@ -1,6 +1,27 @@
-node_modules/*
-.idea/*
+# Dependencies
+node_modules/
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.sublime-*
+
+# Build artifacts
 colorlib-login-customizer.zip
+*.map
+
+# OS files
 .DS_Store
+Thumbs.db
+
+# Package manager files
 package-lock.json
+composer.lock
+
+# PHPCS cache
+.phpcs-cache
 .standard.json
+
+# SASS cache
+.sass-cache/

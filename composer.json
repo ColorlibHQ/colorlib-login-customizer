@@ -1,0 +1,32 @@
+{
+    "name": "colorlib/login-customizer",
+    "description": "Customize the WordPress login page directly from the Customizer",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Colorlib",
+            "email": "support@colorlib.com",
+            "homepage": "https://colorlib.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    },
+    "scripts": {
+        "phpcs": "phpcs",
+        "phpcbf": "phpcbf",
+        "lint": "phpcs -p -s -v -n . --standard=./phpcs.ruleset.xml"
+    }
+}

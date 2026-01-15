@@ -847,6 +847,77 @@ class Colorlib_Login_Customizer_Customizer {
 	}
 
 	/**
+	 * Get the appropriate sanitize callback for a field type.
+	 *
+	 * @param array $setting The setting configuration.
+	 * @return callable|string The sanitize callback function.
+	 */
+	private function get_sanitize_callback( array $setting ) {
+		// If a custom sanitize callback is specified, use it.
+		if ( isset( $setting['sanitize_callback'] ) ) {
+			return $setting['sanitize_callback'];
+		}
+
+		// Determine callback based on field type.
+		switch ( $setting['type'] ) {
+			case 'color':
+				return 'clc_sanitize_color';
+
+			case 'image':
+				return 'clc_sanitize_image';
+
+			case 'clc-toggle':
+			case 'checkbox':
+				return 'clc_sanitize_checkbox';
+
+			case 'clc-range-slider':
+			case 'number':
+				return 'absint';
+
+			case 'clc-templates':
+			case 'clc-button-group':
+			case 'select':
+			case 'radio':
+				return 'sanitize_text_field';
+
+			case 'clc-column-width':
+				return 'clc_sanitize_columns_width';
+
+			case 'custom-css':
+				return 'clc_sanitize_css';
+
+			case 'url':
+				return 'clc_sanitize_url';
+
+			case 'textarea':
+				return 'clc_sanitize_textarea';
+
+			case 'text':
+			default:
+				// Check if this is a CSS-related field by ID.
+				$css_fields = array(
+					'form-padding', 'form-border', 'form-shadow', 'form-border-radius',
+					'form-field-border', 'form-field-border-radius', 'form-field-margin',
+					'button-shadow', 'button-text-shadow',
+				);
+				if ( isset( $setting['id'] ) && in_array( $setting['id'], $css_fields, true ) ) {
+					return 'clc_sanitize_css_value';
+				}
+
+				// Check if this is a dimension field.
+				$dimension_fields = array(
+					'logo-width', 'logo-height', 'logo-text-size',
+					'form-width', 'form-height', 'form-field-width',
+				);
+				if ( isset( $setting['id'] ) && in_array( $setting['id'], $dimension_fields, true ) ) {
+					return 'clc_sanitize_dimension';
+				}
+
+				return 'sanitize_text_field';
+		}
+	}
+
+	/**
 	 * Register settings in the customizer
 	 */
 	public function register_settings( $manager ) {
@@ -872,8 +943,9 @@ class Colorlib_Login_Customizer_Customizer {
 			foreach ( $properties['fields'] as $setting ) {
 				$key_name      = $this->generate_name( $setting['id'] );
 				$settings_args = array(
-					'type'      => 'option',
-					'transport' => 'postMessage',
+					'type'              => 'option',
+					'transport'         => 'postMessage',
+					'sanitize_callback' => $this->get_sanitize_callback( $setting ),
 				);
 
 				if ( isset( $setting['default'] ) ) {
@@ -936,9 +1008,9 @@ class Colorlib_Login_Customizer_Customizer {
 						);
 						break;
 					case 'clc-toggle':
-						$manager->add_control(
-							new Colorlib_Login_Customizer_Control_Toggle( $manager, $key_name, $control_args )
-						);
+						// Use standard WordPress checkbox instead of custom toggle.
+						$control_args['type'] = 'checkbox';
+						$manager->add_control( $key_name, $control_args );
 						break;
 					case 'custom-css':
 						$manager->add_control(

@@ -56,7 +56,7 @@
 						logoImage.toggle( false );
 						logoWidth.toggle( false );
 						logoHeight.toggle( false );
-					} else if ( 'show-image-ony' === logo_type.settings.default._value ) {
+					} else if ( 'show-image-only' === logo_type.settings.default._value ) {
 						logoTextColor.toggle( false );
 						logoTextColorHover.toggle( false );
 						logoTextSize.toggle( false );
@@ -74,8 +74,6 @@
 						logoHeight.toggle( true );
 						logoURL.toggle( true );
 					}
-				} else {
-
 				}
 			} );
 		} );
@@ -416,7 +414,7 @@
 						logoImage.toggle( false );
 						logoWidth.toggle( false );
 						logoHeight.toggle( false );
-					} else if ( 'show-image-ony' === value ) {
+					} else if ( 'show-image-only' === value ) {
 						logoTextColor.toggle( false );
 						logoTextColorHover.toggle( false );
 						logoTextSize.toggle( false );

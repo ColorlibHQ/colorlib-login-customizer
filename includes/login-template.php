@@ -12,6 +12,9 @@ $clc_defaults = $clc_core->get_defaults();
 $clc_options  = get_option( 'clc-options', array() );
 $clc_options  = apply_filters( 'clc_backwards_compatibility_front', wp_parse_args( $clc_options, $clc_defaults ) );
 
+// Initialize user_login variable (used in form fields).
+$user_login = '';
+
 /**
  * Output the login page header.
  *
@@ -164,7 +167,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<h1>
 				<a id="clc-logo-link" href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
 					<span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
-					<span id="logo-text"><?php echo $login_header_text ?></span>
+					<span id="logo-text"><?php echo esc_html( $login_header_text ); ?></span>
 				</a>
 			</h1>
 
@@ -230,7 +233,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<p id="nav">
 				<?php
 				if ( get_option( 'users_can_register' ) ) :
-					$registration_url = sprintf( '<a id="register-link-label" href="%s" class="show-only_login show-only_lostpassword">%s</a>', esc_url( wp_registration_url() ), $clc_options['register-link-label'] );
+					$registration_url = sprintf( '<a id="register-link-label" href="%s" class="show-only_login show-only_lostpassword">%s</a>', esc_url( wp_registration_url() ), esc_html( $clc_options['register-link-label'] ) );
 
 
 
@@ -239,7 +242,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 
 					echo '<span style="display:none" class="show-only_lostpassword">'.esc_html( $login_link_separator ).'</span>';
 
-					echo '<a href="#" id="login-link-label" class="show-only_register show-only_lostpassword" style="display:none">' . $clc_options['login-link-label'] . '</a>';
+					echo '<a href="#" id="login-link-label" class="show-only_register show-only_lostpassword" style="display:none">' . esc_html( $clc_options['login-link-label'] ) . '</a>';
 
 					echo '<span class="show-only_register show-only_login">'.esc_html( $login_link_separator ).'</span>';
 				endif;

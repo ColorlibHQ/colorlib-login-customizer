@@ -334,7 +334,9 @@
     } );
   } );
 
-  $( '.clc-preview-event' ).on( 'click', function() {
+  $( '.clc-preview-event' ).on( 'click', function( e ) {
+    e.preventDefault();
+    e.stopPropagation();
     wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
   } );
 

@@ -23,15 +23,19 @@
 .clc-general-actions > .clc-preview-event {
 	display: inline-block;
 }
+.login h1 {
+	overflow: visible !important;
+}
 .login h1 a {
 	text-indent: initial;
 	position: relative;
-	overflow: visible;
+	overflow: visible !important;
 }
 .login h1 a .clc-preview-event {
 	position: absolute;
-	left: -15px;
-	top: -15px;
+	left: 0;
+	top: 0;
+	z-index: 100;
 }
 .login:not(.clc-both-logo) h1 a #logo-text {
 	display: none;
