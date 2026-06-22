@@ -3,7 +3,7 @@ Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -181,6 +181,11 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 4. Template selection
 
 == Changelog ==
+
+= 2.1.2 =
+* Fix: Custom logo is no longer lost when switching between templates in the Customizer (#172)
+* Fix: Large logos now stay centered on desktop instead of shifting off-center when wider than the form (#70)
+* Fix: The login page language switcher now appears centered below the form instead of beside it (#173)
 
 = 2.1.1 =
 * Security: Hardened output escaping across the login page, the admin review notice, and the settings page (esc_url, esc_attr, esc_html, esc_js, wp_kses_post)
