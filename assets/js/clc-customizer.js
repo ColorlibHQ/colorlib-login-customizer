@@ -120,11 +120,19 @@
 				    options = control.params.options[optionName];
 
 				$.each( options, function ( index, option ) {
-					var currentControl = wp.customize.control( option.name );
+					var currentControl;
 
-					if ( 'default' === optionName ) {
-						currentControl.setting( option.value );
-					} else {
+					// #172: switching template runs a 'default' reset first; don't let
+					// it wipe the user's uploaded logo. Templates only ever reset
+					// custom-logo (never set a real value), so preserving it here keeps
+					// the logo across template changes.
+					if ( 'default' === optionName && 'clc-options[custom-logo]' === option.name ) {
+						return true;
+					}
+
+					currentControl = wp.customize.control( option.name );
+
+					if ( currentControl ) {
 						currentControl.setting( option.value );
 					}
 
