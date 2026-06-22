@@ -3,7 +3,7 @@ Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.2.0
+Stable tag: 2.2.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -181,6 +181,10 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 4. Template selection
 
 == Changelog ==
+
+= 2.2.1 =
+* Fix: The plugin settings page (with the new export/import, reset and menu-location tools) is now reachable instead of redirecting straight to the Customizer
+* Fix: Custom text above the form and the custom footer links/text are no longer hidden behind the background when a custom background image or color is set
 
 = 2.2.0 =
 * New: "Footer & Links" section — add custom text above the login form and a custom footer below it, add up to 3 custom footer links (Imprint, Privacy, Terms, etc.), and toggles to hide the privacy policy link and the language switcher

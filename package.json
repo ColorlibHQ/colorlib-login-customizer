@@ -1,7 +1,7 @@
 {
   "name": "colorlib-login-customizer",
   "main": "Gruntfile.js",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "homepage": "https://www.colorlib.com",
   "author": "Colorlib",
   "license": "GPL v3",
