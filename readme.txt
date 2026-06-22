@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 2.1.0
+Tested up to: 7.0
+Stable tag: 2.1.1
 Requires PHP: 8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -181,6 +181,16 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 4. Template selection
 
 == Changelog ==
+
+= 2.1.1 =
+* Security: Hardened output escaping across the login page, the admin review notice, and the settings page (esc_url, esc_attr, esc_html, esc_js, wp_kses_post)
+* Fix: Corrected legacy logo-settings migration so older installs that used a text logo upgrade to the correct logo display mode
+* Enhancement: Plugin styles and scripts are now versioned by the plugin version for reliable cache-busting after updates
+* Compatibility: Verified and tested with PHP 8.5
+* Compatibility: Tested up to WordPress 7.0
+* Code: Brought the codebase to full WordPress Coding Standards (WPCS 3.3) compliance — phpcs reports zero errors and warnings
+* Code: Added documentation blocks throughout and switched to timezone-safe date handling in the review notice
+* Code: Added PHP 8.4 and 8.5 to the CI test matrix
 
 = 2.1.0 =
 * New: Added 5 new professionally designed login page templates:
