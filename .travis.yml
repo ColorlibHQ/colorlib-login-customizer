@@ -9,6 +9,8 @@ matrix:
     - php: '8.2'
       env: SNIFF=1
     - php: '8.3'
+    - php: '8.4'
+    - php: '8.5'
 
 before_script:
   - composer install --no-interaction --prefer-dist || true

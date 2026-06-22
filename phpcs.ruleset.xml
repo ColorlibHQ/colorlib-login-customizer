@@ -47,4 +47,38 @@
 	<rule ref="Generic.Arrays.DisallowShortArraySyntax.Found">
 		<severity>0</severity>
 	</rule>
+
+	<!--
+		Intentional-pattern exclusions. These flag deliberate, working conventions
+		rather than defects, so they are silenced project-wide. Reviewed 2026-06-19.
+	-->
+
+	<!-- WordPress hook callbacks (e.g. the `gettext` filters) must accept the full
+		 argument list even when not every argument is used in the body. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<severity>0</severity>
+	</rule>
+
+	<!-- WordPress option/setting values are loosely typed (a stored "2" vs an int
+		 default 2), so forcing strict comparisons here would risk changing behaviour.
+		 Comparisons are reviewed case-by-case instead. -->
+	<rule ref="Universal.Operators.StrictComparisons">
+		<severity>0</severity>
+	</rule>
+
+	<!-- The plugin follows the long-standing WP plugin-boilerplate convention of
+		 underscore-prefixed members ($_instance, $_version, $_token, _set_*(), etc.).
+		 These are public/referenced across files; renaming would break the API. -->
+	<rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+		<severity>0</severity>
+	</rule>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<severity>0</severity>
+	</rule>
+
+	<!-- Descriptive parameter names ($parent, $class, $default) mirror WordPress core
+		 naming and are clearer than the suggested alternatives. -->
+	<rule ref="Universal.NamingConventions.NoReservedKeywordParameterNames">
+		<severity>0</severity>
+	</rule>
 </ruleset>
