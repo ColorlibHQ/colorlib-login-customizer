@@ -1324,6 +1324,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			z-index:9;
 			margin:0;
 		}
+		/* #173: keep WordPress core language switcher centered below the form
+		   instead of letting it sit beside #login as a flex sibling. */
+		.ml-container .ml-form-container{
+			position:relative;
+		}
+		.ml-form-container > .language-switcher{
+			position:absolute;
+			left:0;
+			right:0;
+			bottom:24px;
+			margin:0;
+			text-align:center;
+		}
 		#registerform #wp-submit{
 			float:none;
 			margin-top:15px;
@@ -1343,6 +1356,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		.login:not(.clc-both-logo) h1 a{
 			background-position: center;
 			background-size:contain !important;
+		}
+		/* #70: center an image logo even when its width exceeds the form
+		   container (flex centers an over-wide child; block margin:auto cannot). */
+		.login:not(.clc-text-logo):not(.clc-both-logo) h1{
+			display:flex;
+			justify-content:center;
 		}
 		.ml-container #login{
 			 position:relative;
