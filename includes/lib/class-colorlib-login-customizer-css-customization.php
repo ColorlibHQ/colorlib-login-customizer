@@ -1451,6 +1451,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			flex:0 0 100%;
 			max-width:100%;
 			text-align:center;
+			/* Stack above the absolute .ml-extra-div background layer, like #login,
+			   so custom text/links stay visible when a background is set. */
+			position:relative;
+			z-index:1;
 		}
 		.clc-above-form{
 			margin:0 0 16px;
