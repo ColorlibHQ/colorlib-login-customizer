@@ -305,6 +305,8 @@ class Colorlib_Login_Customizer {
 			'custom-background-form'       => '',
 			'custom-background-color'      => '',
 			'custom-background-color-form' => '',
+			'background-blur'              => 0,
+			'background-brightness'        => 100,
 			/**
 			 * Form section
 			 */
@@ -355,6 +357,7 @@ class Colorlib_Login_Customizer {
 			'button-shadow'                => '',
 			'button-text-shadow'           => '',
 			'button-color'                 => '',
+			'button-width'                 => '',
 			'link-color'                   => '',
 			'link-color-hover'             => '',
 			'hide-rememberme'              => false,
