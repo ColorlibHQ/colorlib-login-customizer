@@ -149,6 +149,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'box-shadow',
 					'text-shadow',
 					'color',
+					'width',
 				),
 				'options'    => array(
 					'button-background',
@@ -156,6 +157,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'button-shadow',
 					'button-text-shadow',
 					'button-color',
+					'button-width',
 				),
 			),
 			'.login #backtoblog a, .login #nav a'        => array(
@@ -184,7 +186,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			),
 			'#loginform,#registerform,#lostpasswordform' => array(
 				'attributes' => array(
-					'height',
+					'min-height',
 					'background-image',
 					'background-color',
 					'padding',
@@ -329,11 +331,38 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		 * Start building the CSS file
 		 */
 		$string .= $this->_set_background_options();
+		$string .= $this->_set_background_filter();
 		$string .= $this->_set_logo_options();
 		$string .= $this->_set_form_options();
 		$string .= $this->_set_miscellaneous_options();
 
 		return $string;
+	}
+
+	/**
+	 * Build the CSS filter (blur + brightness) applied to the background image.
+	 *
+	 * @return string
+	 */
+	public function _set_background_filter() {
+		$blur       = isset( $this->options['background-blur'] ) ? absint( $this->options['background-blur'] ) : 0;
+		$brightness = isset( $this->options['background-brightness'] ) ? absint( $this->options['background-brightness'] ) : 100;
+
+		$filters = array();
+
+		if ( $blur > 0 ) {
+			$filters[] = 'blur(' . $blur . 'px)';
+		}
+
+		if ( 100 !== $brightness ) {
+			$filters[] = 'brightness(' . $brightness . '%)';
+		}
+
+		if ( empty( $filters ) ) {
+			return '';
+		}
+
+		return '.ml-container .ml-extra-div{filter:' . implode( ' ', $filters ) . ';}';
 	}
 
 	/**
@@ -364,6 +393,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'box-shadow',
 				'text-shadow',
 				'color',
+				'width',
 			),
 			array(
 				'button-background',
@@ -371,6 +401,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'button-shadow',
 				'button-text-shadow',
 				'button-color',
+				'button-width',
 			)
 		);
 
@@ -431,7 +462,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$string .= $this->create_css_lines(
 			'#loginform,#registerform,#lostpasswordform',
 			array(
-				'height',
+				'min-height',
 				'background-image',
 				'background-color',
 				'padding',
@@ -698,7 +729,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			case 'min-height':
 			case 'max-height':
 			case 'font-size':
-				$value = $value . 'px';
+				// Append px only to bare numbers, so values that already carry a
+				// unit or keyword (e.g. 100%, auto) are passed through unchanged.
+				if ( is_numeric( $value ) ) {
+					$value = $value . 'px';
+				}
 				break;
 			case 'display':
 				if ( ! $value ) {

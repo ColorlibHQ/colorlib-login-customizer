@@ -685,6 +685,32 @@ class Colorlib_Login_Customizer_Customizer {
 					'active_callback' => array( $this, 'check_two_column_layout' ),
 				),
 				array(
+					'id'          => 'background-blur',
+					'label'       => esc_html__( 'Background blur', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Blur the background image, in pixels. 0 = no blur.', 'colorlib-login-customizer' ),
+					'type'        => 'clc-range-slider',
+					'default'     => 0,
+					'choices'     => array(
+						'min'  => 0,
+						'max'  => 30,
+						'step' => 1,
+					),
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'background-brightness',
+					'label'       => esc_html__( 'Background brightness', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Adjust the background brightness. 100% = original.', 'colorlib-login-customizer' ),
+					'type'        => 'clc-range-slider',
+					'default'     => 100,
+					'choices'     => array(
+						'min'  => 0,
+						'max'  => 200,
+						'step' => 5,
+					),
+					'transport'   => 'refresh',
+				),
+				array(
 					'id'              => 'custom-background-form',
 					'label'           => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
 					'description'     => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
@@ -1004,6 +1030,13 @@ class Colorlib_Login_Customizer_Customizer {
 					'default'     => '#ffffff',
 				),
 				array(
+					'id'          => 'button-width',
+					'label'       => esc_html__( 'Button width', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Width of the submit button. Example: 200px, 100%, or auto.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '',
+				),
+				array(
 					'id'          => 'link-color',
 					'label'       => esc_html__( 'Link color', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This will change the text color of links that are underneath the login form', 'colorlib-login-customizer' ),
@@ -1208,6 +1241,7 @@ class Colorlib_Login_Customizer_Customizer {
 					'form-width',
 					'form-height',
 					'form-field-width',
+					'button-width',
 				);
 				if ( isset( $setting['id'] ) && in_array( $setting['id'], $dimension_fields, true ) ) {
 					return 'clc_sanitize_dimension';
