@@ -117,8 +117,6 @@ class Colorlib_Login_Customizer {
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
-		add_action( 'admin_init', array( $this, 'redirect_customizer' ) );
-
 		// Load customizer settings.
 		add_action( 'customize_register', array( $this, 'load_customizer' ), 10, 1 );
 
@@ -151,26 +149,6 @@ class Colorlib_Login_Customizer {
 	 */
 	public function load_customizer_css(): void {
 		new Colorlib_Login_Customizer_CSS_Customization();
-	}
-
-	/**
-	 * Hook to redirect the page for the Customizer.
-	 *
-	 * @return void
-	 */
-	public function redirect_customizer(): void {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce not required for page redirect.
-		if ( ! empty( $_GET['page'] ) && 'colorlib-login-customizer_settings' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
-			$url = add_query_arg(
-				array(
-					'autofocus[panel]' => 'clc_main_panel',
-				),
-				admin_url( 'customize.php' )
-			);
-
-			wp_safe_redirect( $url );
-			exit;
-		}
 	}
 
 	/**
