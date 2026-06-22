@@ -1027,6 +1027,93 @@ class Colorlib_Login_Customizer_Customizer {
 			),
 		);
 
+		$settings['footer-links'] = array(
+			'title'       => esc_html__( 'Footer &amp; Links', 'colorlib-login-customizer' ),
+			'description' => esc_html__( 'Add custom text and links around the login form, and hide the default footer items.', 'colorlib-login-customizer' ),
+			'fields'      => array(
+				array(
+					'id'          => 'above-form-text',
+					'label'       => esc_html__( 'Text above form', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Custom text or HTML shown above the login form.', 'colorlib-login-customizer' ),
+					'type'        => 'textarea',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-text',
+					'label'       => esc_html__( 'Footer text', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Custom text or HTML shown below the login form.', 'colorlib-login-customizer' ),
+					'type'        => 'textarea',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-1-text',
+					'label'       => esc_html__( 'Footer link 1 text', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'For example: Imprint, Privacy Policy, Terms. Leave empty to skip.', 'colorlib-login-customizer' ),
+					'type'        => 'text',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-1-url',
+					'label'       => esc_html__( 'Footer link 1 URL', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'url',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-2-text',
+					'label'       => esc_html__( 'Footer link 2 text', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'text',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-2-url',
+					'label'       => esc_html__( 'Footer link 2 URL', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'url',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-3-text',
+					'label'       => esc_html__( 'Footer link 3 text', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'text',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'footer-link-3-url',
+					'label'       => esc_html__( 'Footer link 3 URL', 'colorlib-login-customizer' ),
+					'description' => '',
+					'type'        => 'url',
+					'default'     => '',
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'hide-privacy-link',
+					'label'       => esc_html__( 'Hide privacy policy link', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Hides the WordPress privacy policy link in the login footer.', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+					'transport'   => 'refresh',
+				),
+				array(
+					'id'          => 'hide-language-switcher',
+					'label'       => esc_html__( 'Hide language switcher', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Hides the language selector that appears when more than one language is installed.', 'colorlib-login-customizer' ),
+					'type'        => 'clc-toggle',
+					'default'     => 0,
+					'transport'   => 'refresh',
+				),
+			),
+		);
+
 		$settings['clc-custom-css'] = array(
 			'title'       => esc_html__( 'Custom CSS', 'colorlib-login-customizer' ),
 			'description' => '',
@@ -1159,7 +1246,7 @@ class Colorlib_Login_Customizer_Customizer {
 				$key_name      = $this->generate_name( $setting['id'] );
 				$settings_args = array(
 					'type'              => 'option',
-					'transport'         => 'postMessage',
+					'transport'         => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
 					'sanitize_callback' => $this->get_sanitize_callback( $setting ),
 				);
 

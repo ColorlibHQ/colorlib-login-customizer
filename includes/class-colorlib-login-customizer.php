@@ -359,6 +359,19 @@ class Colorlib_Login_Customizer {
 			'link-color-hover'             => '',
 			'hide-rememberme'              => false,
 			/**
+			 * Footer & Links section
+			 */
+			'above-form-text'              => '',
+			'footer-text'                  => '',
+			'footer-link-1-text'           => '',
+			'footer-link-1-url'            => '',
+			'footer-link-2-text'           => '',
+			'footer-link-2-url'            => '',
+			'footer-link-3-text'           => '',
+			'footer-link-3-url'            => '',
+			'hide-privacy-link'            => false,
+			'hide-language-switcher'       => false,
+			/**
 			 * Custom CSS
 			 */
 			'custom-css'                   => '',
