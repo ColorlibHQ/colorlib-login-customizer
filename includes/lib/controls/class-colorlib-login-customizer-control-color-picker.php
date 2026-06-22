@@ -18,21 +18,29 @@ if ( ! defined( 'WPINC' ) ) {
  */
 class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Control {
 	/**
+	 * The type of customize control being rendered.
+	 *
 	 * @since 1.0.0
 	 * @var string
 	 */
 	public $type = 'clc-color-picker';
 	/**
+	 * The default value for the control.
+	 *
 	 * @since 1.0.0
 	 * @var string
 	 */
 	public $default = '';
 	/**
+	 * The color picker mode.
+	 *
 	 * @since 1.0.0
 	 * @var string
 	 */
 	public $mode = '';
 	/**
+	 * Whether to render the lite variant of the control.
+	 *
 	 * @since 1.3.4
 	 * @var bool
 	 */
@@ -43,9 +51,9 @@ class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Contro
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		parent::__construct( $manager, $id, $args );
@@ -75,7 +83,7 @@ class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Contro
 	 * Display the control's content
 	 */
 	public function content_template() {
-		//@formatter:off ?>
+		// @formatter:off ?>
 		<label <# if( data.lite ) { #>class="lite"<# } #>>
 			<input class="clc-color-picker" type="text" <# if( data.default ){ #>placeholder="{{ data.default }}"<# } #> <# if(data.value){ #> value="{{ data.value }}" <# } #> />
 			<span class="customize-control-title clc-color-picker-title">
@@ -89,7 +97,8 @@ class Colorlib_Login_Customizer_Control_Color_Picker extends WP_Customize_Contro
 				<# } #>
 			</span>
 		</label>
-	<?php //@formatter:on
+		<?php
+		// @formatter:on
 	}
 
 	/**

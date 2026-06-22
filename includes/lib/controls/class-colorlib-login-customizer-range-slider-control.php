@@ -39,9 +39,9 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 	/**
 	 * Epsilon_Control_Slider constructor.
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		$manager->register_section_type( 'Colorlib_Login_Customizer_Range_Slider_Control' );
@@ -63,6 +63,11 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 		wp_enqueue_script( 'jquery-ui-slider' );
 	}
 
+	/**
+	 * Get the control value, falling back to the default.
+	 *
+	 * @return mixed
+	 */
 	public function get_value() {
 		$value = $this->value();
 		if ( ! $value && isset( $this->default ) ) {
@@ -72,6 +77,11 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 		return $value;
 	}
 
+	/**
+	 * Add custom parameters to pass to the JS via JSON.
+	 *
+	 * @return void
+	 */
 	public function to_json() {
 
 		$default_choices = array(
@@ -99,6 +109,11 @@ class Colorlib_Login_Customizer_Range_Slider_Control extends WP_Customize_Contro
 	public function render_content() {
 	}
 
+	/**
+	 * Display the control's content.
+	 *
+	 * @return void
+	 */
 	public function content_template() {
 		?>
 		<label>
