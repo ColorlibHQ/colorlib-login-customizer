@@ -1,17 +1,19 @@
 <?php
 /**
  * Plugin Name: Colorlib Login Customizer
- * Version: 2.1.0
+ * Version: 2.1.1
  * Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
  * Author: Colorlib
  * Author URI: https://colorlib.com/
- * Tested up to: 6.9
+ * Tested up to: 7.0
  * Requires at least: 6.0
  * License: GPLv3 or later
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
  * Requires PHP: 8.0
  * Text Domain: colorlib-login-customizer
  * Domain Path: /languages
+ *
+ * @package Colorlib_Login_Customizer
  *
  * Copyright 2018-2025 Colorlib support@colorlib.com
  *
@@ -61,7 +63,7 @@ function clc_php_version_notice(): void {
 	<?php
 }
 
-define( 'COLORLIB_LOGIN_CUSTOMIZER_VERSION', '2.1.0' );
+define( 'COLORLIB_LOGIN_CUSTOMIZER_VERSION', '2.1.1' );
 define( 'COLORLIB_LOGIN_CUSTOMIZER_BASE', plugin_dir_path( __FILE__ ) );
 define( 'COLORLIB_LOGIN_CUSTOMIZER_URL', plugin_dir_url( __FILE__ ) );
 
@@ -86,12 +88,19 @@ function colorlib_login_customizer(): Colorlib_Login_Customizer {
 	return $instance;
 }
 
+/**
+ * Initialise the admin review-request notice handler.
+ *
+ * @return void
+ */
 function clc_check_for_review(): void {
 	require_once COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/class-colorlib-login-customizer-review.php';
 
-	CLC_Review::get_instance( array(
-		'slug' => 'colorlib-login-customizer',
-	) );
+	CLC_Review::get_instance(
+		array(
+			'slug' => 'colorlib-login-customizer',
+		)
+	);
 }
 
 add_action( 'admin_init', 'clc_check_for_review' );

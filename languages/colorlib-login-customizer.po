@@ -1,15 +1,15 @@
-# Copyright (C) 2025 Colorlib
+# Copyright (C) 2026 Colorlib
 # This file is distributed under the GPLv3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Colorlib Login Customizer 1.3.4\n"
+"Project-Id-Version: Colorlib Login Customizer 2.1.0\n"
 "Report-Msgid-Bugs-To: "
 "https://wordpress.org/support/plugin/colorlib-login-customizer\n"
-"POT-Creation-Date: 2025-06-05 06:25:57+00:00\n"
+"POT-Creation-Date: 2026-06-19 12:38:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2025-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -23,7 +23,14 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
-"X-Generator: grunt-wp-i18n 1.0.3\n"
+"X-Generator: grunt-wp-i18n 1.0.4\n"
+
+#: colorlib-login-customizer.php:54
+#. translators: 1: Required PHP version, 2: Current PHP version
+msgid ""
+"Colorlib Login Customizer requires PHP %1$s or higher. You are running PHP "
+"%2$s. Please upgrade your PHP version."
+msgstr ""
 
 #: includes/class-colorlib-login-customizer-review.php:22
 msgid ""
@@ -45,11 +52,12 @@ msgstr ""
 msgid "No, not good enough"
 msgstr ""
 
-#: includes/class-colorlib-login-customizer.php:222
-#: includes/class-colorlib-login-customizer.php:231
-#: includes/lib/class-colorlib-login-customizer-settings.php:130
-#: includes/lib/class-colorlib-login-customizer-settings.php:139
-msgid "Cheatin&#8217; huh?"
+#: includes/class-colorlib-login-customizer.php:200
+msgid "Cloning is forbidden."
+msgstr ""
+
+#: includes/class-colorlib-login-customizer.php:209
+msgid "Unserializing is forbidden."
 msgstr ""
 
 #: includes/lib/class-colorlib-login-customizer-customizer.php:62
@@ -60,506 +68,506 @@ msgstr ""
 msgid "Temapltes"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:249
+#: includes/lib/class-colorlib-login-customizer-customizer.php:439
 msgid "Logo options"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:254
+#: includes/lib/class-colorlib-login-customizer-customizer.php:444
 msgid "Logo settings"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:255
+#: includes/lib/class-colorlib-login-customizer-customizer.php:445
 msgid "Select how the logo should be displayed"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:258
+#: includes/lib/class-colorlib-login-customizer-customizer.php:448
 msgid "Hide logo"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:259
+#: includes/lib/class-colorlib-login-customizer-customizer.php:449
 msgid "Show image only"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:260
+#: includes/lib/class-colorlib-login-customizer-customizer.php:450
 msgid "Show text only"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:261
+#: includes/lib/class-colorlib-login-customizer-customizer.php:451
 msgid "Show both"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:267
+#: includes/lib/class-colorlib-login-customizer-customizer.php:457
 msgid "Logo URL"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:268
+#: includes/lib/class-colorlib-login-customizer-customizer.php:458
 msgid "This is where the logo will link to."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:274
+#: includes/lib/class-colorlib-login-customizer-customizer.php:464
 msgid "Logo Title"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:275
+#: includes/lib/class-colorlib-login-customizer-customizer.php:465
 msgid ""
 "The tooltip that will be displayed when hovering over the logo. Also this "
 "is used as Logo text when you select \"Use Text Logo\""
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:281
+#: includes/lib/class-colorlib-login-customizer-customizer.php:471
 msgid "Login Page Title"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:282
+#: includes/lib/class-colorlib-login-customizer-customizer.php:472
 msgid "Login page title that is shown when you access the admin login page."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:288
+#: includes/lib/class-colorlib-login-customizer-customizer.php:478
 msgid "Logo text color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:289
+#: includes/lib/class-colorlib-login-customizer-customizer.php:479
 msgid "This will change the color text property."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:296
+#: includes/lib/class-colorlib-login-customizer-customizer.php:486
 msgid "Logo text color hover"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:297
+#: includes/lib/class-colorlib-login-customizer-customizer.php:487
 msgid "This will change the color text property on hover."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:304
+#: includes/lib/class-colorlib-login-customizer-customizer.php:494
 msgid "Logo text size"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:305
+#: includes/lib/class-colorlib-login-customizer-customizer.php:495
 msgid "This will change the text size of logo."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:317
+#: includes/lib/class-colorlib-login-customizer-customizer.php:507
 msgid "Custom logo"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:318
-#: includes/lib/class-colorlib-login-customizer-customizer.php:465
-#: includes/lib/class-colorlib-login-customizer-customizer.php:487
+#: includes/lib/class-colorlib-login-customizer-customizer.php:508
+#: includes/lib/class-colorlib-login-customizer-customizer.php:655
+#: includes/lib/class-colorlib-login-customizer-customizer.php:677
 msgid ""
 "This will upload an image to your media library and store the attachment ID "
 "in the option field. Once you have uploaded an imge the thumbnail will "
 "display above these buttons."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:325
+#: includes/lib/class-colorlib-login-customizer-customizer.php:515
 msgid "Logo Width"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:326
+#: includes/lib/class-colorlib-login-customizer-customizer.php:516
 msgid "Make sure you set the logo width to match your image."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:338
+#: includes/lib/class-colorlib-login-customizer-customizer.php:528
 msgid "Logo Height"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:339
+#: includes/lib/class-colorlib-login-customizer-customizer.php:529
 msgid "Make sure you set the logo height to match your image."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:353
+#: includes/lib/class-colorlib-login-customizer-customizer.php:543
 msgid "Layout options"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:358
+#: includes/lib/class-colorlib-login-customizer-customizer.php:548
 msgid "Columns"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:375
+#: includes/lib/class-colorlib-login-customizer-customizer.php:565
 msgid "Columns Width"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:382
+#: includes/lib/class-colorlib-login-customizer-customizer.php:572
 msgid "Form Column Alignment"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:408
+#: includes/lib/class-colorlib-login-customizer-customizer.php:598
 msgid "Form Vertical Alignment"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:429
+#: includes/lib/class-colorlib-login-customizer-customizer.php:619
 msgid "Form Horizontal Alignment"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:452
+#: includes/lib/class-colorlib-login-customizer-customizer.php:642
 msgid "Background options"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:457
+#: includes/lib/class-colorlib-login-customizer-customizer.php:647
 msgid "Custom background color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:458
-#: includes/lib/class-colorlib-login-customizer-customizer.php:479
-#: includes/lib/class-colorlib-login-customizer-customizer.php:533
-#: includes/lib/class-colorlib-login-customizer-customizer.php:596
+#: includes/lib/class-colorlib-login-customizer-customizer.php:648
+#: includes/lib/class-colorlib-login-customizer-customizer.php:669
+#: includes/lib/class-colorlib-login-customizer-customizer.php:723
+#: includes/lib/class-colorlib-login-customizer-customizer.php:786
 msgid "This will change the background color property."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:464
+#: includes/lib/class-colorlib-login-customizer-customizer.php:654
 msgid "Custom background"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:471
+#: includes/lib/class-colorlib-login-customizer-customizer.php:661
 msgid "Background Image Link"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:472
+#: includes/lib/class-colorlib-login-customizer-customizer.php:662
 msgid "This will add a link on the background image."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:478
+#: includes/lib/class-colorlib-login-customizer-customizer.php:668
 msgid "Form Column background color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:486
+#: includes/lib/class-colorlib-login-customizer-customizer.php:676
 msgid "Form Column background"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:496
+#: includes/lib/class-colorlib-login-customizer-customizer.php:686
 msgid "General Form options"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:501
+#: includes/lib/class-colorlib-login-customizer-customizer.php:691
 msgid "Form Width"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:502
+#: includes/lib/class-colorlib-login-customizer-customizer.php:692
 msgid "Please input the desired width for the login form in pixels. Example: 20"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:513
+#: includes/lib/class-colorlib-login-customizer-customizer.php:703
 msgid "Form Height"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:514
+#: includes/lib/class-colorlib-login-customizer-customizer.php:704
 msgid "Please input the desired height for the login form in pixels. Example: 20"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:525
+#: includes/lib/class-colorlib-login-customizer-customizer.php:715
 msgid "Form background image"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:526
+#: includes/lib/class-colorlib-login-customizer-customizer.php:716
 msgid "This will change the background image property of login form."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:532
+#: includes/lib/class-colorlib-login-customizer-customizer.php:722
 msgid "Form background color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:539
+#: includes/lib/class-colorlib-login-customizer-customizer.php:729
 msgid "Form padding"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:540
+#: includes/lib/class-colorlib-login-customizer-customizer.php:730
 msgid "This will change the padding property. Example: 26px 24px 46px 30px"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:546
+#: includes/lib/class-colorlib-login-customizer-customizer.php:736
 msgid "Form border"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:547
+#: includes/lib/class-colorlib-login-customizer-customizer.php:737
 msgid "This will change the border property. Example: 2px dotted black"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:553
+#: includes/lib/class-colorlib-login-customizer-customizer.php:743
 msgid "Form border radius"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:554
+#: includes/lib/class-colorlib-login-customizer-customizer.php:744
 msgid "This will change the border radius property. Example: 2px 2px 2px 2px"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:560
+#: includes/lib/class-colorlib-login-customizer-customizer.php:750
 msgid "Form shadow"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:561
+#: includes/lib/class-colorlib-login-customizer-customizer.php:751
 msgid "This will change the form's shadow property. Example: 0 1px 0 #006799"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:567
+#: includes/lib/class-colorlib-login-customizer-customizer.php:757
 msgid "Form field width"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:568
+#: includes/lib/class-colorlib-login-customizer-customizer.php:758
 msgid "Please input the desired width for the form field in pixels. Example: 20"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:574
+#: includes/lib/class-colorlib-login-customizer-customizer.php:764
 msgid "Form field margin"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:575
+#: includes/lib/class-colorlib-login-customizer-customizer.php:765
 msgid "This will change the margin property. Example: 26px 24px 46px 30px"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:581
+#: includes/lib/class-colorlib-login-customizer-customizer.php:771
 msgid "Form field border"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:582
+#: includes/lib/class-colorlib-login-customizer-customizer.php:772
 msgid ""
 "Please input the desired border for the form field. Example: 2px dotted "
 "black"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:588
+#: includes/lib/class-colorlib-login-customizer-customizer.php:778
 msgid "Form field border radius"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:589
+#: includes/lib/class-colorlib-login-customizer-customizer.php:779
 msgid ""
 "Please input the desired border radiuse for the form field. Example: 5px "
 "5px 5px 5px"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:595
+#: includes/lib/class-colorlib-login-customizer-customizer.php:785
 msgid "Form field background"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:602
+#: includes/lib/class-colorlib-login-customizer-customizer.php:792
 msgid "Form field color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:603
+#: includes/lib/class-colorlib-login-customizer-customizer.php:793
 msgid "This will change the text color property."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:609
+#: includes/lib/class-colorlib-login-customizer-customizer.php:799
 msgid "Form label color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:610
+#: includes/lib/class-colorlib-login-customizer-customizer.php:800
 msgid "This will change the label text color property."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:616
+#: includes/lib/class-colorlib-login-customizer-customizer.php:806
 msgid "Lost Password Text"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:617
+#: includes/lib/class-colorlib-login-customizer-customizer.php:807
 msgid "You can change the default text for \"Lost your password\" "
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:623
+#: includes/lib/class-colorlib-login-customizer-customizer.php:813
 msgid "Back to site text"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:624
+#: includes/lib/class-colorlib-login-customizer-customizer.php:814
 msgid "You can change the default text for \"Back to\" site "
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:630
+#: includes/lib/class-colorlib-login-customizer-customizer.php:820
 msgid "Hide Extra Links"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:631
+#: includes/lib/class-colorlib-login-customizer-customizer.php:821
 msgid "Show/Hide the links under the login form"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:639
+#: includes/lib/class-colorlib-login-customizer-customizer.php:829
 msgid "Login Form Texts"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:644
-#: includes/lib/class-colorlib-login-customizer-customizer.php:687
-#: includes/lib/class-colorlib-login-customizer-customizer.php:734
+#: includes/lib/class-colorlib-login-customizer-customizer.php:834
+#: includes/lib/class-colorlib-login-customizer-customizer.php:877
+#: includes/lib/class-colorlib-login-customizer-customizer.php:924
 msgid "Username label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:645
-#: includes/lib/class-colorlib-login-customizer-customizer.php:688
-#: includes/lib/class-colorlib-login-customizer-customizer.php:735
+#: includes/lib/class-colorlib-login-customizer-customizer.php:835
+#: includes/lib/class-colorlib-login-customizer-customizer.php:878
+#: includes/lib/class-colorlib-login-customizer-customizer.php:925
 msgid "You can change the default text for username label or just delete it."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:651
+#: includes/lib/class-colorlib-login-customizer-customizer.php:841
 msgid "Password label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:652
+#: includes/lib/class-colorlib-login-customizer-customizer.php:842
 msgid "You can change the default text for password label or just delete it."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:658
+#: includes/lib/class-colorlib-login-customizer-customizer.php:848
 msgid "Remember Me label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:659
+#: includes/lib/class-colorlib-login-customizer-customizer.php:849
 msgid "You can change the default remember me text."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:665
+#: includes/lib/class-colorlib-login-customizer-customizer.php:855
 msgid "Login label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:666
+#: includes/lib/class-colorlib-login-customizer-customizer.php:856
 msgid "You can change the default text for the log in button."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:672
+#: includes/lib/class-colorlib-login-customizer-customizer.php:862
 msgid "Register link"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:673
+#: includes/lib/class-colorlib-login-customizer-customizer.php:863
 msgid ""
 "You can change the default text for the register link at the end of the "
 "form."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:682
+#: includes/lib/class-colorlib-login-customizer-customizer.php:872
 msgid "Register Form Texts"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:695
+#: includes/lib/class-colorlib-login-customizer-customizer.php:885
 msgid "Email label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:696
+#: includes/lib/class-colorlib-login-customizer-customizer.php:886
 msgid "You can change the default text for email label or just delete it."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:703
+#: includes/lib/class-colorlib-login-customizer-customizer.php:893
 msgid "Registration confirmation text"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:704
+#: includes/lib/class-colorlib-login-customizer-customizer.php:894
 msgid "You can change the default registration confirmation text."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:711
-#: includes/lib/class-colorlib-login-customizer-customizer.php:741
+#: includes/lib/class-colorlib-login-customizer-customizer.php:901
+#: includes/lib/class-colorlib-login-customizer-customizer.php:931
 msgid "Button label"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:712
+#: includes/lib/class-colorlib-login-customizer-customizer.php:902
 msgid "You can change the default text for the register button."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:719
+#: includes/lib/class-colorlib-login-customizer-customizer.php:909
 msgid "Login link"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:720
+#: includes/lib/class-colorlib-login-customizer-customizer.php:910
 msgid "You can change the default text for the login link at the end of the form."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:729
+#: includes/lib/class-colorlib-login-customizer-customizer.php:919
 msgid "Lost Password Form Texts"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:742
+#: includes/lib/class-colorlib-login-customizer-customizer.php:932
 msgid "You can change the default text for the lost password button."
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:751
+#: includes/lib/class-colorlib-login-customizer-customizer.php:941
 msgid "Form Button & Links"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:756
+#: includes/lib/class-colorlib-login-customizer-customizer.php:946
 msgid "Button background"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:757
+#: includes/lib/class-colorlib-login-customizer-customizer.php:947
 msgid "This will change the submit button's background property"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:763
+#: includes/lib/class-colorlib-login-customizer-customizer.php:953
 msgid "Button background hover state"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:764
+#: includes/lib/class-colorlib-login-customizer-customizer.php:954
 msgid "This will change the submit button's background property on hover"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:770
+#: includes/lib/class-colorlib-login-customizer-customizer.php:960
 msgid "Button border color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:771
+#: includes/lib/class-colorlib-login-customizer-customizer.php:961
 msgid "This will change the submit button's border color property"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:777
+#: includes/lib/class-colorlib-login-customizer-customizer.php:967
 msgid "Button border hover state"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:778
+#: includes/lib/class-colorlib-login-customizer-customizer.php:968
 msgid "This will change the submit button's border property on hover"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:784
+#: includes/lib/class-colorlib-login-customizer-customizer.php:974
 msgid "Button shadow"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:785
+#: includes/lib/class-colorlib-login-customizer-customizer.php:975
 msgid ""
 "This will change the submit button's shadow property. Example: 0 1px 0 "
 "#006799"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:791
+#: includes/lib/class-colorlib-login-customizer-customizer.php:981
 msgid "Button text shadow"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:792
+#: includes/lib/class-colorlib-login-customizer-customizer.php:982
 msgid ""
 "This will change the submit button text's shadow property. Example: 0 -1px "
 "1px #006799"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:798
+#: includes/lib/class-colorlib-login-customizer-customizer.php:988
 msgid "Button color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:799
+#: includes/lib/class-colorlib-login-customizer-customizer.php:989
 msgid "This will change the submit button's text color property"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:805
+#: includes/lib/class-colorlib-login-customizer-customizer.php:995
 msgid "Link color"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:806
+#: includes/lib/class-colorlib-login-customizer-customizer.php:996
 msgid "This will change the text color of links that are underneath the login form"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:812
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1002
 msgid "Link color hover"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:813
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1003
 msgid ""
 "This will change the text color of links, that are underneath the login "
 "form, on hover"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:819
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1009
 msgid "Hide \"Remember Me\""
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:820
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1010
 msgid "Show/Hide the \"Remember Me\" checkbox"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:828
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1018
 msgid "Custom CSS"
 msgstr ""
 
-#: includes/lib/class-colorlib-login-customizer-customizer.php:833
+#: includes/lib/class-colorlib-login-customizer-customizer.php:1023
 msgid "CSS code"
 msgstr ""
 
@@ -586,65 +594,70 @@ msgstr ""
 msgid "Start Customizing!"
 msgstr ""
 
-#: includes/lib/controls/class-colorlib-login-customizer-control-color-picker.php:74
+#: includes/lib/class-colorlib-login-customizer-settings.php:130
+#: includes/lib/class-colorlib-login-customizer-settings.php:139
+msgid "Cheatin&#8217; huh?"
+msgstr ""
+
+#: includes/lib/controls/class-colorlib-login-customizer-control-color-picker.php:84
 msgid "(clear)"
 msgstr ""
 
-#: includes/login-template.php:34
+#: includes/login-template.php:37
 #. translators: Login screen title. 1: Login screen name, 2: Network or site
 #. name
 msgid "%1$s &lsaquo; %2$s &#8212; WordPress"
 msgstr ""
 
-#: includes/login-template.php:101 includes/login-template.php:190
+#: includes/login-template.php:104 includes/login-template.php:193
 msgid "Log In"
 msgstr ""
 
-#: includes/login-template.php:103
+#: includes/login-template.php:106
 msgid "https://wordpress.org/"
 msgstr ""
 
-#: includes/login-template.php:104
+#: includes/login-template.php:107
 msgid "Powered by WordPress"
 msgstr ""
 
-#: includes/login-template.php:174 includes/login-template.php:216
+#: includes/login-template.php:177 includes/login-template.php:219
 msgid "Username or Email Address"
 msgstr ""
 
-#: includes/login-template.php:178
+#: includes/login-template.php:181
 msgid "Password"
 msgstr ""
 
-#: includes/login-template.php:189
+#: includes/login-template.php:192
 msgid "Remember Me"
 msgstr ""
 
-#: includes/login-template.php:195
+#: includes/login-template.php:198
 msgid "Username"
 msgstr ""
 
-#: includes/login-template.php:199
+#: includes/login-template.php:202
 msgid "Email"
 msgstr ""
 
-#: includes/login-template.php:210
+#: includes/login-template.php:213
 msgid "Registration confirmation will be emailed to you."
 msgstr ""
 
-#: includes/login-template.php:211
+#: includes/login-template.php:214
 msgid "Register"
 msgstr ""
 
-#: includes/login-template.php:227
+#: includes/login-template.php:230
 msgid "Get New Password"
 msgstr ""
 
-#: includes/login-template.php:247
+#: includes/login-template.php:250
 msgid "Lost your password?"
 msgstr ""
 
-#: includes/login-template.php:253
+#: includes/login-template.php:256
 msgid "Back to"
 msgstr ""
 

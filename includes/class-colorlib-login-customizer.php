@@ -1,10 +1,19 @@
 <?php
+/**
+ * Main plugin class for Colorlib Login Customizer.
+ *
+ * @package Colorlib_Login_Customizer
+ */
+
 declare( strict_types=1 );
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Core plugin class that bootstraps hooks, settings, and defaults.
+ */
 class Colorlib_Login_Customizer {
 
 	/**
@@ -96,34 +105,33 @@ class Colorlib_Login_Customizer {
 		$this->base     = 'clc_';
 		$this->key_name = 'clc-options';
 
-		// Load plugin environment variables
+		// Load plugin environment variables.
 		$this->file       = $file;
 		$this->dir        = dirname( $this->file );
 		$this->assets_dir = trailingslashit( $this->dir ) . 'assets';
 		$this->assets_url = esc_url( trailingslashit( plugins_url( '/assets/', $this->file ) ) );
 
 		$this->script_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		// Remove this after Grunt
+		// Remove this after Grunt.
 		$this->script_suffix = '';
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
 		add_action( 'admin_init', array( $this, 'redirect_customizer' ) );
 
-		// Load customizer settings
+		// Load customizer settings.
 		add_action( 'customize_register', array( $this, 'load_customizer' ), 10, 1 );
 
 		add_filter( 'template_include', array( $this, 'change_template_if_necessary' ), 99 );
 
-		// Handle localisation
+		// Handle localisation.
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
 
-		// Generate plugins css
+		// Generate plugins css.
 		add_action( 'init', array( $this, 'load_customizer_css' ) );
 
-		// Compatibility fix with All In One WP Security
-        add_action('init', array($this, 'clc_aio_wp_security_comp_fix'));
-
+		// Compatibility fix with All In One WP Security.
+		add_action( 'init', array( $this, 'clc_aio_wp_security_comp_fix' ) );
 	} // End __construct ()
 
 	/**
@@ -246,9 +254,8 @@ class Colorlib_Login_Customizer {
 	 * @return string Modified template path.
 	 */
 	public function change_template_if_necessary( string $template ): string {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Customizer preview context.
-		if ( is_customize_preview()
-			&& isset( $_GET['colorlib-login-customizer-customization'] )
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only preview check; no data is processed and it is gated by login + edit_theme_options capability below.
+		if ( is_customize_preview() && isset( $_GET['colorlib-login-customizer-customization'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			&& is_user_logged_in()
 			&& current_user_can( 'edit_theme_options' )
 		) {
@@ -268,97 +275,97 @@ class Colorlib_Login_Customizer {
 			/**
 			 * Templates
 			 */
-			'templates'                 => 'default',
+			'templates'                    => 'default',
 			/**
 			 * Layout
 			 */
-			'columns'                  => '1',
-			'columns-width'            => array(
+			'columns'                      => '1',
+			'columns-width'                => array(
 				'left'  => 6,
 				'right' => 6,
 			),
-			'form-column-align'        => '3',
-			'form-vertical-align'      => '2',
+			'form-column-align'            => '3',
+			'form-vertical-align'          => '2',
 			/**
 			 * Logo section
 			 */
-			'logo-settings'             => 'show-image-only',
-			'logo-url'                  => site_url(),
-			'custom-logo'               => '',
-			'logo-text-color'           => '#444',
-			'logo-text-size'            => '20',
-			'logo-text-color-hover'     => '#00a0d2',
-			'logo-width'                => '',
-			'logo-height'               => '',
+			'logo-settings'                => 'show-image-only',
+			'logo-url'                     => site_url(),
+			'custom-logo'                  => '',
+			'logo-text-color'              => '#444',
+			'logo-text-size'               => '20',
+			'logo-text-color-hover'        => '#00a0d2',
+			'logo-width'                   => '',
+			'logo-height'                  => '',
 			/**
 			 * Background section
 			 */
-			'custom-background'             => '',
-			'custom-background-link'        => '',
-			'custom-background-form'        => '',
-			'custom-background-color'       => '',
-			'custom-background-color-form'  => '',
+			'custom-background'            => '',
+			'custom-background-link'       => '',
+			'custom-background-form'       => '',
+			'custom-background-color'      => '',
+			'custom-background-color-form' => '',
 			/**
 			 * Form section
 			 */
-			'form-width'                => '',
-			'form-height'               => '',
-			'form-background-image'     => '',
-			'form-background-color'     => '#fff',
-			'form-padding'              => '',
-			'form-border'               => '',
-			'form-border-radius'        => '',
-			'form-shadow'               => '',
-			'form-field-width'          => '',
-			'form-field-margin'         => '',
-			'form-field-border-radius'  => 'unset',
-			'form-field-border'         => '1px solid #ddd',
-			'form-field-background'     => '',
-			'form-field-color'          => '',
-			'username-label'            => 'Username or Email Address',
-			'password-label'            => 'Password',
-			'rememberme-label'          => 'Remember Me',
-			'lost-password-text'        => 'Lost your password?',
-			'back-to-text'              => '&larr; Back to %s',
-			'register-link-label'       => 'Register',
+			'form-width'                   => '',
+			'form-height'                  => '',
+			'form-background-image'        => '',
+			'form-background-color'        => '#fff',
+			'form-padding'                 => '',
+			'form-border'                  => '',
+			'form-border-radius'           => '',
+			'form-shadow'                  => '',
+			'form-field-width'             => '',
+			'form-field-margin'            => '',
+			'form-field-border-radius'     => 'unset',
+			'form-field-border'            => '1px solid #ddd',
+			'form-field-background'        => '',
+			'form-field-color'             => '',
+			'username-label'               => 'Username or Email Address',
+			'password-label'               => 'Password',
+			'rememberme-label'             => 'Remember Me',
+			'lost-password-text'           => 'Lost your password?',
+			'back-to-text'                 => '&larr; Back to %s',
+			'register-link-label'          => 'Register',
 
-			'login-label'               => 'Log In',
-			'form-label-color'          => '',
-			'hide-extra-links'          => false,
-            /**
-             * Registration section
-             */
-            'register-username-label'     => 'Username',
-			'register-email-label'        => 'Email',
-			'register-button-label'       => 'Register',
-			'register-confirmation-email' => 'Registration confirmation will be emailed to you.',
-			'login-link-label'            => 'Log in',
+			'login-label'                  => 'Log In',
+			'form-label-color'             => '',
+			'hide-extra-links'             => false,
 			/**
-             * Lost Password
-             */
-			'lostpassword-username-label' => 'Username or Email Address',
-			'lostpassword-button-label'   => 'Get New Password',
+			 * Registration section
+			 */
+			'register-username-label'      => 'Username',
+			'register-email-label'         => 'Email',
+			'register-button-label'        => 'Register',
+			'register-confirmation-email'  => 'Registration confirmation will be emailed to you.',
+			'login-link-label'             => 'Log in',
+			/**
+			 * Lost Password
+			 */
+			'lostpassword-username-label'  => 'Username or Email Address',
+			'lostpassword-button-label'    => 'Get New Password',
 			/**
 			 * Others section ( misc )
 			 */
-			'button-background'         => '',
-			'button-background-hover'   => '',
-			'button-border-color'       => '',
-			'button-border-color-hover' => '',
-			'button-shadow'             => '',
-			'button-text-shadow'        => '',
-			'button-color'              => '',
-			'link-color'                => '',
-			'link-color-hover'          => '',
-			'hide-rememberme'           => false,
+			'button-background'            => '',
+			'button-background-hover'      => '',
+			'button-border-color'          => '',
+			'button-border-color-hover'    => '',
+			'button-shadow'                => '',
+			'button-text-shadow'           => '',
+			'button-color'                 => '',
+			'link-color'                   => '',
+			'link-color-hover'             => '',
+			'hide-rememberme'              => false,
 			/**
 			 * Custom CSS
 			 */
-			'custom-css'                => '',
+			'custom-css'                   => '',
 			/**
 			 * Reset value is not dynamic
 			 */
-			'initial'                   => 'initial',
+			'initial'                      => 'initial',
 		);
 	}
 

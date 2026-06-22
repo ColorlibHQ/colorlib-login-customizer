@@ -1,4 +1,10 @@
 <?php
+/**
+ * Dynamic CSS generation and login text customization.
+ *
+ * @package Colorlib_Login_Customizer
+ */
+
 declare( strict_types=1 );
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -60,21 +66,32 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		add_action( 'login_footer', array( $this, 'close_extra_div' ) );
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
-		add_filter('login_headertext', array($this, 'logo_title'), 99);
-		add_filter('login_title', array($this, 'login_page_title'), 99);
+		add_filter( 'login_headertext', array( $this, 'logo_title' ), 99 );
+		add_filter( 'login_title', array( $this, 'login_page_title' ), 99 );
 
 		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
 	}
 
+	/**
+	 * Build a settings field name namespaced to the plugin option key.
+	 *
+	 * @param string $id Field identifier.
+	 * @return string Namespaced field name.
+	 */
 	private function generate_name( $id ) {
 		return $this->key_name . '[' . $id . ']';
 	}
 
+	/**
+	 * Send the generated CSS object to the Customizer preview via postMessage.
+	 *
+	 * @return void
+	 */
 	public function output_css_object() {
 
 		$css_object = array(
 			'selectors' => array(),
-			'settings' => array(),
+			'settings'  => array(),
 		);
 
 		foreach ( $this->selectors as $selector => $settings ) {
@@ -91,7 +108,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		}
 
 		wp_localize_script( 'colorlib-login-customizer-preview', 'CLC', $css_object );
-
 	}
 
 	/**
@@ -99,7 +115,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 */
 	public function set_options() {
 
-		$options = get_option( $this->key_name, array() );
+		$options       = get_option( $this->key_name, array() );
 		$this->options = wp_parse_args( $options, $this->defaults );
 
 		$this->selectors = array(
@@ -108,12 +124,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background',
 					'border-color',
 				),
-				'options' => array(
+				'options'    => array(
 					'button-background-hover',
 					'button-border-color-hover',
 				),
 			),
-			'.wp-core-ui .button-primary' => array(
+			'.wp-core-ui .button-primary'                => array(
 				'attributes' => array(
 					'background',
 					'border-color',
@@ -121,7 +137,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'text-shadow',
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'button-background',
 					'button-border-color',
 					'button-shadow',
@@ -129,11 +145,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'button-color',
 				),
 			),
-			'.login #backtoblog a, .login #nav a' => array(
+			'.login #backtoblog a, .login #nav a'        => array(
 				'attributes' => array(
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'link-color',
 				),
 			),
@@ -141,15 +157,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'attributes' => array(
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'link-color-hover',
 				),
 			),
-			'.ml-container #login' => array(
+			'.ml-container #login'                       => array(
 				'attributes' => array(
 					'max-width',
 				),
-				'options' => array(
+				'options'    => array(
 					'form-width',
 				),
 			),
@@ -163,7 +179,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'border-radius',
 					'box-shadow',
 				),
-				'options' => array(
+				'options'    => array(
 					'form-height',
 					'form-background-image',
 					'form-background-color',
@@ -182,7 +198,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'background',
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'form-field-width',
 					'form-field-margin',
 					'form-field-border-radius',
@@ -191,49 +207,49 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'form-field-color',
 				),
 			),
-			'.login label' => array(
+			'.login label'                               => array(
 				'attributes' => array(
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'form-label-color',
 				),
 			),
-			'.ml-container .ml-extra-div' => array(
+			'.ml-container .ml-extra-div'                => array(
 				'attributes' => array(
 					'background-image',
 					'background-color',
 				),
-				'options' => array(
+				'options'    => array(
 					'custom-background',
 					'custom-background-color',
 				),
 			),
-			'.ml-half-screen div.ml-form-container' => array(
+			'.ml-half-screen div.ml-form-container'      => array(
 				'attributes' => array(
 					'background-color',
 				),
-				'options' => array(
+				'options'    => array(
 					'custom-background-color',
 				),
 			),
-			'.ml-container .ml-form-container' => array(
+			'.ml-container .ml-form-container'           => array(
 				'attributes' => array(
 					'background-image',
 					'background-color',
 				),
-				'options' => array(
+				'options'    => array(
 					'custom-background-form',
 					'custom-background-color-form',
-				)
+				),
 			),
-			'.login h1 a' => array(
+			'.login h1 a'                                => array(
 				'attributes' => array(
 					'background-image',
 					'width',
 					'height',
 				),
-				'options' => array(
+				'options'    => array(
 					'custom-logo',
 					'logo-width',
 					'logo-height',
@@ -244,7 +260,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 					'color',
 					'font-size',
 				),
-				'options' => array(
+				'options'    => array(
 					'logo-text-color',
 					'logo-text-size',
 				),
@@ -253,36 +269,35 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'attributes' => array(
 					'color',
 				),
-				'options' => array(
+				'options'    => array(
 					'logo-text-color-hover',
 				),
 			),
-			'#login > h1' => array(
+			'#login > h1'                                => array(
 				'attributes' => array(
 					'display',
 				),
-				'options' => array(
+				'options'    => array(
 					'logo-settings',
 				),
 			),
-			'#login > #nav,#login > #backtoblog' => array(
+			'#login > #nav,#login > #backtoblog'         => array(
 				'attributes' => array(
 					'display',
 				),
-				'options' => array(
+				'options'    => array(
 					'hide-extra-links',
 				),
 			),
-			'#login form .forgetmenot' => array(
+			'#login form .forgetmenot'                   => array(
 				'attributes' => array(
 					'display',
 				),
-				'options' => array(
+				'options'    => array(
 					'hide-rememberme',
 				),
 			),
 		);
-
 	}
 
 	/**
@@ -291,15 +306,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return mixed|string
 	 */
 	public function create_css() {
-		/**
-		 * Get an instance of the plugin so we can get the token
-		 */
-		//$instance = Colorlib_Login_Customizer::instance();
-
 		$string = '';
-		/**
-		 * In case the array is empty, we return an empty string
-		 */
+		// In case the array is empty, we return an empty string.
 		if ( empty( $this->options ) ) {
 			return $string;
 		}
@@ -316,6 +324,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
+	 * Build CSS for the miscellaneous (links, custom background) options.
+	 *
 	 * @return string
 	 */
 	public function _set_miscellaneous_options() {
@@ -385,6 +395,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
+	 * Build CSS for the login form options.
+	 *
 	 * @return string
 	 */
 	public function _set_form_options() {
@@ -475,6 +487,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
+	 * Build CSS for the page background options.
+	 *
 	 * @return string
 	 */
 	public function _set_background_options() {
@@ -519,10 +533,11 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			)
 		);
 		return $string;
-
 	}
 
 	/**
+	 * Build CSS for the logo options.
+	 *
 	 * @return string
 	 */
 	public function _set_logo_options() {
@@ -558,7 +573,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			)
 		);
 
-
 		$string .= $this->create_css_lines(
 			'.login.clc-text-logo h1 a',
 			array(
@@ -582,17 +596,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 				'logo-width',
 			)
 		);
-
-		/*$string .= $this->create_css_lines(
-			'.login.clc-both-logo.ml-login-vertical-align-2 h1 a',
-			array(
-				'top',
-			),
-			array(
-				'logo-width',
-				'logo-width',
-			)
-		);*/
 
 		$string .= $this->create_css_lines(
 			'.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover',
@@ -618,17 +621,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
-	 * @param $selector
-	 * @param $properties
-	 * @param $options
+	 * Build a CSS rule block for a selector from the given options.
+	 *
+	 * @param string $selector   CSS selector.
+	 * @param array  $properties CSS properties to set, indexed alongside $options.
+	 * @param array  $options    Option keys whose values feed the properties.
 	 *
 	 * @return string
 	 */
 	private function create_css_lines( $selector, $properties, $options ) {
 
-		$string  = '';
-		$valued  = array();
-		$i       = 0;
+		$string = '';
+		$valued = array();
+		$i      = 0;
 
 		foreach ( $options as $option ) {
 			if ( ! empty( $this->options[ $option ] ) ) {
@@ -642,7 +647,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 				$valued[ $properties[ $i ] ] = $val;
 			}
-			$i ++;
+			++$i;
 		}
 
 		if ( ! empty( $valued ) ) {
@@ -659,10 +664,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
+	 * Append CSS units/wrappers to a raw value based on the property.
 	 *
-	 *
-	 * @param $property
-	 * @param $value
+	 * @param string $property CSS property name.
+	 * @param string $value    Raw value to decorate.
 	 *
 	 * @return string
 	 */
@@ -685,9 +690,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			case 'display':
 				if ( ! $value ) {
 					$value = 'block';
-				}else{
+				} else {
 					$value = 'none';
 				}
+				// Fall through to default.
 			default:
 				break;
 		}
@@ -706,10 +712,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			return '';
 		}
 
-		// Remove any potential script injections
+		// Remove any potential script injections.
 		$css = wp_strip_all_tags( $css );
 
-		// Remove potentially dangerous CSS expressions and behaviors
+		// Remove potentially dangerous CSS expressions and behaviors.
 		$css = preg_replace( '/expression\s*\(/i', '', $css );
 		$css = preg_replace( '/javascript\s*:/i', '', $css );
 		$css = preg_replace( '/behavior\s*:/i', '', $css );
@@ -720,6 +726,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $css;
 	}
 
+	/**
+	 * Filter the login page body classes based on the saved layout options.
+	 *
+	 * @param array $classes Existing body classes.
+	 * @return array Modified body classes.
+	 */
 	public function body_class( $classes ) {
 
 		if ( '2' === $this->options['columns'] ) {
@@ -748,6 +760,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $classes;
 	}
 
+	/**
+	 * Filter the login logo link URL.
+	 *
+	 * @param string $url Default logo URL.
+	 * @return string Custom or default logo URL.
+	 */
 	public function logo_url( $url ) {
 		if ( '' !== $this->options['logo-url'] ) {
 			return esc_url( $this->options['logo-url'] );
@@ -756,6 +774,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $url;
 	}
 
+	/**
+	 * Filter the login logo link title/text.
+	 *
+	 * @param string $title Default logo title.
+	 * @return string Custom or default logo title.
+	 */
 	public function logo_title( $title ) {
 		if ( isset( $this->options['logo-title'] ) ) {
 			return wp_kses_post( $this->options['logo-title'] );
@@ -764,7 +788,13 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $title;
 	}
 
-	public function login_page_title($title){
+	/**
+	 * Filter the login page document title.
+	 *
+	 * @param string $title Default page title.
+	 * @return string Custom or default page title.
+	 */
+	public function login_page_title( $title ) {
 		if ( isset( $this->options['login-page-title'] ) ) {
 			return esc_html( $this->options['login-page-title'] );
 		}
@@ -785,8 +815,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( 2 === (int) $this->options['columns'] ) {
 			$widths = $this->options['columns-width'];
 
-			$left_width = ( 100 / 12 )*absint( $widths['left'] );
-			$right_width = ( 100 / 12 )*absint( $widths['right'] );
+			$left_width  = ( 100 / 12 ) * absint( $widths['left'] );
+			$right_width = ( 100 / 12 ) * absint( $widths['right'] );
 
 			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' . $left_width . '%; }';
 			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' . $left_width . '%; }';
@@ -796,29 +826,34 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		}
 
-		if ( !empty( $this->options['logo-height'] ) && !empty( $this->options['logo-width'] ) ) {
+		if ( ! empty( $this->options['logo-height'] ) && ! empty( $this->options['logo-width'] ) ) {
 			$backgriund_size = absint( $this->options['logo-width'] ) . 'px ' . absint( $this->options['logo-height'] ) . 'px';
 		} else {
 			$backgriund_size = '20px 20px';
 		}
 
-
-		if ( !empty( $this->options['custom-logo'] ) ) {
+		if ( ! empty( $this->options['custom-logo'] ) ) {
 			$background_image = $this->options['custom-logo'];
 		} else {
 			$background_image = get_site_url() . '/wp-admin/images/wordpress-logo.svg';
 		}
 
-		$logo_css = '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent: unset;background-position:top center !important;padding-top:' . (30 + absint( $this->options['logo-height'] )) . 'px; background-size: ' . $backgriund_size . '; margin-top: -' . (15 + absint( $this->options['logo-height'] )) . 'px; position:relative;background-image:url(' . $background_image . ')}';
+		$logo_css = '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent: unset;background-position:top center !important;padding-top:' . ( 30 + absint( $this->options['logo-height'] ) ) . 'px; background-size: ' . $backgriund_size . '; margin-top: -' . ( 15 + absint( $this->options['logo-height'] ) ) . 'px; position:relative;background-image:url(' . esc_url( $background_image ) . ')}';
 
-		echo '<style type="text/css">' . $this->get_base_css() . '</style>';
-		echo '<style type="text/css" id="clc-style">' . $css . '</style>';
-		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>';
-		echo '<style type="text/css" id="clc-logo-style">' . $logo_css . '</style>';
-		echo '<style type="text/css" id="clc-custom-css">' . $this->sanitize_css( $custom_css ) . '</style>';
+		// CSS is built from values sanitized on save (colors, dimensions, image URLs) and via sanitize_css(); it cannot be passed through esc_html() without breaking the stylesheet.
+		echo '<style type="text/css">' . $this->get_base_css() . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static, developer-defined base CSS.
+		echo '<style type="text/css" id="clc-style">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from sanitized option values, escaped per-property in create_css_lines().
+		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() column widths.
+		echo '<style type="text/css" id="clc-logo-style">' . $logo_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() dimensions and esc_url() logo path.
+		echo '<style type="text/css" id="clc-custom-css">' . $this->sanitize_css( $custom_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Passed through sanitize_css() which strips scripts and dangerous directives.
 		echo '<style type="text/css" id="clc-custom-background-link"> body .ml-container .ml-extra-div .clc-custom-background-link {display:block; width:100%; height:100%;} </style>';
 	}
 
+	/**
+	 * Output the opening markup for the two-column layout wrapper.
+	 *
+	 * @return void
+	 */
 	public function add_extra_div() {
 
 		$options = get_option( 'clc-options' );
@@ -830,49 +865,66 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		}
 	}
 
+	/**
+	 * Output the closing markup for the two-column layout wrapper.
+	 *
+	 * @return void
+	 */
 	public function close_extra_div() {
 		echo '</div></div>';
 	}
 
-	// Check general texts
-	public function check_general_texts(){
+	/**
+	 * Register gettext filters for the shared/general login texts.
+	 *
+	 * @return void
+	 */
+	public function check_general_texts() {
 
 		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
 		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
-
 	}
 
-	// Check Login page texts
-	public function check_login_texts(){
+	/**
+	 * Register gettext filters for the login-page texts.
+	 *
+	 * @return void
+	 */
+	public function check_login_texts() {
 
 		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_rememberme_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_login_label' ), 99, 3 );
 		add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
-
 	}
 
-    // Check Register page texts
-    public function check_register_texts(){
+	/**
+	 * Register gettext filters for the registration-page texts.
+	 *
+	 * @return void
+	 */
+	public function check_register_texts() {
 
-    	add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_register_register_label' ),99,3);
-        add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
-
+		add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_register_register_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
 	}
 
-	// Check Lost Password page texts
-    public function check_lostpasswords_texts(){
+	/**
+	 * Register gettext filters for the lost-password-page texts.
+	 *
+	 * @return void
+	 */
+	public function check_lostpasswords_texts() {
 
-    	add_filter( 'gettext', array( $this, 'change_lostpasswords_username_label' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_lostpasswords_button_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_lostpasswords_username_label' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_lostpasswords_button_label' ), 99, 3 );
 
-        add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
-        add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
-
+		add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
 	}
 
 
@@ -888,15 +940,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$default = 'Username or Email Address';
 		$label   = $this->options['username-label'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
-		}else{
+		} else {
 			$translated_text = wp_kses_post( $label );
 		}
 
@@ -914,15 +966,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$default = 'Password';
 		$label   = $this->options['password-label'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
-		}else{
+		} else {
 			$translated_text = esc_html( $label );
 		}
 
@@ -941,12 +993,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$default = 'Remember Me';
 		$label   = $this->options['rememberme-label'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
@@ -968,15 +1020,15 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$default = 'Lost your password?';
 		$label   = $this->options['lost-password-text'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
-		}else{
+		} else {
 			$translated_text = esc_html( $label );
 		}
 
@@ -986,24 +1038,25 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	/**
 	 * Customizer output for custom back to text.
 	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The label we want to replace.
+	 * @param string $context         The gettext context.
+	 * @param string $domain          The text domain of the site.
 	 * @return string
 	 */
 	public function change_back_to_text( $translated_text, $text, $context, $domain ) {
 		$default = '&larr; Back to %s';
 		$label   = $this->options['back-to-text'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
-		}else{
+		} else {
 			$translated_text = '&larr; ' . esc_html( $label ) . ' %s';
 		}
 
@@ -1022,12 +1075,12 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$default = 'Log In';
 		$label   = $this->options['login-label'];
 
-		// Check if is our text
+		// Check if this is our text.
 		if ( $default !== $text ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed
+		// Check if the label is changed.
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
@@ -1037,191 +1090,220 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $translated_text;
 	}
 
-    /**
-     * Customizer output for custom register username label.
-     *
-     * @param string|string $translated_text The translated text.
-     * @param string|string $text The label we want to replace.
-     * @param string|string $domain The text domain of the site.
-     * @return string
-     */
-    public function change_register_username_label( $translated_text, $text, $domain ) {
-        $default = 'Username';
-        $label   = $this->options['register-username-label'];
+	/**
+	 * Customizer output for custom register username label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_register_username_label( $translated_text, $text, $domain ) {
+		$default = 'Username';
+		$label   = $this->options['register-username-label'];
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = wp_kses_post( $label );
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = wp_kses_post( $label );
+		}
 
-        return $translated_text;
-    }
+		return $translated_text;
+	}
 
-    /**
-     * Customizer output for custom register email label.
-     *
-     * @param string|string $translated_text The translated text.
-     * @param string|string $text The label we want to replace.
-     * @param string|string $domain The text domain of the site.
-     * @return string
-     */
-    public function change_register_email_label( $translated_text, $text, $domain ) {
-        $default = 'Email';
-        $label   = $this->options['register-email-label'];
+	/**
+	 * Customizer output for custom register email label.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_register_email_label( $translated_text, $text, $domain ) {
+		$default = 'Email';
+		$label   = $this->options['register-email-label'];
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
 
-        return $translated_text;
-    }
+		return $translated_text;
+	}
 
-    /**
-     * Customizer output for custom registration confirmation text.
-     *
-     * @param string|string $translated_text The translated text.
-     * @param string|string $text The label we want to replace.
-     * @param string|string $domain The text domain of the site.
-     * @return string
-     */
-    public function change_register_confirmation_text( $translated_text, $text, $domain ) {
-        $default = 'Registration confirmation will be emailed to you.';
-        $label   = $this->options['register-confirmation-email'];
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+	/**
+	 * Customizer output for custom registration confirmation text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_register_confirmation_text( $translated_text, $text, $domain ) {
+		$default = 'Registration confirmation will be emailed to you.';
+		$label   = $this->options['register-confirmation-email'];
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = wp_kses_post( $label );
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = wp_kses_post( $label );
+		}
 
+		return $translated_text;
+	}
 
-        return $translated_text;
-    }
+	/**
+	 * Customizer output for custom register button text.
+	 *
+	 * @param string|string $translated_text The translated text.
+	 * @param string|string $text The label we want to replace.
+	 * @param string|string $domain The text domain of the site.
+	 * @return string
+	 */
+	public function change_register_register_label( $translated_text, $text, $domain ) {
+		$default = 'Register';
+		$label   = $this->options['register-button-label'];
 
-    /**
-     * Customizer output for custom register button text.
-     *
-     * @param string|string $translated_text The translated text.
-     * @param string|string $text The label we want to replace.
-     * @param string|string $domain The text domain of the site.
-     * @return string
-     */
-    public function change_register_register_label( $translated_text, $text, $domain ) {
-        $default = 'Register';
-        $label   = $this->options['register-button-label'];
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
+		return $translated_text;
+	}
 
-        return $translated_text;
-    }
+	/**
+	 * Customizer output for the login link text.
+	 *
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The label we want to replace.
+	 * @param string $domain          The text domain of the site.
+	 * @return string
+	 */
+	public function change_login_register_link_text( $translated_text, $text, $domain ) {
+		$default = 'Log in';
+		$label   = $this->options['login-link-label'];
 
-    public function change_login_register_link_text( $translated_text, $text, $domain ) {
-        $default = 'Log in';
-        $label   = $this->options['login-link-label'];
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
+		return $translated_text;
+	}
 
-        return $translated_text;
-    }
+	/**
+	 * Customizer output for the register link text.
+	 *
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The label we want to replace.
+	 * @param string $domain          The text domain of the site.
+	 * @return string
+	 */
+	public function change_register_login_link_text( $translated_text, $text, $domain ) {
+		$default = 'Register';
+		$label   = $this->options['register-link-label'];
 
-    public function change_register_login_link_text( $translated_text, $text, $domain ) {
-        $default = 'Register';
-        $label   = $this->options['register-link-label'];
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
+		return $translated_text;
+	}
 
-        return $translated_text;
-    }
+	/**
+	 * Customizer output for the lost-password username label.
+	 *
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The label we want to replace.
+	 * @param string $domain          The text domain of the site.
+	 * @return string
+	 */
+	public function change_lostpasswords_username_label( $translated_text, $text, $domain ) {
+		$default = 'Username or Email Address';
+		$label   = $this->options['lostpassword-username-label'];
 
-    public function change_lostpasswords_username_label( $translated_text, $text, $domain ) {
-        $default = 'Username or Email Address';
-        $label   = $this->options['lostpassword-username-label'];
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = wp_kses_post( $label );
+		}
 
+		return $translated_text;
+	}
 
+	/**
+	 * Customizer output for the lost-password button label.
+	 *
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The label we want to replace.
+	 * @param string $domain          The text domain of the site.
+	 * @return string
+	 */
+	public function change_lostpasswords_button_label( $translated_text, $text, $domain ) {
+		$default = 'Get New Password';
+		$label   = $this->options['lostpassword-button-label'];
 
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = wp_kses_post( $label );
-        }
+		// Check if this is our text.
+		if ( $default !== $text ) {
+			return $translated_text;
+		}
 
-        return $translated_text;
-    }
+		// Check if the label is changed.
+		if ( $label === $text ) {
+			return $translated_text;
+		} else {
+			$translated_text = esc_html( $label );
+		}
 
-    public function change_lostpasswords_button_label( $translated_text, $text, $domain ) {
-        $default = 'Get New Password';
-        $label   = $this->options['lostpassword-button-label'];
-
-        // Check if is our text
-        if ( $default !== $text ) {
-            return $translated_text;
-        }
-
-        // Check if the label is changed
-        if ( $label === $text ) {
-            return $translated_text;
-        }else{
-            $translated_text = esc_html( $label );
-        }
-
-        return $translated_text;
-    }
+		return $translated_text;
+	}
 
 	/**
 	 * Get the base CSS for the login page

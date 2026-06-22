@@ -1,10 +1,16 @@
 <?php
+/**
+ * Button group control for the Customizer.
+ *
+ * @package Colorlib_Login_Customizer
+ */
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * Class Colorlib_Login_Customizer_Button_Group_Control
+ * Renders a group of buttons as a single radio-style control.
  */
 class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Control {
 	/**
@@ -17,11 +23,15 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 	public $type = 'clc-button-group';
 
 	/**
+	 * The default value for the control.
+	 *
 	 * @var string
 	 */
 	public $default = '';
 
 	/**
+	 * The list of button choices.
+	 *
 	 * @var array
 	 */
 	public $choices = array();
@@ -31,9 +41,9 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		parent::__construct( $manager, $id, $args );
@@ -82,7 +92,7 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 	 * Display the control's content
 	 */
 	public function content_template() {
-		//@formatter:off ?>
+		// @formatter:off ?>
 		<div class="colorlib-login-customizer-control-container">
 			<label>
 				<span class="customize-control-title">
@@ -112,6 +122,7 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 				</div>
 			</div>
 		</div>
-	<?php //@formatter: on
+		<?php
+		// @formatter: on
 	}
 }

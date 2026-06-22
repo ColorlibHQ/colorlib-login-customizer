@@ -1,4 +1,9 @@
 <?php
+/**
+ * Template selector control for the Customizer.
+ *
+ * @package Colorlib_Login_Customizer
+ */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,9 +33,9 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 	/**
 	 * Colorlib_Login_Customizer_Template_Control constructor.
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		$manager->register_section_type( 'Colorlib_Login_Customizer_Template_Control' );
@@ -55,13 +60,23 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 		$this->json['link']    = $this->get_link();
 		$this->json['choices'] = $arrays['choices'];
 		$this->json['options'] = $arrays['options'];
-
 	}
 
+	/**
+	 * Build the option field name for a given ID.
+	 *
+	 * @param string $id Option ID.
+	 * @return string
+	 */
 	private function generate_name( $id ) {
 		return 'clc-options[' . $id . ']';
 	}
 
+	/**
+	 * Build the choices and options arrays passed to the JS template.
+	 *
+	 * @return array
+	 */
 	public function generate_arrays() {
 		$arrays = array(
 			'choices' => array(),
@@ -72,16 +87,15 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 			$arrays['choices'][ $key ] = $choice['url'];
 			$arrays['options'][ $key ] = array();
 			foreach ( $choice['options'] as $option_key => $option_value ) {
-				$name = $this->generate_name( $option_key );
+				$name                                     = $this->generate_name( $option_key );
 				$arrays['options'][ $key ][ $option_key ] = array(
-					'name' => $name,
-					'value' => $option_value
+					'name'  => $name,
+					'value' => $option_value,
 				);
 			}
 		}
 
 		return $arrays;
-
 	}
 
 	/**

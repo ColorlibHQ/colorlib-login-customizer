@@ -1,4 +1,10 @@
 <?php
+/**
+ * Autoloader for the Colorlib Login Customizer plugin classes.
+ *
+ * @package Colorlib_Login_Customizer
+ */
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
@@ -15,14 +21,15 @@ class Colorlib_Login_Customizer_Autoloader {
 	}
 
 	/**
-	 * @param $class
+	 * Autoload a plugin class file when it is requested.
+	 *
+	 * @param string $class The fully qualified class name to load.
 	 */
 	public function load( $class ) {
 		$parts = explode( '_', $class );
 		$bind  = implode( '-', $parts );
 
 		if ( 'Colorlib' == $parts[0] ) {
-
 			/*
 			 * Core library autoload.
 			 */

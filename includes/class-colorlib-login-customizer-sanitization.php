@@ -62,7 +62,7 @@ function clc_sanitize_dimension( string $value ): string {
 		return '';
 	}
 
-	// Allow 'unset', 'auto', 'initial', 'inherit'.
+	// Allow CSS-wide keywords such as unset, auto, initial, inherit and none.
 	$allowed_keywords = array( 'unset', 'auto', 'initial', 'inherit', 'none' );
 	if ( in_array( strtolower( $value ), $allowed_keywords, true ) ) {
 		return strtolower( $value );
@@ -237,7 +237,7 @@ function clc_sanitize_columns_width( $value ): array {
 		return $defaults;
 	}
 
-	$sanitized = array();
+	$sanitized          = array();
 	$sanitized['left']  = isset( $value['left'] ) ? absint( $value['left'] ) : 6;
 	$sanitized['right'] = isset( $value['right'] ) ? absint( $value['right'] ) : 6;
 

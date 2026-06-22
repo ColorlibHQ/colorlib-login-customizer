@@ -1,5 +1,13 @@
 <?php
+/**
+ * Background image control for the Customizer.
+ *
+ * @package Colorlib_Login_Customizer
+ */
 
+/**
+ * Renders an image control with a gallery of default backgrounds.
+ */
 class Colorlib_Login_Customizer_Background_Control extends WP_Customize_Image_Control {
 
 	/**
@@ -11,14 +19,19 @@ class Colorlib_Login_Customizer_Background_Control extends WP_Customize_Image_Co
 	 */
 	public $type = 'clc-background';
 
+	/**
+	 * The list of default background images.
+	 *
+	 * @var array
+	 */
 	public $default_backgrounds;
-	
+
 	/**
 	 * Colorlib_Login_Customizer_Background_Control constructor.
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		parent::__construct( $manager, $id, $args );
@@ -41,12 +54,15 @@ class Colorlib_Login_Customizer_Background_Control extends WP_Customize_Image_Co
 		return $json;
 	}
 
+	/**
+	 * Build the gallery of default background images.
+	 *
+	 * @return array
+	 */
 	private function generate_gallery() {
 
 		if ( ! is_array( $this->default_backgrounds ) ) {
 			return array();
 		}
-
 	}
-
 }

@@ -1,10 +1,16 @@
 <?php
+/**
+ * Column width control for the Customizer.
+ *
+ * @package Colorlib_Login_Customizer
+ */
+
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
 /**
- * Class Colorlib_Login_Customizer_Column_Width
+ * Renders a control for setting left and right column widths.
  */
 class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	/**
@@ -21,9 +27,9 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	 *
 	 * @since 1.1.0
 	 *
-	 * @param WP_Customize_Manager $manager
-	 * @param string               $id
-	 * @param array                $args
+	 * @param WP_Customize_Manager $manager Customizer manager instance.
+	 * @param string               $id      Control ID.
+	 * @param array                $args    Control arguments.
 	 */
 	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
 		parent::__construct( $manager, $id, $args );
@@ -37,10 +43,10 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	 * @access public
 	 */
 	public function json() {
-		$json              = parent::json();
-		$json['id']        = $this->id;
-		$json['link']      = $this->get_link();
-		$json['value']     = $this->get_columns();
+		$json          = parent::json();
+		$json['id']    = $this->id;
+		$json['link']  = $this->get_link();
+		$json['value'] = $this->get_columns();
 
 		return $json;
 	}
@@ -49,9 +55,9 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	 * Set value
 	 */
 	public function get_columns() {
-		$default = array(
+		$default         = array(
 			'left'  => 6,
-			'right' => 6
+			'right' => 6,
 		);
 		$current_columns = $this->value();
 		$current_columns = is_array( $current_columns ) ? $current_columns : array();
@@ -63,7 +69,7 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	 * Display the control's content
 	 */
 	public function content_template() {
-		//@formatter:off ?>
+		// @formatter:off ?>
 		<div class="colorlib-login-customizer-control-container">
 			<label>
 				<span class="customize-control-title">
@@ -88,6 +94,7 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 				</div>
 			</div>
 		</div>
-	<?php //@formatter: on
+		<?php
+		// @formatter: on
 	}
 }
