@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.0', '8.1', '8.2', '8.3', '8.4', '8.5']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Lint every PHP file
+        run: |
+          find . -name '*.php' \
+            -not -path './vendor/*' \
+            -not -path './node_modules/*' \
+            -print0 | xargs -0 -n1 -P4 php -l
+
+      - name: Unit tests
+        run: ./vendor/bin/phpunit --colors=always
+
+  standards:
+    name: Coding standards
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: PHPCS (WordPress standards)
+        run: ./vendor/bin/phpcs -p --standard=./phpcs.ruleset.xml .
+
+      - name: PHP compatibility (8.0+)
+        run: |
+          ./vendor/bin/phpcs -p \
+            --standard=PHPCompatibilityWP \
+            --runtime-set testVersion 8.0- \
+            --extensions=php \
+            --ignore='*/vendor/*,*/node_modules/*,*/tests/*' .
+
+  javascript:
+    name: JavaScript
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install JSHint
+        run: npm install --no-save jshint
+
+      - name: Lint
+        run: npx jshint ./assets/js/clc-customizer.js ./assets/js/clc-preview.js

@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Colorlib Login Customizer
- * Version: 2.2.1
+ * Version: 2.3.0
  * Description: Colorlib Login Customizer is an awesome and intuitive plugin that helps you personalize your login form directly from the Customizer. The plugin fully supports the Live Customizer feature and you can see all the changes in real time and edit them.
  * Author: Colorlib
  * Author URI: https://colorlib.com/
@@ -35,6 +35,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/*
+ * NOTE: this bootstrap file must stay parseable by old PHP.
+ *
+ * PHP parses a whole file before running any of it, so any syntax newer than
+ * the versions we want to warn about (return types, nullable types,
+ * strict_types, ...) turns the notice below into a parse error — a white screen
+ * instead of an explanation. Keep modern syntax in includes/, which is only
+ * required after the check passes.
+ */
+
 // PHP version check.
 if ( version_compare( PHP_VERSION, '8.0.0', '<' ) ) {
 	add_action( 'admin_notices', 'clc_php_version_notice' );
@@ -46,7 +56,7 @@ if ( version_compare( PHP_VERSION, '8.0.0', '<' ) ) {
  *
  * @return void
  */
-function clc_php_version_notice(): void {
+function clc_php_version_notice() {
 	?>
 	<div class="error">
 		<p>
@@ -63,7 +73,7 @@ function clc_php_version_notice(): void {
 	<?php
 }
 
-define( 'COLORLIB_LOGIN_CUSTOMIZER_VERSION', '2.2.1' );
+define( 'COLORLIB_LOGIN_CUSTOMIZER_VERSION', '2.3.0' );
 define( 'COLORLIB_LOGIN_CUSTOMIZER_BASE', plugin_dir_path( __FILE__ ) );
 define( 'COLORLIB_LOGIN_CUSTOMIZER_URL', plugin_dir_url( __FILE__ ) );
 
@@ -78,7 +88,7 @@ require_once 'includes/class-colorlib-login-customizer-sanitization.php';
  * @since  1.0.0
  * @return object Colorlib_Login_Customizer
  */
-function colorlib_login_customizer(): Colorlib_Login_Customizer {
+function colorlib_login_customizer() {
 	$instance = Colorlib_Login_Customizer::instance( __FILE__, COLORLIB_LOGIN_CUSTOMIZER_VERSION );
 
 	if ( is_null( $instance->settings ) ) {
@@ -93,7 +103,7 @@ function colorlib_login_customizer(): Colorlib_Login_Customizer {
  *
  * @return void
  */
-function clc_check_for_review(): void {
+function clc_check_for_review() {
 	require_once COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/class-colorlib-login-customizer-review.php';
 
 	CLC_Review::get_instance(

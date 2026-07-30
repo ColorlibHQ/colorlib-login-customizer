@@ -8,6 +8,12 @@
  * @package Colorlib_Login_Customizer
  */
 
+declare( strict_types=1 );
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 $clc_core     = Colorlib_Login_Customizer::instance();
 $clc_defaults = $clc_core->get_defaults();
 $clc_options  = get_option( 'clc-options', array() );
@@ -35,7 +41,7 @@ function clc_login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 	$login_title = get_bloginfo( 'name', 'display' );
 
 	/* translators: Login screen title. 1: Login screen name, 2: Network or site name */
-	$login_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress', 'colorlib-login-customizer' ), $title, $login_title );
+	$login_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress', 'default' ), $title, $login_title );
 	/**
 	 * Filters the title tag content for login page.
 	 *
@@ -46,8 +52,12 @@ function clc_login_header( $title = 'Log In', $message = '', $wp_error = '' ) {
 	 */
 	$login_title = apply_filters( 'login_title', $login_title, $title );
 	?><!DOCTYPE html>
+	<html <?php language_attributes(); ?>>
 	<head>
-	<title><?php echo esc_attr( $login_title ); ?></title>
+	<meta charset="<?php bloginfo( 'charset' ); ?>" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<?php // kses, not esc_attr(): the title carries entities (&lsaquo;, &#8212;) that esc_attr() would double-encode. ?>
+	<title><?php echo wp_kses_post( $login_title ); ?></title>
 	<?php
 	wp_enqueue_style( 'login' );
 
@@ -102,10 +112,10 @@ $login_link_separator = apply_filters( 'login_link_separator', ' | ' );
  * @param object $errors      WP Error object.
  * @param string $redirect_to Redirect destination URL.
  */
-clc_login_header( __( 'Log In', 'colorlib-login-customizer' ), '', '' );
+clc_login_header( __( 'Log In', 'default' ), '', '' );
 
-$login_header_url   = __( 'https://wordpress.org/', 'colorlib-login-customizer' );
-$login_header_title = __( 'Powered by WordPress', 'colorlib-login-customizer' );
+$login_header_url   = __( 'https://wordpress.org/', 'default' );
+$login_header_title = __( 'Powered by WordPress', 'default' );
 
 /**
  * Filters link URL of the header logo above login form.
@@ -175,11 +185,11 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<form name="loginform" class="show-only_login" id="loginform" action="<?php echo esc_url( site_url( 'wp-login.php', 'login_post' ) ); ?>" method="post">
 				<div id="clc-loginform" class="clc-preview-event" data-section="clc_form"><span class="dashicons dashicons-edit"></span></div>
 				<p>
-					<label for="user_login"><span id="clc-username-label"><?php esc_html_e( 'Username or Email Address', 'colorlib-login-customizer' ); ?></span><br />
+					<label for="user_login"><span id="clc-username-label"><?php echo wp_kses_post( __( 'Username or Email Address', 'default' ) ); ?></span><br />
 					<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
-					<label for="user_pass"><span id="clc-password-label"><?php esc_html_e( 'Password', 'colorlib-login-customizer' ); ?></span><br />
+					<label for="user_pass"><span id="clc-password-label"><?php echo wp_kses_post( __( 'Password', 'default' ) ); ?></span><br />
 					<input type="password" name="pwd" id="user_pass" class="input" value="" size="20" /></label>
 				</p>
 				<?php
@@ -190,17 +200,17 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'login_form' );
 				?>
-				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span id="clc-rememberme-label"><?php esc_html_e( 'Remember Me', 'colorlib-login-customizer' ); ?></span></label></p>
-				<p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'colorlib-login-customizer' ); ?>" /></p>
+				<p class="forgetmenot"><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever" /> <span id="clc-rememberme-label"><?php esc_html_e( 'Remember Me', 'default' ); ?></span></label></p>
+				<p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In', 'default' ); ?>" /></p>
 			</form>
 
 			<form name="registerform" style="display:none" class="show-only_register" id="registerform" action="<?php echo esc_url( wp_registration_url() ); ?>" method="post">
 				<p>
-					<label for="user_register"><span id="clc-register-sername-label"><?php esc_html_e( 'Username', 'colorlib-login-customizer' ); ?></span><br />
+					<label for="user_register"><span id="clc-register-sername-label"><?php echo wp_kses_post( __( 'Username', 'default' ) ); ?></span><br />
 						<input type="text" name="log" id="user_register" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
-					<label for="user_email"><span id="clc-register-email-label"><?php esc_html_e( 'Email', 'colorlib-login-customizer' ); ?></span><br />
+					<label for="user_email"><span id="clc-register-email-label"><?php echo wp_kses_post( __( 'Email', 'default' ) ); ?></span><br />
 						<input type="email" name="email" id="user_email" class="input" value="" size="20" /></label>
 				</p>
 				<?php
@@ -211,13 +221,13 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'login_form' );
 				?>
-				<p id="reg_passmail"><?php esc_html_e( 'Registration confirmation will be emailed to you.', 'colorlib-login-customizer' ); ?></p>
-				<p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'colorlib-login-customizer' ); ?>" /></p>
+				<p id="reg_passmail"><?php echo wp_kses_post( __( 'Registration confirmation will be emailed to you.', 'default' ) ); ?></p>
+				<p class="submit"><input type="submit" name="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Register', 'default' ); ?>" /></p>
 			</form>
 
 			<form style="display:none;" class="show-only_lostpassword" name="lostpasswordform" id="lostpasswordform" action="" method="post">
 				<p>
-					<label for="user_login" ><span><?php esc_html_e( 'Username or Email Address', 'colorlib-login-customizer' ); ?></span><br />
+					<label for="user_login" ><span><?php echo wp_kses_post( __( 'Username or Email Address', 'default' ) ); ?></span><br />
 					<input type="text" name="user_login" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" autocapitalize="off" /></label>
 				</p>
 				<?php
@@ -228,7 +238,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				 */
 				do_action( 'lostpassword_form' );
 				?>
-				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Get New Password', 'colorlib-login-customizer' ); ?>" /></p>
+				<p class="submit"><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Get New Password', 'default' ); ?>" /></p>
 			</form>
 
 			<p id="nav">
@@ -248,7 +258,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 					echo '<span class="show-only_register show-only_login">' . esc_html( $login_link_separator ) . '</span>';
 				endif;
 				?>
-				<a class="show-only_register show-only_login" href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php esc_html_e( 'Lost your password?', 'colorlib-login-customizer' ); ?></a>
+				<a class="show-only_register show-only_login" href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php echo wp_kses_post( __( 'Lost your password?', 'default' ) ); ?></a>
 			</p>
 			<p id="backtoblog">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>">

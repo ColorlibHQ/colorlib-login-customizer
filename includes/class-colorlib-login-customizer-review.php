@@ -5,6 +5,12 @@
  * @package Colorlib_Login_Customizer
  */
 
+declare( strict_types=1 );
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Displays a time-delayed admin notice asking the user to leave a review.
  */
@@ -13,61 +19,69 @@ class CLC_Review {
 	/**
 	 * The single instance of this class.
 	 *
-	 * @var CLC_Review
+	 * @var CLC_Review|null
 	 */
-	private static $instance;
+	private static ?CLC_Review $instance = null;
+
+	/**
+	 * Capability required to see and act on the review notice.
+	 *
+	 * @var string
+	 */
+	private const CAPABILITY = 'manage_options';
+
+	/**
+	 * User meta key holding this user's review-notice state.
+	 *
+	 * @var string
+	 */
+	private const USER_META_KEY = 'clc_review_state';
 
 	/**
 	 * Days after install at which the review notice is shown.
 	 *
-	 * @var array
+	 * @var array<int, int>
 	 */
-	private $when = array( 5, 15, 30 );
+	private array $when = array( 5, 15, 30 );
 
 	/**
-	 * Number of days since the plugin was installed.
+	 * Number of days since the plugin was installed. Null until the install
+	 * date transient exists (i.e. on the very first admin request).
 	 *
-	 * @var int
+	 * @var int|null
 	 */
-	private $value;
+	private ?int $value = null;
 
 	/**
 	 * Notice strings keyed by purpose.
 	 *
-	 * @var array
+	 * @var array<string, string>
 	 */
-	private $messages;
+	private array $messages;
 
 	/**
 	 * Review URL template for the plugin.
 	 *
 	 * @var string
 	 */
-	private $link = 'https://wordpress.org/support/plugin/%s/reviews/#new-post';
+	private string $link = 'https://wordpress.org/support/plugin/%s/reviews/#new-post';
 
 	/**
 	 * Plugin slug used to build the review URL.
 	 *
 	 * @var string
 	 */
-	private $slug = '';
-
-	/**
-	 * Option name used to persist the review state.
-	 *
-	 * @var string
-	 */
-	private $option_name = '';
+	private string $slug = '';
 
 	/**
 	 * Constructor.
 	 *
-	 * @param array $args Configuration arguments (expects 'slug' and optional 'messages').
+	 * @param array<string, mixed> $args Configuration arguments (expects 'slug' and optional 'messages').
 	 */
-	public function __construct( $args ) {
+	public function __construct( array $args ) {
 
 		if ( isset( $args['slug'] ) ) {
-			$this->slug = $args['slug'];
+			$this->slug = (string) $args['slug'];
 		}
 
 		$this->value = $this->value();
@@ -80,7 +94,7 @@ class CLC_Review {
 			'no_rate' => __( 'No, not good enough', 'colorlib-login-customizer' ),
 		);
 
-		if ( isset( $args['messages'] ) ) {
+		if ( isset( $args['messages'] ) && is_array( $args['messages'] ) ) {
 			$this->messages = wp_parse_args( $args['messages'], $this->messages );
 		}
 
@@ -90,15 +104,15 @@ class CLC_Review {
 	/**
 	 * Retrieve the single instance of this class.
 	 *
-	 * @param array $args Configuration arguments.
+	 * @param array<string, mixed> $args Configuration arguments.
 	 * @return CLC_Review
 	 */
-	public static function get_instance( $args ) {
-		if ( null === static::$instance ) {
-			static::$instance = new static( $args );
+	public static function get_instance( array $args ): CLC_Review {
+		if ( null === self::$instance ) {
+			self::$instance = new self( $args );
 		}
 
-		return static::$instance;
+		return self::$instance;
 	}
 
 	/**
@@ -106,8 +120,12 @@ class CLC_Review {
 	 *
 	 * @return void
 	 */
-	private function init() {
+	private function init(): void {
 		if ( ! is_admin() ) {
+			return;
+		}
+
+		if ( ! current_user_can( self::CAPABILITY ) ) {
 			return;
 		}
 
@@ -115,9 +133,32 @@ class CLC_Review {
 
 		if ( $this->check() ) {
 			add_action( 'admin_notices', array( $this, 'five_star_wp_rate_notice' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 			add_action( 'admin_print_footer_scripts', array( $this, 'ajax_script' ) );
 		}
+	}
+
+	/**
+	 * Read this user's stored review state.
+	 *
+	 * Falls back to the legacy site-wide `clc-options[givemereview]` value so
+	 * that a dismissal made before the per-user migration is still honoured.
+	 *
+	 * @return string Stored state, or an empty string when never dismissed.
+	 */
+	private function get_state(): string {
+		$state = get_user_meta( get_current_user_id(), self::USER_META_KEY, true );
+
+		if ( '' !== $state && false !== $state && null !== $state ) {
+			return (string) $state;
+		}
+
+		$options = get_option( 'clc-options', array() );
+
+		if ( is_array( $options ) && isset( $options['givemereview'] ) ) {
+			return (string) $options['givemereview'];
+		}
+
+		return '';
 	}
 
 	/**
@@ -125,46 +166,48 @@ class CLC_Review {
 	 *
 	 * @return bool True when the notice should be shown.
 	 */
-	private function check() {
+	private function check(): bool {
 
-		$options = get_option( 'clc-options' );
-		$option  = isset( $options['givemereview'] ) ? $options['givemereview'] : '';
-
-		if ( 'already-rated' == $option ) {
+		if ( null === $this->value ) {
 			return false;
 		}
 
-		if ( $this->value == $option && '' != $option ) {
+		$state = $this->get_state();
+
+		if ( 'already-rated' === $state ) {
 			return false;
 		}
 
-		if ( is_array( $this->when ) ) {
-			foreach ( $this->when as $et ) {
-				if ( $et == $this->value ) {
-					return true;
-				}
-			}
+		if ( '' !== $state && (string) $this->value === $state ) {
+			return false;
 		}
+
+		return in_array( $this->value, $this->when, true );
 	}
 
 	/**
 	 * Calculate the number of days since the plugin was installed.
 	 *
-	 * @return int|null Days since install, or null on first run.
+	 * @return int|null Days since install, or null on the first run (when the
+	 *                  install date is only just being recorded).
 	 */
-	private function value() {
+	private function value(): ?int {
 
 		$value = get_transient( 'clc_review' );
 
-		if ( $value ) {
-			$current_time = time(); // Current time in seconds.
-			$trans_date   = strtotime( $value );
-			$date_diff    = $current_time - $trans_date;
-			return round( $date_diff / ( 60 * 60 * 24 ) );
+		if ( is_string( $value ) && '' !== $value ) {
+			$trans_date = strtotime( $value );
+
+			if ( false === $trans_date ) {
+				return null;
+			}
+
+			return (int) round( ( time() - $trans_date ) / DAY_IN_SECONDS );
 		}
 
-		$date = gmdate( 'Y-m-d' );
-		set_transient( 'clc_review', $date, 24 * 30 * HOUR_IN_SECONDS );
+		set_transient( 'clc_review', gmdate( 'Y-m-d' ), 30 * DAY_IN_SECONDS );
+
+		return null;
 	}
 
 	/**
@@ -172,13 +215,13 @@ class CLC_Review {
 	 *
 	 * @return void
 	 */
-	public function five_star_wp_rate_notice() {
+	public function five_star_wp_rate_notice(): void {
 
 		$url = sprintf( $this->link, $this->slug );
 
 		?>
 		<div id="<?php echo esc_attr( $this->slug ); ?>-epsilon-review-notice" class="notice notice-success is-dismissible">
-			<p><?php printf( wp_kses_post( $this->messages['notice'] ), esc_html( $this->value ) ); ?></p>
+			<p><?php printf( wp_kses_post( $this->messages['notice'] ), esc_html( (string) $this->value ) ); ?></p>
 			<p class="actions">
 				<a id="epsilon-rate" href="<?php echo esc_url( $url ); ?>"
 					class="button button-primary epsilon-review-button"><?php echo esc_html( $this->messages['rate'] ); ?></a>
@@ -196,30 +239,24 @@ class CLC_Review {
 	 *
 	 * @return void
 	 */
-	public function ajax() {
+	public function ajax(): void {
 
 		check_ajax_referer( 'epsilon-review', 'security' );
 
-		$options = get_option( 'clc-options', array() );
-
-		if ( isset( $_POST['epsilon-review'] ) ) {
-			$options['givemereview'] = 'already-rated';
-		} else {
-			$options['givemereview'] = $this->value;
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( -1, 403 );
 		}
 
-		update_option( 'clc-options', $options );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified by check_ajax_referer() above.
+		$rated = isset( $_POST['epsilon-review'] );
+
+		update_user_meta(
+			get_current_user_id(),
+			self::USER_META_KEY,
+			$rated ? 'already-rated' : (string) $this->value
+		);
 
 		wp_die( 'ok' );
-	}
-
-	/**
-	 * Enqueue the scripts required by the review notice.
-	 *
-	 * @return void
-	 */
-	public function enqueue() {
-		wp_enqueue_script( 'jquery' );
 	}
 
 	/**
@@ -227,62 +264,74 @@ class CLC_Review {
 	 *
 	 * @return void
 	 */
-	public function ajax_script() {
+	public function ajax_script(): void {
 
 		$ajax_nonce = wp_create_nonce( 'epsilon-review' );
+		$notice_id  = $this->slug . '-epsilon-review-notice';
 
 		?>
+		<script>
+			( function () {
+				'use strict';
 
-		<script type="text/javascript">
-			jQuery(document).ready(function ($) {
+				var notice = document.getElementById( <?php echo wp_json_encode( $notice_id ); ?> );
 
-				$('.epsilon-review-button').click(function (evt) {
-					var href = $(this).attr('href'),
-						id = $(this).attr('id');
+				if ( ! notice ) {
+					return;
+				}
 
-					evt.preventDefault();
+				var ajaxUrl = <?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
+				var nonce   = <?php echo wp_json_encode( $ajax_nonce ); ?>;
 
-					var data = {
-						action: 'clc_epsilon_review',
-						security: '<?php echo esc_js( $ajax_nonce ); ?>',
-					};
+				function dismiss( rated, then ) {
+					var body = new URLSearchParams();
+					body.append( 'action', 'clc_epsilon_review' );
+					body.append( 'security', nonce );
 
-					if ('epsilon-rated' === id || 'epsilon-rate' === id) {
-						data['epsilon-review'] = 1;
+					if ( rated ) {
+						body.append( 'epsilon-review', '1' );
 					}
 
-
-					$.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data, function (response) {
-						$('#<?php echo esc_attr( $this->slug ); ?>-epsilon-review-notice').slideUp('fast', function () {
-							$(this).remove();
-						});
-
-						if ('epsilon-rate' === id) {
-							window.location.href = href;
+					window.fetch( ajaxUrl, {
+						method: 'POST',
+						credentials: 'same-origin',
+						headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+						body: body.toString()
+					} ).then( function () {
+						if ( notice && notice.parentNode ) {
+							notice.parentNode.removeChild( notice );
 						}
+						if ( then ) {
+							then();
+						}
+					} );
+				}
 
-					});
+				Array.prototype.forEach.call(
+					notice.querySelectorAll( '.epsilon-review-button' ),
+					function ( button ) {
+						button.addEventListener( 'click', function ( event ) {
+							event.preventDefault();
 
-				});
+							var id   = button.getAttribute( 'id' );
+							var href = button.getAttribute( 'href' );
 
-				$('#colorlib-login-customizer-epsilon-review-notice .notice-dismiss').click(function(){
+							dismiss( 'epsilon-rated' === id || 'epsilon-rate' === id, function () {
+								if ( 'epsilon-rate' === id ) {
+									window.location.href = href;
+								}
+							} );
+						} );
+					}
+				);
 
-					var data = {
-						action: 'clc_epsilon_review',
-						security: '<?php echo esc_js( $ajax_nonce ); ?>',
-					};
-
-					$.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data, function (response) {
-						$('#<?php echo esc_attr( $this->slug ); ?>-epsilon-review-notice').slideUp('fast', function () {
-							$(this).remove();
-						});
-
-					});
-				});
-
-			});
+				notice.addEventListener( 'click', function ( event ) {
+					if ( event.target.classList.contains( 'notice-dismiss' ) ) {
+						dismiss( false );
+					}
+				} );
+			}() );
 		</script>
-
 		<?php
 	}
 }

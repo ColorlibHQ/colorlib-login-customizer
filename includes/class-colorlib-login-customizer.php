@@ -264,11 +264,14 @@ class Colorlib_Login_Customizer {
 			),
 			'form-column-align'            => '3',
 			'form-vertical-align'          => '2',
+			'form-horizontal-align'        => '2',
 			/**
 			 * Logo section
 			 */
 			'logo-settings'                => 'show-image-only',
 			'logo-url'                     => site_url(),
+			'logo-title'                   => 'Powered by WordPress',
+			'login-page-title'             => '',
 			'custom-logo'                  => '',
 			'logo-text-color'              => '#444',
 			'logo-text-size'               => '20',

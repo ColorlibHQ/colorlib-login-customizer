@@ -47,19 +47,63 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	private array $defaults;
 
 	/**
+	 * Whether the option/selector data has been loaded yet.
+	 *
+	 * @var bool
+	 */
+	private bool $booted = false;
+
+	/**
 	 * Constructor.
+	 *
+	 * Deliberately cheap: this object is created on `init` for every request,
+	 * so it only registers the two entry points it needs. Reading options and
+	 * building the selector map is deferred to boot(), which runs solely on the
+	 * login page and in the Customizer preview.
 	 */
 	public function __construct() {
+		add_action( 'login_init', array( $this, 'init_login' ) );
+		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
+	}
+
+	/**
+	 * Load options and the selector map, once per request.
+	 *
+	 * @return void
+	 */
+	private function boot(): void {
+		if ( $this->booted ) {
+			return;
+		}
+
+		$this->booted   = true;
 		$plugin         = Colorlib_Login_Customizer::instance();
 		$this->key_name = $plugin->key_name;
 		$this->defaults = $plugin->get_defaults();
-		$this->set_options();
 
-		add_action( 'login_init', array( $this, 'check_general_texts' ) );
+		$this->set_options();
+	}
+
+	/**
+	 * Register every login-page hook.
+	 *
+	 * Runs on `login_init`, which fires both on wp-login.php and in the
+	 * Customizer preview template, so none of these filters can leak onto the
+	 * front end. (The privacy-policy filter in particular is global, and used
+	 * to hide the link site-wide when it was registered on `init`.)
+	 *
+	 * @return void
+	 */
+	public function init_login(): void {
+		$this->boot();
+
+		$this->check_general_texts();
 
 		add_action( 'login_form_login', array( $this, 'check_login_texts' ) );
 		add_action( 'login_form_register', array( $this, 'check_register_texts' ) );
 		add_action( 'login_form_lostpassword', array( $this, 'check_lostpasswords_texts' ) );
+
+		add_action( 'login_enqueue_scripts', array( $this, 'enqueue_login_styles' ) );
 
 		add_action( 'login_header', array( $this, 'add_extra_div' ) );
 		add_action( 'login_head', array( $this, 'generate_css' ), 15 );
@@ -77,12 +121,58 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( ! empty( $this->options['hide-language-switcher'] ) ) {
 			add_filter( 'login_display_language_dropdown', '__return_false' );
 		}
+
 		add_filter( 'login_body_class', array( $this, 'body_class' ) );
 		add_filter( 'login_headerurl', array( $this, 'logo_url' ), 99 );
 		add_filter( 'login_headertext', array( $this, 'logo_title' ), 99 );
 		add_filter( 'login_title', array( $this, 'login_page_title' ), 99 );
 
-		add_action( 'customize_preview_init', array( $this, 'output_css_object' ), 26 );
+		$this->fix_selective_refresh_exports();
+	}
+
+	/**
+	 * Print the selective-refresh export data core would normally emit.
+	 *
+	 * The Customizer preview template mirrors wp-login.php rather than a theme
+	 * page, so it never calls wp_head() and `wp_enqueue_scripts` never fires.
+	 * Core hooks WP_Customize_Selective_Refresh::export_preview_data() to that
+	 * action, yet the selective-refresh script still loads because
+	 * `customize-preview-nav-menus` lists it as a dependency — so the script
+	 * runs without the `_customizePartialRefreshExports` global it reads and
+	 * throws a JS error in the preview.
+	 *
+	 * Call core's own exporter just before wp_print_footer_scripts, which runs
+	 * on `login_footer` at priority 20.
+	 *
+	 * @return void
+	 */
+	private function fix_selective_refresh_exports(): void {
+		if ( ! is_customize_preview() || ! isset( $GLOBALS['wp_customize'] ) ) {
+			return;
+		}
+
+		$selective_refresh = $GLOBALS['wp_customize']->selective_refresh;
+
+		if ( $selective_refresh instanceof WP_Customize_Selective_Refresh ) {
+			add_action( 'login_footer', array( $selective_refresh, 'export_preview_data' ), 19 );
+		}
+	}
+
+	/**
+	 * Enqueue the static base stylesheet for the login page.
+	 *
+	 * Kept as a real file rather than inline CSS so browsers can cache it
+	 * between login page views.
+	 *
+	 * @return void
+	 */
+	public function enqueue_login_styles(): void {
+		wp_enqueue_style(
+			'colorlib-login-customizer-login',
+			COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/css/clc-login.css',
+			array(),
+			COLORLIB_LOGIN_CUSTOMIZER_VERSION
+		);
 	}
 
 	/**
@@ -101,6 +191,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return void
 	 */
 	public function output_css_object() {
+
+		$this->boot();
 
 		$css_object = array(
 			'selectors' => array(),
@@ -699,7 +791,19 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			$string .= $selector . '{' . "\n";
 
 			foreach ( $valued as $index => $value ) {
-				$string .= $index . ':' . esc_attr( $this->add_artifacts( $index, $value ) ) . ';' . "\n";
+				/*
+				 * Escaped with clc_escape_css_value(), not esc_attr(): HTML
+				 * entities are not decoded inside a <style> element, so
+				 * esc_attr() would corrupt legitimate values (quoted font
+				 * names became &#039;) while blocking nothing.
+				 */
+				$declaration = clc_escape_css_value( (string) $this->add_artifacts( $index, $value ) );
+
+				if ( '' === $declaration ) {
+					continue;
+				}
+
+				$string .= $index . ':' . $declaration . ';' . "\n";
 			}
 			$string .= '}' . "\n";
 		}
@@ -718,7 +822,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	private function add_artifacts( $property, $value ) {
 		switch ( $property ) {
 			case 'background-image':
-				$value = 'url(' . $value . ')';
+				// Quote the URL and drop characters that could close url() early.
+				$value = 'url("' . str_replace( array( '"', "'", '(', ')' ), '', (string) $value ) . '")';
 				break;
 
 			case 'width':
@@ -749,30 +854,6 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		return $value;
 	}
 
-	/**
-	 * Sanitize CSS input to prevent injection attacks.
-	 *
-	 * @param string $css Raw CSS input.
-	 * @return string Sanitized CSS.
-	 */
-	private function sanitize_css( string $css ): string {
-		if ( empty( $css ) ) {
-			return '';
-		}
-
-		// Remove any potential script injections.
-		$css = wp_strip_all_tags( $css );
-
-		// Remove potentially dangerous CSS expressions and behaviors.
-		$css = preg_replace( '/expression\s*\(/i', '', $css );
-		$css = preg_replace( '/javascript\s*:/i', '', $css );
-		$css = preg_replace( '/behavior\s*:/i', '', $css );
-		$css = preg_replace( '/-moz-binding\s*:/i', '', $css );
-		$css = preg_replace( '/@import/i', '', $css );
-		$css = preg_replace( '/url\s*\(\s*["\']?\s*data:/i', 'url(', $css );
-
-		return $css;
-	}
 
 	/**
 	 * Filter the login page body classes based on the saved layout options.
@@ -843,11 +924,17 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return string Custom or default page title.
 	 */
 	public function login_page_title( $title ) {
-		if ( isset( $this->options['login-page-title'] ) ) {
-			return esc_html( $this->options['login-page-title'] );
+		if ( ! empty( $this->options['login-page-title'] ) ) {
+			$title = $this->options['login-page-title'];
 		}
 
-		return $title;
+		/*
+		 * Core echoes the title into <title> without escaping, and <title> is
+		 * RCDATA, so a stray "</title>" would break out of the element. kses
+		 * strips tags while leaving core's own entities (&lsaquo;, &#8212;)
+		 * intact, which esc_html() would double-encode.
+		 */
+		return wp_kses_post( (string) $title );
 	}
 
 	/**
@@ -888,13 +975,17 @@ class Colorlib_Login_Customizer_CSS_Customization {
 
 		$logo_css = '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent: unset;background-position:top center !important;padding-top:' . ( 30 + absint( $this->options['logo-height'] ) ) . 'px; background-size: ' . $backgriund_size . '; margin-top: -' . ( 15 + absint( $this->options['logo-height'] ) ) . 'px; position:relative;background-image:url(' . esc_url( $background_image ) . ')}';
 
-		// CSS is built from values sanitized on save (colors, dimensions, image URLs) and via sanitize_css(); it cannot be passed through esc_html() without breaking the stylesheet.
-		echo '<style type="text/css">' . $this->get_base_css() . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static, developer-defined base CSS.
-		echo '<style type="text/css" id="clc-style">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from sanitized option values, escaped per-property in create_css_lines().
-		echo '<style type="text/css" id="clc-columns-style">' . $columns_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() column widths.
-		echo '<style type="text/css" id="clc-logo-style">' . $logo_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() dimensions and esc_url() logo path.
-		echo '<style type="text/css" id="clc-custom-css">' . $this->sanitize_css( $custom_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Passed through sanitize_css() which strips scripts and dangerous directives.
-		echo '<style type="text/css" id="clc-custom-background-link"> body .ml-container .ml-extra-div .clc-custom-background-link {display:block; width:100%; height:100%;} </style>';
+		/*
+		 * The static base stylesheet is enqueued as a real file by
+		 * enqueue_login_styles(); only the settings-derived rules are inlined
+		 * here. Every value below is sanitized on save (colors, dimensions,
+		 * image URLs) and re-filtered through clc_sanitize_css() on output, so
+		 * it cannot be passed through esc_html() without breaking the CSS.
+		 */
+		echo '<style id="clc-style">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from sanitized option values, filtered per-property in create_css_lines().
+		echo '<style id="clc-columns-style">' . $columns_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() column widths.
+		echo '<style id="clc-logo-style">' . $logo_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() dimensions and esc_url() logo path.
+		echo '<style id="clc-custom-css">' . clc_sanitize_css( (string) $custom_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Passed through clc_sanitize_css(), which strips tags and dangerous directives.
 	}
 
 	/**
@@ -1065,7 +1156,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = wp_kses_post( $label );
+			// Core prints this label with _e() (unescaped), so escape here.
+			$translated_text = esc_html( $label );
 		}
 
 		return $translated_text;
@@ -1118,7 +1210,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = esc_html( $label );
+			// Core prints this with esc_html_e(); escaping here would double-encode.
+			$translated_text = $label;
 		}
 
 		return $translated_text;
@@ -1161,22 +1254,47 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return string
 	 */
 	public function change_back_to_text( $translated_text, $text, $context, $domain ) {
-		$default = '&larr; Back to %s';
-		$label   = $this->options['back-to-text'];
+		/*
+		 * WordPress 5.7 renamed this string from "Back to %s" to "Go to %s"
+		 * (and added the `login_site_html_link` filter). Match both so the
+		 * setting keeps working on current and older installs.
+		 */
+		$patterns = array( '&larr; Back to %s', '&larr; Go to %s' );
 
 		// Check if this is our text.
-		if ( $default !== $text ) {
+		if ( ! in_array( $text, $patterns, true ) ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed.
-		if ( $label === $text ) {
+		$label = isset( $this->options['back-to-text'] ) ? (string) $this->options['back-to-text'] : '';
+
+		/*
+		 * On an install that never saved this setting the value falls back to
+		 * the full legacy pattern from get_defaults(), which is not something a
+		 * user would ever type. Treat that as "not customised" and leave core's
+		 * own wording alone.
+		 */
+		if ( '' === trim( $label ) || in_array( $label, $patterns, true ) ) {
 			return $translated_text;
-		} else {
-			$translated_text = '&larr; ' . esc_html( $label ) . ' %s';
 		}
 
-		return $translated_text;
+		/*
+		 * The stored value is meant to be a bare phrase ("Back to site"), but
+		 * older versions saved the arrow and the placeholder too. Strip both so
+		 * the result carries exactly one %s for core's sprintf() — two would
+		 * raise ArgumentCountError and take the whole login page down.
+		 */
+		$label = str_replace( array( '&larr;', '←', '%s' ), '', $label );
+		$label = trim( $label );
+
+		if ( '' === $label ) {
+			return $translated_text;
+		}
+
+		// Escape stray percent signs so sprintf() only ever sees our own %s.
+		$label = str_replace( '%', '%%', $label );
+
+		return '&larr; ' . esc_html( $label ) . ' %s';
 	}
 
 	/**
@@ -1200,7 +1318,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = esc_attr( $label );
+			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
+			$translated_text = $label;
 		}
 
 		return $translated_text;
@@ -1227,7 +1346,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = wp_kses_post( $label );
+			// Core prints this label with _e() (unescaped), so escape here.
+			$translated_text = esc_html( $label );
 		}
 
 		return $translated_text;
@@ -1280,7 +1400,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = wp_kses_post( $label );
+			// Core prints this with _e() (unescaped), so escape here.
+			$translated_text = esc_html( $label );
 		}
 
 		return $translated_text;
@@ -1307,7 +1428,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = esc_html( $label );
+			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
+			$translated_text = $label;
 		}
 
 		return $translated_text;
@@ -1388,7 +1510,8 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = wp_kses_post( $label );
+			// Core prints this label with _e() (unescaped), so escape here.
+			$translated_text = esc_html( $label );
 		}
 
 		return $translated_text;
@@ -1415,249 +1538,10 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		if ( $label === $text ) {
 			return $translated_text;
 		} else {
-			$translated_text = esc_html( $label );
+			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
+			$translated_text = $label;
 		}
 
 		return $translated_text;
-	}
-
-	/**
-	 * Get the base CSS for the login page
-	 *
-	 * @return string
-	 * @since 1.3.2
-	 */
-	private function get_base_css() {
-		return '
-		/* Hide third-party theme customizer overlays (Astra, etc.) */
-		.ast-style-guide-wrapper,
-		.ast-quick-tour-body,
-		.ast-close-tour,
-		.ast-tour-inner-wrap {
-			display: none !important;
-		}
-		.language-switcher{
-			z-index:9;
-			margin:0;
-		}
-		/* Footer & Links (#173 too): give the custom above-form text, custom footer,
-		   the core language switcher and the privacy-policy link their own full-width
-		   rows so they stack centered around the form instead of sitting beside
-		   #login as flex siblings (.ml-form-container also gets flex-wrap below). */
-		.ml-form-container > .clc-above-form,
-		.ml-form-container > .clc-custom-footer,
-		.ml-form-container > .language-switcher,
-		.ml-form-container > .privacy-policy-page-link{
-			flex:0 0 100%;
-			max-width:100%;
-			text-align:center;
-			/* Stack above the absolute .ml-extra-div background layer, like #login,
-			   so custom text/links stay visible when a background is set. */
-			position:relative;
-			z-index:1;
-		}
-		.clc-above-form{
-			margin:0 0 16px;
-			order:-1;
-		}
-		.ml-form-container > .clc-custom-footer{
-			margin:16px 0 0;
-			order:1;
-		}
-		.ml-form-container > .privacy-policy-page-link{
-			order:2;
-		}
-		.ml-form-container > .language-switcher{
-			order:3;
-		}
-		.clc-footer-links{
-			margin:0 0 8px;
-		}
-		.clc-footer-links a{
-			color:inherit;
-			text-decoration:underline;
-		}
-		.clc-footer-sep{
-			opacity:.5;
-		}
-		.clc-footer-text{
-			font-size:13px;
-			opacity:.85;
-		}
-		#registerform #wp-submit{
-			float:none;
-			margin-top:15px;
-		}
-		.login.clc-text-logo:not(.clc-both-logo) h1 a{
-			 background-image: none !important;
-			text-indent: unset;
-			width:auto !important;
-			height: auto !important;
-		}
-		#login form p label br{
-			display:none
-		}
-		body:not( .ml-half-screen ) .ml-form-container{
-			background:transparent !important;
-		}
-		.login:not(.clc-both-logo) h1 a{
-			background-position: center;
-			background-size:contain !important;
-		}
-		/* #70: center an image logo even when its width exceeds the form
-		   container (flex centers an over-wide child; block margin:auto cannot). */
-		.login:not(.clc-text-logo):not(.clc-both-logo) h1{
-			display:flex;
-			justify-content:center;
-		}
-		.ml-container #login{
-			 position:relative;
-			padding: 0;
-			width:100%;
-			max-width:320px;
-			margin:0;
-		}
-		#loginform,#registerform,#lostpasswordform{
-			box-sizing: border-box;
-			max-height: 100%;
-			background-position: center;
-			background-repeat: no-repeat;
-			background-size: cover;
-		}
-		/* Fix password field width to match username field */
-		.login form .input,
-		.login input[type="text"],
-		.login input[type="password"],
-		.login input[type="email"]{
-			width: 100% !important;
-			box-sizing: border-box !important;
-		}
-		.login .user-pass-wrap{
-			display: block !important;
-		}
-		.login .user-pass-wrap > label{
-			display: block !important;
-		}
-		.login .wp-pwd{
-			position: relative !important;
-			display: block !important;
-		}
-		.login .wp-pwd input[type="password"]{
-			width: 100% !important;
-			padding-right: 50px !important;
-			box-sizing: border-box !important;
-		}
-		.login .wp-pwd .wp-hide-pw{
-			position: absolute !important;
-			right: 0 !important;
-			top: 35% !important;
-			transform: translateY(-50%) !important;
-			height: auto !important;
-			width: 44px !important;
-			padding: 0 !important;
-			margin: 0 !important;
-			display: flex !important;
-			align-items: center !important;
-			justify-content: center !important;
-			background: transparent !important;
-			border: none !important;
-			box-shadow: none !important;
-			cursor: pointer !important;
-			z-index: 10 !important;
-		}
-		.login .wp-pwd .wp-hide-pw .dashicons{
-			position: static !important;
-			top: auto !important;
-			margin: 0 !important;
-			padding: 0 !important;
-		}
-		.ml-container{
-			position:relative;
-			min-height:100vh;
-			display:flex;
-			height:100%;
-			min-width:100%;
-		}
-		.ml-container .ml-extra-div{
-			background-position:center;
-			background-size:cover;
-			background-repeat:no-repeat
-		}
-		body .ml-form-container{
-			display:flex;
-			flex-wrap:wrap;
-			align-items:center;
-			align-content:center;
-			justify-content:center;
-		}
-		body:not( .ml-half-screen ) .ml-container .ml-extra-div{
-			position:absolute;
-			top:0;
-			left:0;
-			width:100%;
-			height:100%
-		}
-		body:not( .ml-half-screen ) .ml-container .ml-form-container{
-			width:100%;
-			min-height:100vh;
-		}
-		body.ml-half-screen .ml-container{
-			flex-wrap:wrap
-		}
-		body.ml-half-screen .ml-container>.ml-extra-div,body.ml-half-screen .ml-container>.ml-form-container{
-			width:50%
-		}
-		body.ml-half-screen.ml-login-align-2 .ml-container>div,body.ml-half-screen.ml-login-align-4 .ml-container>div{
-			width:100%;
-			flex-basis:50%;
-		}
-		body.ml-half-screen.ml-login-align-2 .ml-container{
-			flex-direction:column-reverse
-		}
-		body.ml-half-screen.ml-login-align-4 .ml-container{
-			flex-direction:column
-		}
-		body.ml-half-screen.ml-login-align-1 .ml-container{
-			flex-direction:row-reverse
-		}
-		body.ml-login-vertical-align-1 .ml-form-container{
-			align-items:flex-start
-		}
-		body.ml-login-vertical-align-3 .ml-form-container{
-			align-items:flex-end
-		}
-		body.ml-login-horizontal-align-1 .ml-form-container{
-			justify-content:flex-start
-		}
-		body.ml-login-horizontal-align-3 .ml-form-container{
-			justify-content:flex-end
-		}
-		@media only screen and (max-width: 768px) {
-			body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{
-				width:50% !important;
-			}
-			.login h1 a{
-				max-width: 100%;
-			}
-		}
-		.login input[type=text]:focus, .login input[type=search]:focus, .login input[type=radio]:focus, .login input[type=tel]:focus, .login input[type=time]:focus, .login input[type=url]:focus, .login input[type=week]:focus, .login input[type=password]:focus, .login input[type=checkbox]:focus, .login input[type=color]:focus, .login input[type=date]:focus, .login input[type=datetime]:focus, .login input[type=datetime-local]:focus, .login input[type=email]:focus, .login input[type=month]:focus, .login input[type=number]:focus, .login select:focus, .login textarea:focus{
-			 box-shadow: none;
-		}
-		@media only screen and (max-width: 577px){
-			body.ml-half-screen .ml-container > .ml-extra-div, body.ml-half-screen .ml-container > .ml-form-container{
-				width:100% !important;
-			}
-			body.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div, body.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container,body.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,body.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container{
-				 width: 100%;
-			}
-			body.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div,body.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div{
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 100%;
-				height: 100%;
-			}
-		}
-		';
 	}
 }

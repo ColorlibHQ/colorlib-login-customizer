@@ -3,10 +3,10 @@ Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 2.2.1
+Stable tag: 2.3.0
 Requires PHP: 8.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
 Customize your WordPress login page with live preview. Change logo, background, colors, and form styling without coding.
 
@@ -180,7 +180,34 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 3. Form styling options
 4. Template selection
 
+== Upgrade Notice ==
+
+= 2.3.0 =
+Security and correctness release. Custom-CSS sanitization is hardened (dangerous directives could previously be smuggled through by nesting them), the review-notice AJAX handler now checks capabilities, and several login-page texts no longer render double-escaped. Also fixes the "Back to site text" setting, which had silently stopped working on WordPress 5.7 and later. Recommended for all users.
+
 == Changelog ==
+
+= 2.3.0 =
+* Security: Hardened custom-CSS sanitization. Dangerous directives (@import, javascript:, expression(), behavior:, -moz-binding:, data: URIs) were previously stripped in a single pass, so a nested payload could reassemble itself into a working token. Filtering now repeats until the value stops changing.
+* Security: The review-notice AJAX handler now performs a capability check, and its dismissal is stored per user instead of in a shared site-wide option.
+* Security: Added direct-access guards to the files that were missing them.
+* Security: CSS values are now escaped with a CSS-aware filter at print time instead of esc_attr(), which offered no protection inside a <style> element while corrupting quoted values such as font stacks.
+* Security: Login page title is filtered through kses, closing a possible breakout via the unescaped <title> element.
+* Fix: The "Hide privacy policy link" option no longer registers its filter on every request, so it can no longer affect the privacy policy link on the front end.
+* Fix: Corrected double-escaped login text. Labels that WordPress already escapes (Log In, Register and Get New Password buttons, Remember Me) were escaped a second time, so an ampersand or apostrophe rendered as &amp; or &#039;.
+* Fix: The "Back to site text" setting works again. WordPress 5.7 renamed the underlying string from "Back to %s" to "Go to %s"; both are now matched.
+* Fix: Uninstall now removes the options and transients the plugin actually creates (including the admin menu location preference), no longer iterates every user on the site, and no longer flushes the entire object cache.
+* New: Modern CSS support in colour and dimension fields — hsl(), 4- and 8-digit hex, space-separated rgb(0 0 0 / 50%), var(), color-mix(), calc(), clamp(), min(), max() and the dvh/svh/lvh/ch viewport units.
+* Performance: The static base stylesheet is now a real, browser-cacheable file instead of being inlined on every login page view.
+* Performance: Settings and the selector map are only loaded on the login page and in the Customizer preview, rather than on every front-end, admin and AJAX request.
+* Performance: Removed ~1,250 lines of unused code (the jQuery minicolors library and four superseded Customizer controls) and their orphaned stylesheets.
+* Fix: The "requires PHP 8.0" notice can now actually appear. The bootstrap file used PHP 7.1+ return types, and PHP parses a whole file before running it, so on an older PHP the plugin died with a parse error instead of explaining itself.
+* i18n: The Customizer preview now reuses WordPress core's own translations for the login form labels it copies from wp-login.php, so the preview matches the real login page in every locale instead of depending on those core strings being re-translated into this plugin.
+* Housekeeping: Removed two unused images (three-column.png, four-column.png).
+* Fix: The two-column "form above" and "form below" layouts no longer force a horizontal scrollbar. Running the flex container in column direction while it still inherited flex-wrap made it start a second column once the two rows were taller than the viewport, doubling the page width.
+* Fix: Removed a JavaScript error ("_customizePartialRefreshExports is not defined") from the Customizer preview. The preview template mirrors wp-login.php and never runs wp_head(), so WordPress never printed the selective-refresh data its own script expects.
+* Fix: Restored the "Logo Title", "Login Page Title" and "Form Horizontal Alignment" settings to the defaults list — without an entry there they were silently discarded when importing a settings file.
+* Dev: Added a PHPUnit suite covering the sanitization layer and the generated login stylesheet, and replaced Travis CI with GitHub Actions running PHP 8.0 through 8.5.
 
 = 2.2.1 =
 * Fix: The plugin settings page (with the new export/import, reset and menu-location tools) is now reachable instead of redirecting straight to the Customizer

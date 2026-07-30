@@ -14,9 +14,10 @@
         "php": ">=8.0"
     },
     "require-dev": {
-        "wp-coding-standards/wpcs": "^3.3",
         "dealerdirect/phpcodesniffer-composer-installer": "^1.2",
-        "phpcompatibility/phpcompatibility-wp": "^2.1"
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "phpunit/phpunit": "^9.6",
+        "wp-coding-standards/wpcs": "^3.3"
     },
     "config": {
         "allow-plugins": {
@@ -25,8 +26,10 @@
         "sort-packages": true
     },
     "scripts": {
-        "phpcs": "phpcs",
-        "phpcbf": "phpcbf",
-        "lint": "phpcs -p -s -v -n . --standard=./phpcs.ruleset.xml"
+        "phpcs": "phpcs -p --standard=./phpcs.ruleset.xml .",
+        "phpcbf": "phpcbf -p --standard=./phpcs.ruleset.xml .",
+        "lint": "phpcs -p --standard=./phpcs.ruleset.xml .",
+        "test": "phpunit --colors=always",
+        "compat": "phpcs -p --standard=PHPCompatibilityWP --runtime-set testVersion 8.0- --extensions=php --ignore='*/vendor/*,*/node_modules/*,*/tests/*' ."
     }
 }

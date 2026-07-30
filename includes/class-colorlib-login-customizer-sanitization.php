@@ -2,6 +2,11 @@
 /**
  * Sanitization functions for Colorlib Login Customizer.
  *
+ * Every function here is a Customizer `sanitize_callback`, so it may be handed
+ * whatever a client submitted — including null, arrays or objects. They all
+ * accept `mixed` and normalise internally rather than type-hinting `string`,
+ * which would raise a TypeError under `strict_types` for a null setting.
+ *
  * @package Colorlib_Login_Customizer
  */
 
@@ -12,134 +17,314 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Sanitize color values (hex, rgb, rgba).
+ * Coerce an arbitrary setting value to a trimmed string.
  *
- * @param string $color Color value to sanitize.
- * @return string Sanitized color or empty string.
+ * @param mixed $value Raw value.
+ * @return string Scalar value as a trimmed string, or '' when not scalar.
  */
-function clc_sanitize_color( string $color ): string {
-	$color = trim( $color );
-
-	// Allow empty values.
-	if ( empty( $color ) ) {
-		return '';
+function clc_stringify( $value ): string {
+	if ( is_string( $value ) ) {
+		return trim( $value );
 	}
 
-	// Allow WordPress color keywords.
-	$allowed_keywords = array( 'transparent', 'initial', 'inherit', 'unset' );
-	if ( in_array( strtolower( $color ), $allowed_keywords, true ) ) {
-		return strtolower( $color );
+	if ( is_bool( $value ) ) {
+		return $value ? '1' : '';
 	}
 
-	// Hex color (3 or 6 characters).
-	if ( preg_match( '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color ) ) {
-		return $color;
-	}
-
-	// RGB color.
-	if ( preg_match( '/^rgb\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*\)$/i', $color ) ) {
-		return $color;
-	}
-
-	// RGBA color.
-	if ( preg_match( '/^rgba\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*(0|1|0?\.\d+)\s*\)$/i', $color ) ) {
-		return $color;
+	if ( is_scalar( $value ) ) {
+		return trim( (string) $value );
 	}
 
 	return '';
 }
 
 /**
- * Sanitize dimension values (px, em, rem, %, vh, vw).
+ * Characters that must never survive into a CSS declaration.
  *
- * @param string $value Dimension value to sanitize.
- * @return string Sanitized value or empty string.
+ * `<` and `>` could close the surrounding <style> element; `{`, `}` and `;`
+ * would let a value break out of its declaration or rule block; a backslash
+ * enables CSS escape sequences that reconstruct any of the above.
+ *
+ * @param string $value CSS fragment.
+ * @return bool True when the value contains a structural character.
  */
-function clc_sanitize_dimension( string $value ): string {
-	$value = trim( $value );
-
-	if ( empty( $value ) ) {
-		return '';
-	}
-
-	// Allow CSS-wide keywords such as unset, auto, initial, inherit and none.
-	$allowed_keywords = array( 'unset', 'auto', 'initial', 'inherit', 'none' );
-	if ( in_array( strtolower( $value ), $allowed_keywords, true ) ) {
-		return strtolower( $value );
-	}
-
-	// Allow just numbers (will have px added later).
-	if ( is_numeric( $value ) ) {
-		return $value;
-	}
-
-	// Allow number + unit.
-	if ( preg_match( '/^-?\d+(\.\d+)?(px|em|rem|%|vh|vw|pt)?$/i', $value ) ) {
-		return $value;
-	}
-
-	return '';
+function clc_css_has_structural_chars( string $value ): bool {
+	return (bool) preg_match( '/[;{}<>\\\\]/', $value );
 }
 
 /**
- * Sanitize CSS property value (generic sanitization for borders, shadows, etc.).
+ * Detect CSS functions that can load or execute external content.
  *
- * @param string $value CSS value to sanitize.
- * @return string Sanitized CSS value.
+ * @param string $value CSS fragment.
+ * @return bool True when a disallowed function is present.
  */
-function clc_sanitize_css_value( string $value ): string {
-	$value = trim( $value );
+function clc_css_has_unsafe_function( string $value ): bool {
+	return (bool) preg_match( '/(url|expression|image-set|-webkit-image-set|element|attr)\s*\(/i', $value );
+}
 
-	if ( empty( $value ) ) {
-		return '';
-	}
+/**
+ * Strip directives that can execute script or pull in remote resources.
+ *
+ * Applied repeatedly until the string stops changing. A single pass is not
+ * enough: removing the inner match of a nested token such as
+ * `java` + `javascript:` + `script:` rejoins the outer halves into a working
+ * `javascript:`. Each pass can only shorten the string, so the loop always
+ * terminates; the counter is a defensive backstop that fails closed.
+ *
+ * @param string $value CSS fragment.
+ * @return string Cleaned fragment, or '' if it would not converge.
+ */
+function clc_css_strip_dangerous_tokens( string $value ): string {
+	$patterns = array(
+		'/expression\s*\(/i',
+		'/javascript\s*:/i',
+		'/vbscript\s*:/i',
+		'/behaviou?r\s*:/i',
+		'/-moz-binding\s*:/i',
+		'/@\s*import/i',
+		'/@\s*charset/i',
+	);
 
-	// Remove potentially dangerous content.
-	$value = wp_strip_all_tags( $value );
+	$passes = 0;
 
-	// Remove dangerous CSS expressions.
-	$value = preg_replace( '/expression\s*\(/i', '', $value );
-	$value = preg_replace( '/javascript\s*:/i', '', $value );
-	$value = preg_replace( '/behavior\s*:/i', '', $value );
-	$value = preg_replace( '/-moz-binding\s*:/i', '', $value );
+	do {
+		$previous = $value;
+
+		$value = (string) preg_replace( $patterns, '', $value );
+
+		/*
+		 * Strip a data: URI anywhere inside url(), not just immediately after
+		 * the opening paren, so padding the scheme (url(dadata:ta:...)) cannot
+		 * smuggle one through. The character class stops at the closing paren,
+		 * so this can never reach past the url() it started in.
+		 */
+		$value = (string) preg_replace( '/url\s*\(\s*["\']?[^)"\']*?data\s*:/i', 'url(', $value );
+
+		++$passes;
+
+		if ( $passes > 100 ) {
+			return '';
+		}
+	} while ( $value !== $previous );
 
 	return $value;
 }
 
 /**
- * Sanitize URL value.
+ * Escape a value for output inside a CSS declaration.
  *
- * @param string $url URL to sanitize.
- * @return string Sanitized URL.
+ * The saved value has already been validated; this is the last line of defence
+ * applied at print time, so a legacy option stored before validation existed
+ * still cannot break out of the stylesheet.
+ *
+ * @param string $value CSS declaration value.
+ * @return string Safe declaration value.
  */
-function clc_sanitize_url( string $url ): string {
-	$url = trim( $url );
+function clc_escape_css_value( string $value ): string {
+	$value = str_replace( array( '<', '>', '{', '}', ';', '\\' ), '', $value );
 
-	if ( empty( $url ) ) {
+	return trim( clc_css_strip_dangerous_tokens( $value ) );
+}
+
+/**
+ * Sanitize color values.
+ *
+ * Accepts named colors and CSS-wide keywords, 3/4/6/8-digit hex, the legacy
+ * comma and modern space-separated forms of rgb()/rgba()/hsl()/hsla(), plus
+ * var() and single-level color-mix().
+ *
+ * @param mixed $color Color value to sanitize.
+ * @return string Sanitized color or empty string.
+ */
+function clc_sanitize_color( $color ): string {
+	$color = clc_stringify( $color );
+
+	if ( '' === $color ) {
 		return '';
 	}
 
-	return esc_url_raw( $url );
+	if ( clc_css_has_structural_chars( $color ) || clc_css_has_unsafe_function( $color ) ) {
+		return '';
+	}
+
+	$lower = strtolower( $color );
+
+	// Named colors, `transparent`, `currentcolor` and the CSS-wide keywords.
+	if ( preg_match( '/^[a-z]+$/', $lower ) ) {
+		return $lower;
+	}
+
+	// Hex: #rgb, #rgba, #rrggbb, #rrggbbaa.
+	if ( preg_match( '/^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i', $color ) ) {
+		return $color;
+	}
+
+	/*
+	 * rgb()/rgba()/hsl()/hsla(). The character class excludes parentheses, so
+	 * no nested function can hide inside the argument list.
+	 */
+	if ( preg_match( '#^(rgba?|hsla?)\(\s*[0-9a-z%.,/\s+-]+\)$#i', $color ) ) {
+		return $color;
+	}
+
+	// Custom properties, with an optional fallback.
+	if ( preg_match( '/^var\(\s*--[a-z0-9_-]+\s*(,[^()]*)?\)$/i', $color ) ) {
+		return $color;
+	}
+
+	// Single-level color-mix(), e.g. color-mix(in srgb, #fff 40%, #000).
+	if ( preg_match( '/^color-mix\(\s*in\s+[a-z0-9-]+\s*,[^()]*\)$/i', $color ) ) {
+		return $color;
+	}
+
+	return '';
+}
+
+/**
+ * Sanitize dimension values.
+ *
+ * Accepts bare numbers, a number with any modern CSS length unit, sizing
+ * keywords, and the calc()/clamp()/min()/max()/var() function family.
+ *
+ * @param mixed $value Dimension value to sanitize.
+ * @return string Sanitized value or empty string.
+ */
+function clc_sanitize_dimension( $value ): string {
+	$value = clc_stringify( $value );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	if ( clc_css_has_structural_chars( $value ) || clc_css_has_unsafe_function( $value ) ) {
+		return '';
+	}
+
+	$lower = strtolower( $value );
+
+	$keywords = array(
+		'unset',
+		'auto',
+		'initial',
+		'inherit',
+		'none',
+		'revert',
+		'revert-layer',
+		'fit-content',
+		'max-content',
+		'min-content',
+	);
+
+	if ( in_array( $lower, $keywords, true ) ) {
+		return $lower;
+	}
+
+	// Bare number; a unit is appended later where the property needs one.
+	if ( is_numeric( $value ) ) {
+		return $value;
+	}
+
+	$units = 'px|em|rem|%|vh|vw|vmin|vmax|dvh|dvw|svh|svw|lvh|lvw|pt|pc|cm|mm|in|ch|ex|cap|ic|lh|rlh|q';
+
+	if ( preg_match( '/^-?\d*\.?\d+(' . $units . ')$/i', $value ) ) {
+		return $value;
+	}
+
+	// Math and custom-property functions.
+	if ( preg_match( '/^(calc|clamp|min|max|var)\s*\(/i', $value )
+		&& clc_css_parens_balanced( $value )
+		&& preg_match( '#^[a-z0-9\s%.,()/*+_-]+$#i', $value )
+	) {
+		return $value;
+	}
+
+	return '';
+}
+
+/**
+ * Check that parentheses in a CSS fragment are balanced and never go negative.
+ *
+ * @param string $value CSS fragment.
+ * @return bool True when balanced.
+ */
+function clc_css_parens_balanced( string $value ): bool {
+	$depth = 0;
+
+	foreach ( str_split( $value ) as $char ) {
+		if ( '(' === $char ) {
+			++$depth;
+		} elseif ( ')' === $char ) {
+			--$depth;
+
+			if ( $depth < 0 ) {
+				return false;
+			}
+		}
+	}
+
+	return 0 === $depth;
+}
+
+/**
+ * Sanitize a CSS property value (borders, shadows, padding, margins, etc.).
+ *
+ * @param mixed $value CSS value to sanitize.
+ * @return string Sanitized CSS value.
+ */
+function clc_sanitize_css_value( $value ): string {
+	$value = clc_stringify( $value );
+
+	if ( '' === $value ) {
+		return '';
+	}
+
+	$value = wp_strip_all_tags( $value );
+
+	if ( clc_css_has_structural_chars( $value ) || clc_css_has_unsafe_function( $value ) ) {
+		return '';
+	}
+
+	if ( ! clc_css_parens_balanced( $value ) ) {
+		return '';
+	}
+
+	return trim( clc_css_strip_dangerous_tokens( $value ) );
+}
+
+/**
+ * Sanitize URL value.
+ *
+ * @param mixed $url URL to sanitize.
+ * @return string Sanitized URL.
+ */
+function clc_sanitize_url( $url ): string {
+	$url = clc_stringify( $url );
+
+	if ( '' === $url ) {
+		return '';
+	}
+
+	return esc_url_raw( $url, array( 'http', 'https', 'mailto', 'tel' ) );
 }
 
 /**
  * Sanitize text field (single line).
  *
- * @param string $text Text to sanitize.
+ * @param mixed $text Text to sanitize.
  * @return string Sanitized text.
  */
-function clc_sanitize_text( string $text ): string {
-	return sanitize_text_field( $text );
+function clc_sanitize_text( $text ): string {
+	return sanitize_text_field( clc_stringify( $text ) );
 }
 
 /**
  * Sanitize textarea (multi-line text, allows some HTML).
  *
- * @param string $text Text to sanitize.
+ * @param mixed $text Text to sanitize.
  * @return string Sanitized text.
  */
-function clc_sanitize_textarea( string $text ): string {
-	return wp_kses_post( $text );
+function clc_sanitize_textarea( $text ): string {
+	return wp_kses_post( clc_stringify( $text ) );
 }
 
 /**
@@ -155,12 +340,14 @@ function clc_sanitize_checkbox( $value ): bool {
 /**
  * Sanitize select/radio value against allowed choices.
  *
- * @param string $value   Value to sanitize.
+ * @param mixed  $value   Value to sanitize.
  * @param array  $choices Allowed choices.
  * @param string $default Default value if invalid.
  * @return string Sanitized value.
  */
-function clc_sanitize_select( string $value, array $choices, string $default = '' ): string {
+function clc_sanitize_select( $value, array $choices, string $default = '' ): string {
+	$value = clc_stringify( $value );
+
 	if ( array_key_exists( $value, $choices ) || in_array( $value, $choices, true ) ) {
 		return $value;
 	}
@@ -169,56 +356,52 @@ function clc_sanitize_select( string $value, array $choices, string $default = '
 }
 
 /**
- * Sanitize image URL (must be a valid image).
+ * Sanitize image URL (must point at a permitted image type).
  *
- * @param string $url Image URL to sanitize.
+ * @param mixed $url Image URL to sanitize.
  * @return string Sanitized image URL.
  */
-function clc_sanitize_image( string $url ): string {
-	$url = trim( $url );
+function clc_sanitize_image( $url ): string {
+	$url = clc_stringify( $url );
 
-	if ( empty( $url ) ) {
+	if ( '' === $url ) {
 		return '';
 	}
 
-	// Get the file extension.
-	$ext = strtolower( pathinfo( wp_parse_url( $url, PHP_URL_PATH ) ?? '', PATHINFO_EXTENSION ) );
+	$path = wp_parse_url( $url, PHP_URL_PATH );
 
-	// Allowed image extensions.
-	$allowed = array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'ico' );
+	if ( ! is_string( $path ) || '' === $path ) {
+		return '';
+	}
+
+	$ext = strtolower( (string) pathinfo( $path, PATHINFO_EXTENSION ) );
+
+	$allowed = array( 'jpg', 'jpeg', 'png', 'gif', 'webp', 'avif', 'svg', 'ico' );
 
 	if ( ! in_array( $ext, $allowed, true ) ) {
 		return '';
 	}
 
-	return esc_url_raw( $url );
+	return esc_url_raw( $url, array( 'http', 'https' ) );
 }
 
 /**
  * Sanitize custom CSS.
  *
- * @param string $css CSS to sanitize.
+ * @param mixed $css CSS to sanitize.
  * @return string Sanitized CSS.
  */
-function clc_sanitize_css( string $css ): string {
-	if ( empty( $css ) ) {
+function clc_sanitize_css( $css ): string {
+	$css = clc_stringify( $css );
+
+	if ( '' === $css ) {
 		return '';
 	}
 
-	// Use WordPress built-in CSS sanitization if available.
-	if ( function_exists( 'wp_strip_all_tags' ) ) {
-		$css = wp_strip_all_tags( $css );
-	}
+	// Removes any tag, including a `</style>` that would end the stylesheet.
+	$css = wp_strip_all_tags( $css );
 
-	// Remove potentially dangerous CSS.
-	$css = preg_replace( '/expression\s*\(/i', '', $css );
-	$css = preg_replace( '/javascript\s*:/i', '', $css );
-	$css = preg_replace( '/behavior\s*:/i', '', $css );
-	$css = preg_replace( '/-moz-binding\s*:/i', '', $css );
-	$css = preg_replace( '/@import/i', '', $css );
-	$css = preg_replace( '/url\s*\(\s*["\']?\s*data:/i', 'url(', $css );
-
-	return $css;
+	return clc_css_strip_dangerous_tokens( $css );
 }
 
 /**
@@ -237,9 +420,10 @@ function clc_sanitize_columns_width( $value ): array {
 		return $defaults;
 	}
 
-	$sanitized          = array();
-	$sanitized['left']  = isset( $value['left'] ) ? absint( $value['left'] ) : 6;
-	$sanitized['right'] = isset( $value['right'] ) ? absint( $value['right'] ) : 6;
+	$sanitized = array(
+		'left'  => isset( $value['left'] ) ? absint( $value['left'] ) : 6,
+		'right' => isset( $value['right'] ) ? absint( $value['right'] ) : 6,
+	);
 
 	// Ensure values are between 1 and 11.
 	$sanitized['left']  = max( 1, min( 11, $sanitized['left'] ) );
