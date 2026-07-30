@@ -1,0 +1,338 @@
+/**
+ * Colorlib Login Customizer — static base styles for the login page.
+ *
+ * Only rules that never change with user settings belong here; anything
+ * derived from saved options is printed inline by
+ * Colorlib_Login_Customizer_CSS_Customization::generate_css().
+ */
+
+/* Hide third-party theme customizer overlays (Astra, etc.) */
+.ast-style-guide-wrapper,
+.ast-quick-tour-body,
+.ast-close-tour,
+.ast-tour-inner-wrap {
+	display: none !important;
+}
+
+.language-switcher {
+	z-index: 9;
+	margin: 0;
+}
+
+/* Footer & Links (#173 too): give the custom above-form text, custom footer,
+   the core language switcher and the privacy-policy link their own full-width
+   rows so they stack centered around the form instead of sitting beside
+   #login as flex siblings (.ml-form-container also gets flex-wrap below). */
+.ml-form-container > .clc-above-form,
+.ml-form-container > .clc-custom-footer,
+.ml-form-container > .language-switcher,
+.ml-form-container > .privacy-policy-page-link {
+	flex: 0 0 100%;
+	max-width: 100%;
+	text-align: center;
+	/* Stack above the absolute .ml-extra-div background layer, like #login,
+	   so custom text/links stay visible when a background is set. */
+	position: relative;
+	z-index: 1;
+}
+
+.clc-above-form {
+	margin: 0 0 16px;
+	order: -1;
+}
+
+.ml-form-container > .clc-custom-footer {
+	margin: 16px 0 0;
+	order: 1;
+}
+
+.ml-form-container > .privacy-policy-page-link {
+	order: 2;
+}
+
+.ml-form-container > .language-switcher {
+	order: 3;
+}
+
+.clc-footer-links {
+	margin: 0 0 8px;
+}
+
+.clc-footer-links a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.clc-footer-sep {
+	opacity: .5;
+}
+
+.clc-footer-text {
+	font-size: 13px;
+	opacity: .85;
+}
+
+/* Clickable background image overlay. */
+body .ml-container .ml-extra-div .clc-custom-background-link {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+#registerform #wp-submit {
+	float: none;
+	margin-top: 15px;
+}
+
+.login.clc-text-logo:not(.clc-both-logo) h1 a {
+	background-image: none !important;
+	text-indent: unset;
+	width: auto !important;
+	height: auto !important;
+}
+
+#login form p label br {
+	display: none;
+}
+
+body:not( .ml-half-screen ) .ml-form-container {
+	background: transparent !important;
+}
+
+.login:not(.clc-both-logo) h1 a {
+	background-position: center;
+	background-size: contain !important;
+}
+
+/* #70: center an image logo even when its width exceeds the form
+   container (flex centers an over-wide child; block margin:auto cannot). */
+.login:not(.clc-text-logo):not(.clc-both-logo) h1 {
+	display: flex;
+	justify-content: center;
+}
+
+.ml-container #login {
+	position: relative;
+	padding: 0;
+	width: 100%;
+	max-width: 320px;
+	margin: 0;
+}
+
+#loginform,
+#registerform,
+#lostpasswordform {
+	box-sizing: border-box;
+	max-height: 100%;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+/* Fix password field width to match username field */
+.login form .input,
+.login input[type="text"],
+.login input[type="password"],
+.login input[type="email"] {
+	width: 100% !important;
+	box-sizing: border-box !important;
+}
+
+.login .user-pass-wrap {
+	display: block !important;
+}
+
+.login .user-pass-wrap > label {
+	display: block !important;
+}
+
+.login .wp-pwd {
+	position: relative !important;
+	display: block !important;
+}
+
+.login .wp-pwd input[type="password"] {
+	width: 100% !important;
+	padding-right: 50px !important;
+	box-sizing: border-box !important;
+}
+
+.login .wp-pwd .wp-hide-pw {
+	position: absolute !important;
+	right: 0 !important;
+	top: 35% !important;
+	transform: translateY(-50%) !important;
+	height: auto !important;
+	width: 44px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	cursor: pointer !important;
+	z-index: 10 !important;
+}
+
+.login .wp-pwd .wp-hide-pw .dashicons {
+	position: static !important;
+	top: auto !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.ml-container {
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	height: 100%;
+	min-width: 100%;
+}
+
+.ml-container .ml-extra-div {
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+body .ml-form-container {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	align-content: center;
+	justify-content: center;
+}
+
+body:not( .ml-half-screen ) .ml-container .ml-extra-div {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+body:not( .ml-half-screen ) .ml-container .ml-form-container {
+	width: 100%;
+	min-height: 100vh;
+}
+
+body.ml-half-screen .ml-container {
+	flex-wrap: wrap;
+}
+
+body.ml-half-screen .ml-container > .ml-extra-div,
+body.ml-half-screen .ml-container > .ml-form-container {
+	width: 50%;
+}
+
+body.ml-half-screen.ml-login-align-2 .ml-container > div,
+body.ml-half-screen.ml-login-align-4 .ml-container > div {
+	width: 100%;
+	flex-basis: 50%;
+}
+
+body.ml-half-screen.ml-login-align-2 .ml-container {
+	flex-direction: column-reverse;
+}
+
+body.ml-half-screen.ml-login-align-4 .ml-container {
+	flex-direction: column;
+}
+
+/* The stacked (form above/below) variants run the flex container in column
+   direction. Inherited `flex-wrap: wrap` then starts a *second column* as soon
+   as the two rows are taller than the viewport, which doubles the page width
+   and forces a horizontal scrollbar. Keep them on one column and let the page
+   grow downwards instead. */
+body.ml-half-screen.ml-login-align-2 .ml-container,
+body.ml-half-screen.ml-login-align-4 .ml-container {
+	flex-wrap: nowrap;
+}
+
+body.ml-half-screen.ml-login-align-2 .ml-container > div,
+body.ml-half-screen.ml-login-align-4 .ml-container > div {
+	/* Grow past the configured share rather than overflow when the form is
+	   taller than its half of the viewport. */
+	flex-shrink: 0;
+	min-height: 50vh;
+	height: auto;
+}
+
+body.ml-half-screen.ml-login-align-1 .ml-container {
+	flex-direction: row-reverse;
+}
+
+body.ml-login-vertical-align-1 .ml-form-container {
+	align-items: flex-start;
+}
+
+body.ml-login-vertical-align-3 .ml-form-container {
+	align-items: flex-end;
+}
+
+body.ml-login-horizontal-align-1 .ml-form-container {
+	justify-content: flex-start;
+}
+
+body.ml-login-horizontal-align-3 .ml-form-container {
+	justify-content: flex-end;
+}
+
+.login input[type=text]:focus,
+.login input[type=search]:focus,
+.login input[type=radio]:focus,
+.login input[type=tel]:focus,
+.login input[type=time]:focus,
+.login input[type=url]:focus,
+.login input[type=week]:focus,
+.login input[type=password]:focus,
+.login input[type=checkbox]:focus,
+.login input[type=color]:focus,
+.login input[type=date]:focus,
+.login input[type=datetime]:focus,
+.login input[type=datetime-local]:focus,
+.login input[type=email]:focus,
+.login input[type=month]:focus,
+.login input[type=number]:focus,
+.login select:focus,
+.login textarea:focus {
+	box-shadow: none;
+}
+
+@media only screen and (max-width: 768px) {
+
+	body.ml-half-screen .ml-container > .ml-extra-div,
+	body.ml-half-screen .ml-container > .ml-form-container {
+		width: 50% !important;
+	}
+
+	.login h1 a {
+		max-width: 100%;
+	}
+}
+
+@media only screen and (max-width: 577px) {
+
+	body.ml-half-screen .ml-container > .ml-extra-div,
+	body.ml-half-screen .ml-container > .ml-form-container {
+		width: 100% !important;
+	}
+
+	body.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div,
+	body.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container,
+	body.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,
+	body.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container {
+		width: 100%;
+	}
+
+	body.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div,
+	body.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+}

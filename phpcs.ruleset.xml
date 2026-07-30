@@ -9,7 +9,7 @@
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 	<exclude-pattern>/.git/*</exclude-pattern>
-	<exclude-pattern>/assets/js/jquery.minicolors*</exclude-pattern>
+	<exclude-pattern>/tests/*</exclude-pattern>
 
 	<!-- Show progress and sniff codes -->
 	<arg value="sp"/>
@@ -34,11 +34,22 @@
 	<!-- Minimum WordPress version -->
 	<config name="minimum_wp_version" value="6.0"/>
 
-	<!-- Text domain for i18n -->
+	<!--
+		Text domain for i18n.
+
+		'default' is deliberate and limited to includes/login-template.php, which
+		reproduces wp-login.php's markup for the Customizer preview. Those labels
+		are verbatim WordPress core strings, so they resolve through core's own
+		translations — the preview then matches the real login page in every
+		locale instead of relying on translators re-translating core strings into
+		this plugin (which had already drifted: es_ES rendered a different
+		"Username or Email Address" in the preview than on the login page).
+	-->
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
 				<element value="colorlib-login-customizer"/>
+				<element value="default"/>
 			</property>
 		</properties>
 	</rule>

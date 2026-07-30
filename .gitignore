@@ -25,3 +25,7 @@ composer.lock
 
 # SASS cache
 .sass-cache/
+
+# PHPUnit
+.phpunit.result.cache
+phpunit.xml

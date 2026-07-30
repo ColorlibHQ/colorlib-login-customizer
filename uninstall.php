@@ -16,19 +16,44 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Delete main plugin options.
-delete_option( 'clc-options' );
-delete_option( 'colorlib-login-customizer_version' );
+/**
+ * Remove every option and transient the plugin creates on a single site.
+ *
+ * Keep this list in sync with the keys written by the plugin:
+ * - `clc-options`                      main settings blob.
+ * - `clc-admin-menu-location`          admin menu placement preference.
+ * - `colorlib-login-customizer_version` version stamp written on activation.
+ * - `clc_review`                       install-date transient for the review notice.
+ *
+ * @return void
+ */
+function clc_uninstall_site_data(): void {
+	delete_option( 'clc-options' );
+	delete_option( 'clc-admin-menu-location' );
+	delete_option( 'colorlib-login-customizer_version' );
 
-// Delete review notice options and transients.
-delete_option( 'colorlib-login-customizer_review_notice' );
-delete_transient( 'colorlib-login-customizer_review_notice' );
-
-// Clean up any user meta for dismissed notices.
-$users = get_users( array( 'fields' => 'ID' ) );
-foreach ( $users as $user_id ) {
-	delete_user_meta( $user_id, 'colorlib-login-customizer_dismiss_notice' );
+	delete_transient( 'clc_review' );
 }
 
-// Clear object cache.
-wp_cache_flush();
+if ( is_multisite() ) {
+	$clc_sites = get_sites(
+		array(
+			'fields' => 'ids',
+			'number' => 0,
+		)
+	);
+
+	foreach ( $clc_sites as $clc_site_id ) {
+		switch_to_blog( (int) $clc_site_id );
+		clc_uninstall_site_data();
+		restore_current_blog();
+	}
+} else {
+	clc_uninstall_site_data();
+}
+
+/*
+ * Remove the per-user review-notice state for every user in one query rather
+ * than loading every user ID into memory.
+ */
+delete_metadata( 'user', 0, 'clc_review_state', '', true );

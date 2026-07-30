@@ -5,6 +5,12 @@
  * @package Colorlib_Login_Customizer
  */
 
+declare( strict_types=1 );
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Handles migration of legacy plugin options to the current format.
  */

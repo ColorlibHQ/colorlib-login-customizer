@@ -7,7 +7,10 @@ module.exports = function(grunt) {
     checktextdomain: {
         standard: {
             options:{
-                text_domain: [ 'colorlib-login-customizer' ], //Specify allowed domain(s)
+                // 'default' is intentional: includes/login-template.php reuses
+                // verbatim WordPress core strings so the Customizer preview picks up
+                // core's own translations instead of showing English everywhere.
+                text_domain: [ 'colorlib-login-customizer', 'default' ], //Specify allowed domain(s)
                 create_report_file: "true",
                 keywords: [ //List keyword specifications
                     '__:1,2d',
@@ -30,6 +33,8 @@ module.exports = function(grunt) {
                 src: [
                     '**/*.php',
                     '!**/node_modules/**',
+                    '!**/vendor/**',
+                    '!tests/**',
                 ], //all php
                 expand: true,
             }],
@@ -40,11 +45,11 @@ module.exports = function(grunt) {
               options: {
                   cwd: '',                          // Directory of files to internationalize.
                   domainPath: 'languages/',         // Where to save the POT file.
-                  exclude: [],                      // List of files or directories to ignore.
+                  exclude: ['tests/.*', 'vendor/.*', 'node_modules/.*', 'build/.*'], // List of files or directories to ignore.
                   include: [],                      // List of files or directories to include.
                   mainFile: 'colorlib-login-customizer.php',                     // Main project file.
                   potComments: '',                  // The copyright at the beginning of the POT file.
-                  potFilename: 'colorlib-login-customizer.po',                  // Name of the POT file.
+                  potFilename: 'colorlib-login-customizer.pot',                  // Name of the POT file.
                   potHeaders: {
                       poedit: true,                 // Includes common Poedit headers.
                       'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
@@ -85,7 +90,14 @@ module.exports = function(grunt) {
               '!composer.lock',
               '!set_tags.sh',
               '!colorlib-login-customizer.zip',
-              '!nbproject/**' ],
+              '!nbproject/**',
+              '!tests/**',
+              '!.github/**',
+              '!phpunit.xml.dist',
+              '!phpunit.xml',
+              '!CLAUDE.md',
+              '!IMPROVEMENT_PLAN.md',
+              '!.phpunit.result.cache' ],
           dest: 'build/'
       }
     },

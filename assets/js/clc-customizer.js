@@ -214,19 +214,19 @@
 					return;
 				}
 
-				if ( 'left' == increment ) {
+				if ( 'left' === increment ) {
 					incrementElement = control.container.find( '.clc-column-left' );
 					decrementElement = control.container.find( '.clc-column-right' );
 
-					control.values['left'] += 1;
-					control.values['right'] -= 1;
+					control.values.left += 1;
+					control.values.right -= 1;
 
 				} else {
 					incrementElement = control.container.find( '.clc-column-right' );
 					decrementElement = control.container.find( '.clc-column-left' );
 
-					control.values['right'] += 1;
-					control.values['left'] -= 1;
+					control.values.right += 1;
+					control.values.left -= 1;
 
 				}
 
@@ -244,8 +244,8 @@
 				    rightColumn = control.container.find( '.clc-column-right' ),
 				    classes     = 'col12 col11 col10 col9 col8 col7 col6 col5 col4 col3 col2 col1';
 
-				leftColumn.removeClass( classes ).addClass( 'col' + control.values['left'] );
-				rightColumn.removeClass( classes ).addClass( 'col' + control.values['right'] );
+				leftColumn.removeClass( classes ).addClass( 'col' + control.values.left );
+				rightColumn.removeClass( classes ).addClass( 'col' + control.values.right );
 
 			}
 

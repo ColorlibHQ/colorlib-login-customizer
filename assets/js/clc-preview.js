@@ -33,7 +33,8 @@
         style = style + cssLine + '}';
       });
      
-      self.style.html( style );
+      // textContent, not innerHTML: stylesheet text must never be parsed as markup.
+      self.style.text( style );
 
     },
     generateCSSLine: function( option ) {
@@ -59,7 +60,7 @@
       } else if ( 'display' === this.settings[option].attribute ) {
         // We replaced toggle with select so we need to make sure
         // h1 displays correctly
-        if ( 'clc-options[logo-settings]' != this.settings[option].name ) {
+        if ( 'clc-options[logo-settings]' !== this.settings[option].name ) {
           if ( this.settings[option].value ) {
             line += 'none';
           } else {
@@ -153,7 +154,7 @@
   // Username label
   wp.customize( 'clc-options[username-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#clc-username-label' ).html( to );
+      $( '#clc-username-label' ).text( to );
     } );
   } );
 
@@ -188,7 +189,7 @@
     // Back to site text
   wp.customize( 'clc-options[back-to-text]', function( value ) {
     value.bind( function( to ) {
-      $( '#clc-back-to-text' ).html( '&larr; ' + to );
+      $( '#clc-back-to-text' ).text( '\u2190 ' + to );
     } );
   } );
 
@@ -205,21 +206,21 @@
   // Register username label
   wp.customize( 'clc-options[register-username-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#clc-register-sername-label' ).html( to );
+      $( '#clc-register-sername-label' ).text( to );
     } );
   } );
 
   // Register email label
   wp.customize( 'clc-options[register-email-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#clc-register-email-label' ).html( to );
+      $( '#clc-register-email-label' ).text( to );
     } );
   } );
 
   // Register confirmation text
   wp.customize( 'clc-options[register-confirmation-email]', function( value ) {
     value.bind( function( to ) {
-      $( '#reg_passmail' ).html( to );
+      $( '#reg_passmail' ).text( to );
     } );
   } );
 
@@ -264,8 +265,8 @@
 
 
       var h_size = wp.customize( 'clc-options[logo-height]' )._value + 'px ';
-      var pad_t = ( 30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) ) + 'px ';
-      var mar_top = ( 0 - (30 + parseInt(wp.customize( 'clc-options[logo-height]' )._value) )) + 'px ';
+      var pad_t = ( 30 + parseInt( wp.customize( 'clc-options[logo-height]' )._value, 10 ) ) + 'px ';
+      var mar_top = ( 0 - (30 + parseInt( wp.customize( 'clc-options[logo-height]' )._value, 10 ) )) + 'px ';
       var w_size = to + 'px ';
 
       $( '.login.clc-both-logo h1 a' ).css( {
@@ -288,9 +289,9 @@
       var h_size = to + 'px';
 
       $( '.login.clc-both-logo h1 a' ).css( {
-        'margin-top':      ( 0 - (30 + parseInt(to)) ) + 'px',
+        'margin-top':      ( 0 - (30 + parseInt( to, 10 )) ) + 'px',
         'background-size': w_size + h_size,
-        'padding-top':     ( 30 + parseInt(to) ) + 'px'
+        'padding-top':     ( 30 + parseInt( to, 10 ) ) + 'px'
       } );
     } );
   } );
@@ -308,7 +309,7 @@
   // Username label
   wp.customize( 'clc-options[lostpassword-username-label]', function( value ) {
     value.bind( function( to ) {
-      $( '#lostpasswordform label span' ).html( to );
+      $( '#lostpasswordform label span' ).text( to );
     } );
   } );
 
@@ -342,11 +343,11 @@
 
   wp.customize.bind( 'preview-ready', function() {
     wp.customize.preview.bind( 'change-form', function( form ) {
-      if ( 'register' == form ) {
+      if ( 'register' === form ) {
         $('.show-only_login').hide();
         $('.show-only_lostpassword').hide();
         $('.show-only_register').show();
-      }else if( 'lostpassword' == form ){
+      }else if( 'lostpassword' === form ){
         $('.show-only_login').hide();
         $('.show-only_register').hide();
         $('.show-only_lostpassword').show();
