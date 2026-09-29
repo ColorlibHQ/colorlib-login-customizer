@@ -25,20 +25,6 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	public $type = 'clc-column-width';
 
 	/**
-	 * Colorlib_Login_Customizer_Column_Width constructor.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @param WP_Customize_Manager $manager Customizer manager instance.
-	 * @param string               $id      Control ID.
-	 * @param array                $args    Control arguments.
-	 */
-	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
-		parent::__construct( $manager, $id, $args );
-		$manager->register_control_type( 'Colorlib_Login_Customizer_Column_Width' );
-	}
-
-	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  1.1.0
@@ -68,6 +54,17 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 	}
 
 	/**
+	 * Don't render the content via PHP: the JS template below replaces it.
+	 *
+	 * Without this override core's default markup was built (and discarded)
+	 * for every instance, and for the column widths it called esc_attr() on
+	 * the array value, logging "Array to string conversion".
+	 *
+	 * @return void
+	 */
+	public function render_content() {}
+
+	/**
 	 * Display the control's content
 	 */
 	public function content_template() {
@@ -88,10 +85,10 @@ class Colorlib_Login_Customizer_Column_Width extends WP_Customize_Control {
 			<div class="clc-layouts-container-advanced">
 				<div class="clc-layouts-setup">
 					<div class="clc-column clc-column-left col{{data.value.left}}">
-						<a href="#" data-action="left"><span class="dashicons dashicons-arrow-right"></span></a>
+						<a href="#" role="button" data-action="left" aria-label="<?php esc_attr_e( 'Widen the left column', 'colorlib-login-customizer' ); ?>"><span class="dashicons dashicons-arrow-right" aria-hidden="true"></span></a>
 					</div>
 					<div class="clc-column clc-column-right col{{data.value.right}}">
-						<a href="#" data-action="right"><span class="dashicons dashicons-arrow-left"></span></a>
+						<a href="#" role="button" data-action="right" aria-label="<?php esc_attr_e( 'Widen the right column', 'colorlib-login-customizer' ); ?>"><span class="dashicons dashicons-arrow-left" aria-hidden="true"></span></a>
 					</div>
 				</div>
 			</div>

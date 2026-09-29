@@ -1,367 +1,251 @@
-( function ( $ ) {
+( function ( $, api ) {
 	'use strict';
 
-	if ( 'undefined' !== typeof ( wp ) && 'undefined' !== typeof ( wp.customize ) ) {
+	if ( 'undefined' === typeof api ) {
+		return;
+	}
 
-		// Detect when the templates section is expanded (or closed) so we can hide the templates shortcut when it's open.
-		wp.customize.panel( 'clc_main_panel', function ( section ) {
-			section.expanded.bind( function ( isExpanding ) {
-				var loginURL = CLCUrls.siteurl + '?colorlib-login-customizer-customization=true';
+	var urls = window.CLCUrls || {};
 
-				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
-				if ( isExpanding ) {
-					wp.customize.previewer.previewUrl.set( loginURL );
-				} else {
-					wp.customize.previewer.previewUrl.set( CLCUrls.siteurl );
-				}
-			} );
-		} );
+	/*
+	 * Show only the logo controls that apply to the chosen logo mode. The
+	 * server-side active_callbacks cover the initial state; this keeps the
+	 * panel in step while the user switches modes.
+	 */
+	function syncLogoControls( mode ) {
+		var controls = {
+			    textColor:      api.control( 'clc-options[logo-text-color]' ),
+			    textColorHover: api.control( 'clc-options[logo-text-color-hover]' ),
+			    textSize:       api.control( 'clc-options[logo-text-size]' ),
+			    image:          api.control( 'clc-options[custom-logo]' ),
+			    width:          api.control( 'clc-options[logo-width]' ),
+			    height:         api.control( 'clc-options[logo-height]' ),
+			    title:          api.control( 'clc-options[logo-title]' ),
+			    url:            api.control( 'clc-options[logo-url]' )
+		    },
+		    hidden = 'hide-logo' === mode,
+		    text   = 'show-text-only' === mode || 'use-both' === mode,
+		    image  = 'show-image-only' === mode || 'use-both' === mode;
 
-		wp.customize.section( 'clc_logo', function ( section ) {
-			section.expanded.bind( function ( isExpanding ) {
-				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
-				if ( isExpanding ) {
-					var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
-					    logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
-					    logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
-					    logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
-					    logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
-					    logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
-					    logoTitle          = wp.customize.control( 'clc-options[logo-title]' ),
-					    logoURL            = wp.customize.control( 'clc-options[logo-url]' ),
-					    logo_type          = wp.customize.control( 'clc-options[logo-settings]' );
+		$.each( controls, function ( name, control ) {
+			var visible;
 
-					if ( 'hide-logo' === logo_type.settings.default._value ) {
-						logoTextColor.toggle( false );
-						logoTextColorHover.toggle( false );
-						logoTextSize.toggle( false );
-						logoImage.toggle( false );
-						logoWidth.toggle( false );
-						logoHeight.toggle( false );
-						logoURL.toggle( false );
-						logoTitle.toggle( false );
-
-						return;
-
-					} else {
-						logoTitle.toggle( true );
-					}
-
-					if ( 'show-text-only' === logo_type.settings.default._value ) {
-						logoTextColor.toggle( true );
-						logoTextColorHover.toggle( true );
-						logoTextSize.toggle( true );
-						logoURL.toggle( true );
-
-						logoImage.toggle( false );
-						logoWidth.toggle( false );
-						logoHeight.toggle( false );
-					} else if ( 'show-image-only' === logo_type.settings.default._value ) {
-						logoTextColor.toggle( false );
-						logoTextColorHover.toggle( false );
-						logoTextSize.toggle( false );
-
-						logoURL.toggle( true );
-						logoImage.toggle( true );
-						logoWidth.toggle( true );
-						logoHeight.toggle( true );
-					} else {
-						logoTextColor.toggle( true );
-						logoTextColorHover.toggle( true );
-						logoTextSize.toggle( true );
-						logoImage.toggle( true );
-						logoWidth.toggle( true );
-						logoHeight.toggle( true );
-						logoURL.toggle( true );
-					}
-				}
-			} );
-		} );
-
-		wp.customize.section( 'clc_register-form', function ( section ) {
-			section.expanded.bind( function ( isExpanding ) {
-				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
-				if ( isExpanding ) {
-					wp.customize.previewer.send( 'change-form', 'register' );
-				} else {
-					wp.customize.previewer.send( 'change-form', 'login' );
-				}
-			} );
-		} );
-
-		wp.customize.section( 'clc_lostpassword-form', function ( section ) {
-			section.expanded.bind( function ( isExpanding ) {
-				// Value of isExpanding will = true if you're entering the section, false if you're leaving it.
-				if ( isExpanding ) {
-					wp.customize.previewer.send( 'change-form', 'lostpassword' );
-				} else {
-					wp.customize.previewer.send( 'change-form', 'login' );
-				}
-			} );
-		} );
-
-		wp.customize.controlConstructor['clc-templates'] = wp.customize.Control.extend( {
-			ready:        function () {
-				var control = this;
-
-				this.container.on( 'change', 'input:radio', function () {
-					var template = $( this ).val();
-
-					control.loadTemplate( 'default' );
-
-					if ( 'default' !== template ) {
-						control.loadTemplate( template );
-					}
-
-				} );
-			},
-			loadTemplate: function ( optionName ) {
-				var control = this,
-				    options = control.params.options[optionName];
-
-				$.each( options, function ( index, option ) {
-					var currentControl;
-
-					// #172: switching template runs a 'default' reset first; don't let
-					// it wipe the user's uploaded logo. Templates only ever reset
-					// custom-logo (never set a real value), so preserving it here keeps
-					// the logo across template changes.
-					if ( 'default' === optionName && 'clc-options[custom-logo]' === option.name ) {
-						return true;
-					}
-
-					currentControl = wp.customize.control( option.name );
-
-					if ( currentControl ) {
-						currentControl.setting( option.value );
-					}
-
-				} );
-			}
-		} );
-
-		// Range slider now uses native HTML5 range input - no custom JS needed.
-
-		wp.customize.controlConstructor['clc-button-group'] = wp.customize.Control.extend( {
-			ready: function () {
-				var control  = this,
-				    updating = false;
-				control.container.on( 'click', '.colorlib-login-customizer-control-group > a', function () {
-					var value = $( this ).attr( 'data-value' );
-					$( this ).siblings().removeClass( 'active' );
-					$( this ).addClass( 'active' );
-
-					updating = true;
-					control.setting.set( value );
-					updating = false;
-				} );
-
-				// Whenever the setting's value changes, refresh the preview.
-				control.setting.bind( function ( value ) {
-
-					var options = control.container.find( '.colorlib-login-customizer-control-group > a' );
-
-					// Bail if the update came from the control itself.
-					if ( updating ) {
-						return;
-					}
-
-					options.removeClass( 'active' );
-					options.filter( '[data-value=' + value + ']' ).addClass( 'active' );
-
-				} );
-
-			}
-		} );
-
-		wp.customize.controlConstructor['clc-column-width'] = wp.customize.Control.extend( {
-			ready: function () {
-				var control  = this,
-				    updating = false;
-
-				control.values = control.params.value;
-
-				control.container.on( 'click', '.clc-layouts-setup .clc-column > a', function () {
-					var currentAction = $( this ).data( 'action' );
-
-					updating = true;
-					control.updateColumns( currentAction );
-					updating = false;
-
-				} );
-
-				// Whenever the setting's value changes, refresh the preview.
-				control.setting.bind( function ( value ) {
-
-					// Bail if the update came from the control itself.
-					if ( updating ) {
-						return;
-					}
-
-					control.values = value;
-					control.rederColumns();
-
-				} );
-
-			},
-
-			updateColumns: function ( increment ) {
-				var incrementElement,
-				    decrementElement,
-				    control = this;
-
-				if ( 11 === control.values[increment] ) {
-					return;
-				}
-
-				if ( 'left' === increment ) {
-					incrementElement = control.container.find( '.clc-column-left' );
-					decrementElement = control.container.find( '.clc-column-right' );
-
-					control.values.left += 1;
-					control.values.right -= 1;
-
-				} else {
-					incrementElement = control.container.find( '.clc-column-right' );
-					decrementElement = control.container.find( '.clc-column-left' );
-
-					control.values.right += 1;
-					control.values.left -= 1;
-
-				}
-
-				// Update control values
-				control.setting( '' );
-				control.setting( control.values );
-
-				control.rederColumns();
-
-			},
-
-			rederColumns: function () {
-				var control     = this,
-				    leftColumn  = control.container.find( '.clc-column-left' ),
-				    rightColumn = control.container.find( '.clc-column-right' ),
-				    classes     = 'col12 col11 col10 col9 col8 col7 col6 col5 col4 col3 col2 col1';
-
-				leftColumn.removeClass( classes ).addClass( 'col' + control.values.left );
-				rightColumn.removeClass( classes ).addClass( 'col' + control.values.right );
-
+			if ( ! control ) {
+				return;
 			}
 
+			if ( hidden ) {
+				visible = false;
+			} else if ( 'textColor' === name || 'textColorHover' === name || 'textSize' === name ) {
+				visible = text;
+			} else if ( 'image' === name || 'width' === name || 'height' === name ) {
+				visible = image;
+			} else {
+				visible = true;
+			}
 
-		} );
-
-		// Color picker now uses WordPress built-in WP_Customize_Color_Control - no custom JS needed.
-
-		// Listen for previewer events
-		wp.customize.bind( 'ready', function () {
-
-			wp.customize.previewer.bind( 'clc-focus-section', function ( sectionName ) {
-				var section = wp.customize.section( sectionName );
-
-				if ( undefined !== section ) {
-					section.focus();
-				}
-			} );
-
-			wp.customize( 'clc-options[columns]', function ( value ) {
-
-				value.bind( function ( to ) {
-					var alignControl           = wp.customize.control( 'clc-options[form-column-align]' ),
-					    backgroundControl      = wp.customize.control( 'clc-options[custom-background-form]' ),
-					    columnsWidthControl    = wp.customize.control( 'clc-options[columns-width]' ),
-					    backgroundColorControl = wp.customize.control( 'clc-options[custom-background-color-form]' );
-
-					if ( '2' === to ) {
-						alignControl.toggle( true );
-						backgroundControl.toggle( true );
-						backgroundColorControl.toggle( true );
-						columnsWidthControl.toggle( true );
-					} else {
-						alignControl.toggle( false );
-						backgroundControl.toggle( false );
-						backgroundColorControl.toggle( false );
-						columnsWidthControl.toggle( false );
-					}
-				} );
-			} );
-
-			// validation for the login-level setting
-			wp.customize( 'clc-options[login-label]', function ( setting ) {
-				setting.validate = function ( value ) {
-					var code, notification;
-
-					code = 'required';
-					if ( !value ) {
-						notification = new wp.customize.Notification( code, { message: 'value is empty' } );
-						setting.notifications.add( code, notification );
-					} else {
-						setting.notifications.remove( code );
-					}
-
-					return value;
-				};
-			} );
-
-			wp.customize( 'clc-options[logo-settings]', function ( setting ) {
-
-				setting.bind( function ( value ) {
-
-					var logoTextColor      = wp.customize.control( 'clc-options[logo-text-color]' ),
-					    logoTextColorHover = wp.customize.control( 'clc-options[logo-text-color-hover]' ),
-					    logoTextSize       = wp.customize.control( 'clc-options[logo-text-size]' ),
-					    logoImage          = wp.customize.control( 'clc-options[custom-logo]' ),
-					    logoWidth          = wp.customize.control( 'clc-options[logo-width]' ),
-					    logoHeight         = wp.customize.control( 'clc-options[logo-height]' ),
-					    logoTitle         = wp.customize.control( 'clc-options[logo-title]' ),
-					    logoURL         = wp.customize.control( 'clc-options[logo-url]' );
-
-					if ( 'hide-logo' === value ) {
-						logoTextColor.toggle( false );
-						logoTextColorHover.toggle( false );
-						logoTextSize.toggle( false );
-						logoImage.toggle( false );
-						logoWidth.toggle( false );
-						logoHeight.toggle( false );
-						logoURL.toggle( false );
-						logoTitle.toggle( false );
-
-						return;
-
-					} else {
-						logoTitle.toggle( true );
-					}
-
-					if ( 'show-text-only' === value ) {
-						logoTextColor.toggle( true );
-						logoTextColorHover.toggle( true );
-						logoTextSize.toggle( true );
-						logoURL.toggle( true );
-
-						logoImage.toggle( false );
-						logoWidth.toggle( false );
-						logoHeight.toggle( false );
-					} else if ( 'show-image-only' === value ) {
-						logoTextColor.toggle( false );
-						logoTextColorHover.toggle( false );
-						logoTextSize.toggle( false );
-
-						logoURL.toggle( true );
-						logoImage.toggle( true );
-						logoWidth.toggle( true );
-						logoHeight.toggle( true );
-					} else {
-						logoTextColor.toggle( true );
-						logoTextColorHover.toggle( true );
-						logoTextSize.toggle( true );
-						logoImage.toggle( true );
-						logoWidth.toggle( true );
-						logoHeight.toggle( true );
-						logoURL.toggle( true );
-					}
-				} );
-			} );
+			control.toggle( visible );
 		} );
 	}
-} )( jQuery );
+
+	// Switch the preview to the login page while the plugin's panel is open,
+	// and put the visitor back where they were when it closes.
+	api.panel( 'clc_main_panel', function ( panel ) {
+		var previousUrl = '';
+
+		panel.expanded.bind( function ( isExpanded ) {
+			var previewUrl = api.previewer.previewUrl;
+
+			if ( isExpanded ) {
+				if ( previewUrl.get() !== urls.previewUrl ) {
+					previousUrl = previewUrl.get();
+				}
+				previewUrl.set( urls.previewUrl );
+			} else {
+				previewUrl.set( previousUrl || api.settings.url.home );
+			}
+		} );
+	} );
+
+	api.section( 'clc_logo', function ( section ) {
+		section.expanded.bind( function ( isExpanded ) {
+			if ( isExpanded ) {
+				syncLogoControls( api( 'clc-options[logo-settings]' ).get() );
+			}
+		} );
+	} );
+
+	// Show the matching form in the preview while its texts are being edited.
+	$.each( { 'clc_register-form': 'register', 'clc_lostpassword-form': 'lostpassword' }, function ( sectionId, form ) {
+		api.section( sectionId, function ( section ) {
+			section.expanded.bind( function ( isExpanded ) {
+				api.previewer.send( 'change-form', isExpanded ? form : 'login' );
+			} );
+		} );
+	} );
+
+	api.controlConstructor[ 'clc-templates' ] = api.Control.extend( {
+		ready: function () {
+			var control = this;
+
+			control.container.find( 'input:radio[value="' + control.setting.get() + '"]' ).prop( 'checked', true );
+
+			control.container.on( 'change', 'input:radio', function () {
+				var template = $( this ).val();
+
+				control.loadTemplate( 'default' );
+
+				if ( 'default' !== template ) {
+					control.loadTemplate( template );
+				}
+
+				// Remember the choice so the selection survives a reload.
+				control.setting.set( template );
+			} );
+		},
+
+		loadTemplate: function ( optionName ) {
+			var options = this.params.options[ optionName ];
+
+			$.each( options, function ( index, option ) {
+				var currentControl;
+
+				// #172: switching template runs a 'default' reset first; don't let
+				// it wipe the user's uploaded logo. Templates only ever reset
+				// custom-logo (never set a real value), so preserving it here keeps
+				// the logo across template changes.
+				if ( 'default' === optionName && 'clc-options[custom-logo]' === option.name ) {
+					return true;
+				}
+
+				currentControl = api.control( option.name );
+
+				if ( currentControl ) {
+					currentControl.setting( option.value );
+				}
+			} );
+		}
+	} );
+
+	api.controlConstructor[ 'clc-button-group' ] = api.Control.extend( {
+		ready: function () {
+			var control = this;
+
+			function markActive( value ) {
+				control.container.find( '.colorlib-login-customizer-control-group > a' ).each( function () {
+					var active = String( $( this ).attr( 'data-value' ) ) === String( value );
+
+					$( this ).toggleClass( 'active', active ).attr( 'aria-pressed', active ? 'true' : 'false' );
+				} );
+			}
+
+			control.container.on( 'click', '.colorlib-login-customizer-control-group > a', function ( event ) {
+				event.preventDefault();
+				control.setting.set( $( this ).attr( 'data-value' ) );
+			} );
+
+			control.setting.bind( markActive );
+			markActive( control.setting.get() );
+		}
+	} );
+
+	api.controlConstructor[ 'clc-column-width' ] = api.Control.extend( {
+		ready: function () {
+			var control = this;
+
+			control.values = control.normalize( control.params.value );
+
+			control.container.on( 'click', '.clc-layouts-setup .clc-column > a', function ( event ) {
+				event.preventDefault();
+				control.updateColumns( $( this ).data( 'action' ) );
+			} );
+
+			control.setting.bind( function ( value ) {
+				control.values = control.normalize( value );
+				control.renderColumns();
+			} );
+		},
+
+		// Always work on integers that add up to 12, whatever was stored.
+		normalize: function ( value ) {
+			var left = value ? parseInt( value.left, 10 ) : NaN;
+
+			if ( isNaN( left ) || left < 1 || left > 11 ) {
+				left = 6;
+			}
+
+			return { left: left, right: 12 - left };
+		},
+
+		updateColumns: function ( grow ) {
+			var values = $.extend( {}, this.values ),
+			    shrink = 'left' === grow ? 'right' : 'left';
+
+			if ( values[ shrink ] <= 1 ) {
+				return;
+			}
+
+			values[ grow ] += 1;
+			values[ shrink ] -= 1;
+
+			// A new object, so the setting registers the change.
+			this.setting.set( values );
+		},
+
+		renderColumns: function () {
+			var classes = 'col12 col11 col10 col9 col8 col7 col6 col5 col4 col3 col2 col1';
+
+			this.container.find( '.clc-column-left' ).removeClass( classes ).addClass( 'col' + this.values.left );
+			this.container.find( '.clc-column-right' ).removeClass( classes ).addClass( 'col' + this.values.right );
+		}
+	} );
+
+	api.bind( 'ready', function () {
+
+		api.previewer.bind( 'clc-focus-section', function ( sectionName ) {
+			var section = api.section( sectionName );
+
+			if ( section ) {
+				section.focus();
+			}
+		} );
+
+		api( 'clc-options[columns]', function ( setting ) {
+			setting.bind( function ( to ) {
+				var twoColumns = 2 === parseInt( to, 10 );
+
+				$.each( [ 'form-column-align', 'custom-background-form', 'columns-width', 'custom-background-color-form' ], function ( index, id ) {
+					var control = api.control( 'clc-options[' + id + ']' );
+
+					if ( control ) {
+						control.toggle( twoColumns );
+					}
+				} );
+			} );
+		} );
+
+		// An empty button label is allowed (the page keeps WordPress's own
+		// text), but say so rather than leave the user guessing.
+		$.each( [ 'login-label', 'register-button-label', 'lostpassword-button-label' ], function ( index, id ) {
+			api( 'clc-options[' + id + ']', function ( setting ) {
+				function check( value ) {
+					if ( value ) {
+						setting.notifications.remove( 'clc-empty-label' );
+					} else {
+						setting.notifications.add( new api.Notification( 'clc-empty-label', {
+							type:    'info',
+							message: urls.emptyLabel
+						} ) );
+					}
+				}
+
+				setting.bind( check );
+				check( setting.get() );
+			} );
+		} );
+
+		api( 'clc-options[logo-settings]', function ( setting ) {
+			setting.bind( syncLogoControls );
+		} );
+	} );
+}( jQuery, window.wp && window.wp.customize ) );
