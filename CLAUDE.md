@@ -7,9 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Colorlib Login Customizer is a WordPress plugin that customizes the WordPress login page via the WordPress Customizer interface. It provides real-time preview of login form styling and layout changes.
 
 **Repository**: https://github.com/puikinsh/colorlib-login-customizer
-**PHP**: 8.0+ (verified through 8.5) | **WordPress**: 6.0+ | **Tested up to**: 7.0
+**PHP**: 8.0+ (verified through 8.5) | **WordPress**: 6.0+ | **Tested up to**: 7.1
 
-Current version is `2.3.0`. The version is declared in three places that must stay in sync on every release: the plugin header in `colorlib-login-customizer.php`, the `COLORLIB_LOGIN_CUSTOMIZER_VERSION` constant, and `readme.txt`'s `Stable tag`. `package.json`'s `version` should match too (it drives the Grunt build archive name). When shipping a change after a released version, add a NEW `= x.y.z =` heading at the top of the `readme.txt` changelog — do not edit already-released entries or `@since` docblock tags.
+Current version is `2.3.1`. The version is declared in three places that must stay in sync on every release: the plugin header in `colorlib-login-customizer.php`, the `COLORLIB_LOGIN_CUSTOMIZER_VERSION` constant, and `readme.txt`'s `Stable tag`. `package.json`'s `version` should match too (it drives the Grunt build archive name). When shipping a change after a released version, add a NEW `= x.y.z =` heading at the top of the `readme.txt` changelog — do not edit already-released entries or `@since` docblock tags.
 
 ## Build Commands
 
@@ -79,13 +79,13 @@ colorlib-login-customizer.php          # Entry point, PHP version check, defines
 
 4. **Sanitization Functions** (`includes/class-colorlib-login-customizer-sanitization.php`) - Helper functions for validating colors, dimensions, URLs, and CSS
 
-5. **Custom Controls** (`includes/lib/controls/`) - Extend `WP_Customize_Control`: template selector, button group, and column-width. Colors, toggles and range sliders use core controls (`WP_Customize_Color_Control`, `checkbox`, `range`); the bespoke versions were removed in 2.3.0
+5. **Custom Controls** (`includes/lib/controls/`) - Extend `WP_Customize_Control`: template selector, button group, and column-width. Colors, toggles and range sliders use core controls (`WP_Customize_Color_Control`, `checkbox`, `range`); the bespoke versions were removed in 2.3.0. Control types are registered once in `register_settings()` — core's `register_control_type()` does not de-duplicate, so never call it from a control constructor. Controls rendered by a JS `content_template()` must also override `render_content()` with an empty method, or core builds (and for array values, warns on) throwaway PHP markup
 
 6. **Colorlib_Login_Customizer_Settings** (`includes/lib/class-colorlib-login-customizer-settings.php`) - Singleton that adds the admin menu item and the "Settings" action link on the plugins screen; attached as `colorlib_login_customizer()->settings`
 
 7. **CLC_Backwards_Compatibility** (`includes/class-colorlib-login-customizer-backwards-compatibility.php`) - Migrates old saved option keys on `admin_init` and exposes the `clc_backwards_compatibility_front` filter so legacy logo settings keep working. Touch this when renaming or restructuring saved settings.
 
-8. **CLC_Review** (`includes/class-colorlib-login-customizer-review.php`) - Time-delayed admin notice asking for a WordPress.org review, dismissed/handled via the `clc_epsilon_review` AJAX action
+8. **CLC_Review** (`includes/class-colorlib-login-customizer-review.php`) - Time-delayed admin notice asking for a WordPress.org review, dismissed/handled via the `clc_epsilon_review` AJAX action. Install date is the autoloaded `clc_review_installed` option (it was a 30-day transient that expired and restarted the countdown). Shows once per stage (5/15/30 days), only on Dashboard, Plugins and the plugin page; closing snoozes to the next stage, "already rated"/"no" are final
 
 ### Preview Mode
 
@@ -116,6 +116,7 @@ TypeError on a null setting.
 - `clc_sanitize_css()` - Custom CSS with injection protection
 - `clc_sanitize_image()` - Image URL validation
 - `clc_sanitize_columns_width()` - Column width array validation
+- `clc_sanitize_choice()` - select / button-group / template values; reads the control's choices through the `WP_Customize_Setting` core passes as the second argument
 
 Supporting helpers: `clc_stringify()`, `clc_css_has_structural_chars()`,
 `clc_css_has_unsafe_function()`, `clc_css_parens_balanced()`,
@@ -134,10 +135,27 @@ HTML entities are not decoded inside a `<style>` element, so `esc_attr()`
 blocks nothing there while corrupting legitimate values (a quoted font stack
 became `&#039;Helvetica Neue&#039;`).
 
+### Login CSS: one rule list
+
+`Colorlib_Login_Customizer_CSS_Customization::get_css_rules()` is the single
+source of truth for settings-driven CSS. `create_css()` prints it on the login
+page and `output_css_object()` sends the same list to `clc-preview.js`, whose
+`cssValue()` / `backgroundFilter()` / `bothLogoCSS()` mirror the PHP
+`css_value()` / `background_filter_css()` / `generate_css()`. Change both sides
+together. Rule order matters: the two-column fallback
+`.ml-half-screen .ml-form-container` must precede, and not out-specify,
+`.ml-container .ml-form-container` or "Form Column background color" stops
+working.
+
 ### gettext Filter Escaping
 
 `Colorlib_Login_Customizer_CSS_Customization` replaces core login strings via
-`gettext`. Whether a filter escapes depends on how **core** prints that string:
+one `gettext` callback, `filter_login_text()`, fed by `add_login_text()` calls
+in the `check_*_texts()` methods. It only touches the `default` text domain —
+other plugins' "Password"/"Email" strings on the login page must be left alone.
+An empty setting renders per entry as `blank`, `hide` (screen-reader-only span,
+for field labels core prints raw) or `keep` (core text, for buttons).
+Whether an entry escapes depends on how **core** prints that string:
 
 | Core output | Example strings | Filter must return |
 |---|---|---|
@@ -196,12 +214,12 @@ find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' | xar
 Findings — all clean:
 - No implicit-nullable params (8.4), dynamic properties (8.2), `${}` interpolation (8.2), removed casts/functions, or `trigger_error(E_USER_ERROR)` (8.5).
 - Every plugin class declares all properties it assigns; custom controls inherit theirs from `WP_Customize_Control`. No `#[\AllowDynamicProperties]` is needed.
-- WordPress side uses only long-stable APIs (Customizer, `login_head`, `template_include`, `wp_ajax_*`). `load_plugin_textdomain` is correctly hooked on `init` (priority 0), so it won't trip the WP 6.7+ just-in-time translation warning. The Customizer is de-emphasized but **not** removed in WP 7.x.
+- WordPress side uses only long-stable APIs (Customizer, `login_head`, `template_include`, `wp_ajax_*`). There is no `load_plugin_textdomain()` call (removed in 2.3.1 — Plugin Check flags it, and WordPress.org language packs load just in time). The Customizer is de-emphasized but **not** removed in WP 7.x.
 
 Caveats — important when trusting the green result:
 - The pinned `phpcompatibility/php-compatibility` is **9.3.5**, whose sniff data only reaches ~PHP 8.0. So PHPCS confirms the 8.0 baseline; the 8.1–8.5 deprecation coverage above comes from manual scanning + an actual `php -l` under a real PHP 8.5 build. Don't read a clean PHPCS run as proof for 8.5 on its own.
 - The one class of issue neither static check catches is *passing `null` to non-nullable internal params* (deprecated since 8.1). Heavy input sanitization mitigates it, but final sign-off needs a live smoke test under PHP 8.5 + WP 7.x with `WP_DEBUG = true`.
-- `Tested up to: 7.0` is set in the plugin header and `readme.txt`; WordPress 7.0 is released, so this is valid to publish. Keep this value at or below the current stable WP release — WordPress.org rejects anything higher.
+- `Tested up to: 7.1` is set in the plugin header and `readme.txt` (WP 7.1.2 was current on 2026-09-29; smoke-tested on the Local site). Keep this value at or below the current stable WP release — WordPress.org rejects anything higher.
 
 ## Third-Party Libraries
 
