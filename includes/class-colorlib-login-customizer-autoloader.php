@@ -28,28 +28,33 @@ class Colorlib_Login_Customizer_Autoloader {
 	 * @param string $class The fully qualified class name to load.
 	 */
 	public function load( $class ) {
-		$parts = explode( '_', $class );
-		$bind  = implode( '-', $parts );
+		/*
+		 * Only this plugin's classes. A bare `Colorlib_` match also caught
+		 * other Colorlib plugins' classes and cost three file_exists() calls
+		 * for each of them.
+		 */
+		if ( 0 !== strpos( $class, 'Colorlib_Login_Customizer' ) ) {
+			return;
+		}
 
-		if ( 'Colorlib' == $parts[0] ) {
-			/*
-			 * Core library autoload.
-			 */
-			$directories = array(
-				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes',
-				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes/lib',
-				COLORLIB_LOGIN_CUSTOMIZER_BASE . '/includes/lib/controls',
-			);
+		$file = 'class-' . strtolower( str_replace( '_', '-', $class ) ) . '.php';
 
-			foreach ( $directories as $directory ) {
-				if ( file_exists( $directory . '/class-' . strtolower( $bind ) . '.php' ) ) {
-					require_once $directory . '/class-' . strtolower( $bind ) . '.php';
+		$directories = array(
+			COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/',
+			COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/lib/',
+			COLORLIB_LOGIN_CUSTOMIZER_BASE . 'includes/lib/controls/',
+		);
 
-					return;
-				}
+		foreach ( $directories as $directory ) {
+			if ( file_exists( $directory . $file ) ) {
+				require_once $directory . $file;
+
+				return;
 			}
 		}
 	}
 }
 
-$autoloader = new Colorlib_Login_Customizer_Autoloader();
+// Not assigned to a variable: plugin files load at global scope, and a bare
+// `$autoloader` global could clobber (or be clobbered by) another plugin's.
+new Colorlib_Login_Customizer_Autoloader();
