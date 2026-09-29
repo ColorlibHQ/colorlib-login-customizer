@@ -19,8 +19,11 @@ $clc_defaults = $clc_core->get_defaults();
 $clc_options  = get_option( 'clc-options', array() );
 $clc_options  = apply_filters( 'clc_backwards_compatibility_front', wp_parse_args( $clc_options, $clc_defaults ) );
 
-// Initialize user_login variable (used in form fields). Mirrors core wp-login.php.
-$user_login = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Local form value, mirrors core wp-login.php behaviour.
+/*
+ * template_include templates run at global scope, so every variable below is
+ * a global: keep them prefixed. (This used to reset core's own $user_login.)
+ */
+$clc_user_login = '';
 
 /**
  * Output the login page header.
@@ -102,7 +105,7 @@ do_action( 'login_form_register' );
 /**
  * Filters the separator used between login form navigation links.
  */
-$login_link_separator = apply_filters( 'login_link_separator', ' | ' );
+$clc_link_separator = apply_filters( 'login_link_separator', ' | ' );
 
 /**
  * Filters the login page errors.
@@ -114,8 +117,8 @@ $login_link_separator = apply_filters( 'login_link_separator', ' | ' );
  */
 clc_login_header( __( 'Log In', 'default' ), '', '' );
 
-$login_header_url   = __( 'https://wordpress.org/', 'default' );
-$login_header_title = __( 'Powered by WordPress', 'default' );
+$clc_header_url   = __( 'https://wordpress.org/', 'default' );
+$clc_header_title = __( 'Powered by WordPress', 'default' );
 
 /**
  * Filters link URL of the header logo above login form.
@@ -124,7 +127,7 @@ $login_header_title = __( 'Powered by WordPress', 'default' );
  *
  * @param string $login_header_url Login header logo URL.
  */
-$login_header_url = apply_filters( 'login_headerurl', $login_header_url );
+$clc_header_url = apply_filters( 'login_headerurl', $clc_header_url );
 
 /**
  * Filters the title attribute of the header logo above login form.
@@ -133,16 +136,16 @@ $login_header_url = apply_filters( 'login_headerurl', $login_header_url );
  *
  * @param string $login_header_title Login header logo title attribute.
  */
-$login_header_title = apply_filters( 'login_headertext', $login_header_title );
+$clc_header_title = apply_filters( 'login_headertext', $clc_header_title );
 
 /*
  * To match the URL/title set above, Multisite sites have the blog name,
  * while single sites get the header title.
  */
 if ( is_multisite() ) {
-	$login_header_text = get_bloginfo( 'name', 'display' );
+	$clc_header_text = get_bloginfo( 'name', 'display' );
 } else {
-	$login_header_text = $login_header_title;
+	$clc_header_text = $clc_header_title;
 }
 
 /**
@@ -153,12 +156,12 @@ if ( is_multisite() ) {
  * @param array  $classes An array of body classes.
  * @param string $action  The action that brought the visitor to the login page.
  */
-$classes   = array( 'login-action-login', 'wp-core-ui' );
-$classes[] = ' locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_locale() ) ) );
-$classes   = apply_filters( 'login_body_class', $classes, 'login' );
+$clc_classes   = array( 'login-action-login', 'wp-core-ui' );
+$clc_classes[] = 'locale-' . sanitize_html_class( strtolower( str_replace( '_', '-', get_locale() ) ) );
+$clc_classes   = apply_filters( 'login_body_class', $clc_classes, 'login' );
 ?>
 
-	<body class="login <?php echo esc_attr( implode( ' ', $classes ) ); ?>">
+	<body class="login <?php echo esc_attr( implode( ' ', $clc_classes ) ); ?>">
 		<div class="clc-general-actions">
 			<div id="clc-templates" class="clc-preview-event" data-section="clc_templates"><span class="dashicons dashicons-tagcloud"></span></div>
 			<div id="clc-layout" class="clc-preview-event" data-section="clc_layout"><span class="dashicons dashicons-layout"></span></div>
@@ -176,9 +179,9 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 		<div id="login">
 
 			<h1>
-				<a id="clc-logo-link" href="<?php echo esc_url( $login_header_url ); ?>" title="<?php echo esc_attr( $login_header_title ); ?>" tabindex="-1">
+				<a id="clc-logo-link" href="<?php echo esc_url( $clc_header_url ); ?>" title="<?php echo esc_attr( $clc_header_title ); ?>" tabindex="-1">
 					<span id="clc-logo" class="clc-preview-event" data-section="clc_logo"><span class="dashicons dashicons-edit"></span></span>
-					<span id="logo-text"><?php echo esc_html( $login_header_text ); ?></span>
+					<span id="logo-text"><?php echo esc_html( $clc_header_text ); ?></span>
 				</a>
 			</h1>
 
@@ -186,7 +189,7 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 				<div id="clc-loginform" class="clc-preview-event" data-section="clc_form"><span class="dashicons dashicons-edit"></span></div>
 				<p>
 					<label for="user_login"><span id="clc-username-label"><?php echo wp_kses_post( __( 'Username or Email Address', 'default' ) ); ?></span><br />
-					<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
+					<input type="text" name="log" id="user_login" class="input" value="<?php echo esc_attr( $clc_user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
 					<label for="user_pass"><span id="clc-password-label"><?php echo wp_kses_post( __( 'Password', 'default' ) ); ?></span><br />
@@ -206,8 +209,8 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 
 			<form name="registerform" style="display:none" class="show-only_register" id="registerform" action="<?php echo esc_url( wp_registration_url() ); ?>" method="post">
 				<p>
-					<label for="user_register"><span id="clc-register-sername-label"><?php echo wp_kses_post( __( 'Username', 'default' ) ); ?></span><br />
-						<input type="text" name="log" id="user_register" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" /></label>
+					<label for="user_register"><span id="clc-register-username-label"><?php echo wp_kses_post( __( 'Username', 'default' ) ); ?></span><br />
+						<input type="text" name="log" id="user_register" class="input" value="<?php echo esc_attr( $clc_user_login ); ?>" size="20" /></label>
 				</p>
 				<p>
 					<label for="user_email"><span id="clc-register-email-label"><?php echo wp_kses_post( __( 'Email', 'default' ) ); ?></span><br />
@@ -227,8 +230,8 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 
 			<form style="display:none;" class="show-only_lostpassword" name="lostpasswordform" id="lostpasswordform" action="" method="post">
 				<p>
-					<label for="user_login" ><span><?php echo wp_kses_post( __( 'Username or Email Address', 'default' ) ); ?></span><br />
-					<input type="text" name="user_login" id="user_login" class="input" value="<?php echo esc_attr( $user_login ); ?>" size="20" autocapitalize="off" /></label>
+					<label for="user_login_lostpassword"><span id="clc-lostpassword-username-label"><?php echo wp_kses_post( __( 'Username or Email Address', 'default' ) ); ?></span><br />
+					<input type="text" name="user_login" id="user_login_lostpassword" class="input" value="<?php echo esc_attr( $clc_user_login ); ?>" size="20" autocapitalize="off" /></label>
 				</p>
 				<?php
 				/**
@@ -244,18 +247,16 @@ $classes   = apply_filters( 'login_body_class', $classes, 'login' );
 			<p id="nav">
 				<?php
 				if ( get_option( 'users_can_register' ) ) :
-					$registration_url = sprintf( '<a id="register-link-label" href="%s" class="show-only_login show-only_lostpassword">%s</a>', esc_url( wp_registration_url() ), esc_html( $clc_options['register-link-label'] ) );
-
-
+					$clc_registration_url = sprintf( '<a id="register-link-label" href="%s" class="show-only_login show-only_lostpassword">%s</a>', esc_url( wp_registration_url() ), esc_html( $clc_options['register-link-label'] ) );
 
 					/** This filter is documented in wp-includes/general-template.php */
-					echo wp_kses_post( apply_filters( 'register', $registration_url ) );
+					echo wp_kses_post( apply_filters( 'register', $clc_registration_url ) );
 
-					echo '<span style="display:none" class="show-only_lostpassword">' . esc_html( $login_link_separator ) . '</span>';
+					echo '<span style="display:none" class="show-only_lostpassword">' . esc_html( $clc_link_separator ) . '</span>';
 
 					echo '<a href="#" id="login-link-label" class="show-only_register show-only_lostpassword" style="display:none">' . esc_html( $clc_options['login-link-label'] ) . '</a>';
 
-					echo '<span class="show-only_register show-only_login">' . esc_html( $login_link_separator ) . '</span>';
+					echo '<span class="show-only_register show-only_login">' . esc_html( $clc_link_separator ) . '</span>';
 				endif;
 				?>
 				<a class="show-only_register show-only_login" href="<?php echo esc_url( wp_lostpassword_url() ); ?>" id="clc-lost-password-text"><?php echo wp_kses_post( __( 'Lost your password?', 'default' ) ); ?></a>

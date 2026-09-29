@@ -19,6 +19,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Colorlib_Login_Customizer_CSS_Customization {
 
 	/**
+	 * The untranslated logo title stored by get_defaults().
+	 *
+	 * An install that never changed the title still has this English string
+	 * saved as its default, so it is treated as "not customised" and core's
+	 * own translated title is kept instead.
+	 */
+	const DEFAULT_LOGO_TITLE = 'Powered by WordPress';
+
+	/**
 	 * Plugin options.
 	 *
 	 * @var array<string, mixed>
@@ -26,40 +35,47 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	private array $options = array();
 
 	/**
-	 * CSS selectors mapping.
-	 *
-	 * @var array<string, array<string, array<int, string>>>
-	 */
-	private array $selectors = array();
-
-	/**
 	 * CLC WP options name.
 	 *
 	 * @var string
 	 */
-	public string $key_name;
+	public string $key_name = 'clc-options';
 
 	/**
 	 * Default options.
 	 *
 	 * @var array<string, mixed>
 	 */
-	private array $defaults;
+	private array $defaults = array();
 
 	/**
-	 * Whether the option/selector data has been loaded yet.
+	 * Whether the option data has been loaded yet.
 	 *
 	 * @var bool
 	 */
 	private bool $booted = false;
 
 	/**
+	 * Core login strings replaced through gettext, keyed by source string.
+	 *
+	 * Filled per login action by the check_*_texts() methods and read by the
+	 * single filter_login_text() callback. `escape` says whether core prints
+	 * the string raw (so it must be escaped here); `empty` says what an empty
+	 * setting renders as: 'blank', 'hide' (screen-reader only, so the field
+	 * keeps an accessible name) or 'keep' (core's own text — a button can
+	 * never be left without a label).
+	 *
+	 * @var array<string, array{option: string, escape: bool, empty: string}>
+	 */
+	private array $login_texts = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * Deliberately cheap: this object is created on `init` for every request,
-	 * so it only registers the two entry points it needs. Reading options and
-	 * building the selector map is deferred to boot(), which runs solely on the
-	 * login page and in the Customizer preview.
+	 * so it only registers the two entry points it needs. Reading options is
+	 * deferred to boot(), which runs solely on the login page and in the
+	 * Customizer preview.
 	 */
 	public function __construct() {
 		add_action( 'login_init', array( $this, 'init_login' ) );
@@ -67,7 +83,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
-	 * Load options and the selector map, once per request.
+	 * Load options, once per request.
 	 *
 	 * @return void
 	 */
@@ -181,264 +197,243 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @param string $id Field identifier.
 	 * @return string Namespaced field name.
 	 */
-	private function generate_name( $id ) {
+	private function generate_name( string $id ): string {
 		return $this->key_name . '[' . $id . ']';
 	}
 
 	/**
-	 * Send the generated CSS object to the Customizer preview via postMessage.
+	 * Send the CSS rule map and current values to the Customizer preview.
+	 *
+	 * The preview script rebuilds #clc-style from exactly the same rules that
+	 * create_css() prints on the real login page, so the live preview and the
+	 * saved result cannot drift apart.
 	 *
 	 * @return void
 	 */
-	public function output_css_object() {
-
+	public function output_css_object(): void {
 		$this->boot();
 
-		$css_object = array(
-			'selectors' => array(),
-			'settings'  => array(),
-		);
+		$rules    = $this->get_css_rules();
+		$settings = array();
+		$options  = array( 'background-blur', 'background-brightness' );
 
-		foreach ( $this->selectors as $selector => $settings ) {
-			if ( isset( $settings['options'] ) ) {
-				$css_object['selectors'][ $selector ] = $settings['options'];
-				foreach ( $settings['options'] as $index => $setting ) {
-					$css_object['settings'][ $setting ] = array(
-						'name'      => $this->generate_name( $setting ),
-						'value'     => $this->options[ $setting ],
-						'attribute' => $settings['attributes'][ $index ],
-					);
-				}
+		foreach ( $rules as $rule ) {
+			foreach ( $rule['declarations'] as $option ) {
+				$options[] = $option;
 			}
 		}
 
-		wp_localize_script( 'colorlib-login-customizer-preview', 'CLC', $css_object );
+		foreach ( array_unique( $options ) as $option ) {
+			$settings[ $option ] = array(
+				'name'  => $this->generate_name( $option ),
+				'value' => $this->options[ $option ] ?? '',
+			);
+		}
+
+		wp_localize_script(
+			'colorlib-login-customizer-preview',
+			'CLC',
+			array(
+				'rules'       => $rules,
+				'settings'    => $settings,
+				'defaultLogo' => admin_url( 'images/wordpress-logo.svg' ),
+			)
+		);
 	}
 
 	/**
-	 * Set the options array, it returns nothing
+	 * Load the saved options merged over the defaults.
+	 *
+	 * @return void
 	 */
-	public function set_options() {
+	public function set_options(): void {
+		$options = get_option( $this->key_name, array() );
 
-		$options       = get_option( $this->key_name, array() );
-		$this->options = wp_parse_args( $options, $this->defaults );
+		$this->options = wp_parse_args( is_array( $options ) ? $options : array(), $this->defaults );
+	}
 
-		$this->selectors = array(
-			'.wp-core-ui .button-primary.focus, .wp-core-ui .button-primary.hover, .wp-core-ui .button-primary:focus, .wp-core-ui .button-primary:hover' => array(
-				'attributes' => array(
-					'background',
-					'border-color',
-				),
-				'options'    => array(
-					'button-background-hover',
-					'button-border-color-hover',
-				),
-			),
-			'.wp-core-ui .button-primary'                => array(
-				'attributes' => array(
-					'background',
-					'border-color',
-					'box-shadow',
-					'text-shadow',
-					'color',
-					'width',
-				),
-				'options'    => array(
-					'button-background',
-					'button-border-color',
-					'button-shadow',
-					'button-text-shadow',
-					'button-color',
-					'button-width',
+	/**
+	 * The settings-driven CSS rules, in output order.
+	 *
+	 * Single source of truth for both the login page (create_css()) and the
+	 * Customizer live preview (output_css_object()). Each declaration maps a
+	 * CSS property to the option that supplies its value; a declaration is
+	 * skipped while its option is empty.
+	 *
+	 * @return array<int, array{selector: string, declarations: array<string, string>}>
+	 */
+	public function get_css_rules(): array {
+		return array(
+			array(
+				'selector'     => '.ml-container .ml-extra-div',
+				'declarations' => array(
+					'background-image' => 'custom-background',
+					'background-color' => 'custom-background-color',
 				),
 			),
-			'.login #backtoblog a, .login #nav a'        => array(
-				'attributes' => array(
-					'color',
-				),
-				'options'    => array(
-					'link-color',
-				),
-			),
-			'.login #backtoblog a:hover, .login #nav a:hover, .login h1 a:hover,.login.clc-both-logo #backtoblog a:hover, .login.clc-both-logo #nav a:hover, .login.clc-both-logo h1 a:hover' => array(
-				'attributes' => array(
-					'color',
-				),
-				'options'    => array(
-					'link-color-hover',
+
+			/*
+			 * Two-column fallback: paint the form column with the page colour.
+			 * It must come before, and be no more specific than, the "Form
+			 * Column background" rule below so that setting wins when set. (It
+			 * used to be `div.ml-form-container`, which outranked it and made
+			 * the form-column colour impossible to change.)
+			 */
+			array(
+				'selector'     => '.ml-half-screen .ml-form-container',
+				'declarations' => array(
+					'background-color' => 'custom-background-color',
 				),
 			),
-			'.ml-container #login'                       => array(
-				'attributes' => array(
-					'max-width',
-				),
-				'options'    => array(
-					'form-width',
-				),
-			),
-			'#loginform,#registerform,#lostpasswordform' => array(
-				'attributes' => array(
-					'min-height',
-					'background-image',
-					'background-color',
-					'padding',
-					'border',
-					'border-radius',
-					'box-shadow',
-				),
-				'options'    => array(
-					'form-height',
-					'form-background-image',
-					'form-background-color',
-					'form-padding',
-					'form-border',
-					'form-border-radius',
-					'form-shadow',
+			array(
+				'selector'     => '.ml-container .ml-form-container',
+				'declarations' => array(
+					'background-image' => 'custom-background-form',
+					'background-color' => 'custom-background-color-form',
 				),
 			),
-			'.login form .input, .login input[type="text"]' => array(
-				'attributes' => array(
-					'max-width',
-					'margin',
-					'border-radius',
-					'border',
-					'background',
-					'color',
-				),
-				'options'    => array(
-					'form-field-width',
-					'form-field-margin',
-					'form-field-border-radius',
-					'form-field-border',
-					'form-field-background',
-					'form-field-color',
+			array(
+				'selector'     => '.login:not(.clc-both-logo) h1 a',
+				'declarations' => array(
+					'background-image' => 'custom-logo',
+					'width'            => 'logo-width',
+					'height'           => 'logo-height',
 				),
 			),
-			'.login label'                               => array(
-				'attributes' => array(
-					'color',
-				),
-				'options'    => array(
-					'form-label-color',
+			array(
+				'selector'     => '.login.clc-both-logo h1 a',
+				'declarations' => array(
+					'background-image' => 'custom-logo',
 				),
 			),
-			'.ml-container .ml-extra-div'                => array(
-				'attributes' => array(
-					'background-image',
-					'background-color',
-				),
-				'options'    => array(
-					'custom-background',
-					'custom-background-color',
+			array(
+				'selector'     => '.login.clc-text-logo h1 a',
+				'declarations' => array(
+					'color'     => 'logo-text-color',
+					'font-size' => 'logo-text-size',
 				),
 			),
-			'.ml-half-screen div.ml-form-container'      => array(
-				'attributes' => array(
-					'background-color',
-				),
-				'options'    => array(
-					'custom-background-color',
+			array(
+				'selector'     => '.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover',
+				'declarations' => array(
+					'color' => 'logo-text-color-hover',
 				),
 			),
-			'.ml-container .ml-form-container'           => array(
-				'attributes' => array(
-					'background-image',
-					'background-color',
-				),
-				'options'    => array(
-					'custom-background-form',
-					'custom-background-color-form',
+			array(
+				'selector'     => '#login > h1',
+				'declarations' => array(
+					'display' => 'logo-settings',
 				),
 			),
-			'.login h1 a'                                => array(
-				'attributes' => array(
-					'background-image',
-					'width',
-					'height',
-				),
-				'options'    => array(
-					'custom-logo',
-					'logo-width',
-					'logo-height',
+			array(
+				'selector'     => '.ml-container #login',
+				'declarations' => array(
+					'max-width' => 'form-width',
 				),
 			),
-			'.login.clc-text-logo h1 a,.login.clc-both-logo h1 a' => array(
-				'attributes' => array(
-					'color',
-					'font-size',
-				),
-				'options'    => array(
-					'logo-text-color',
-					'logo-text-size',
-				),
-			),
-			'.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover' => array(
-				'attributes' => array(
-					'color',
-				),
-				'options'    => array(
-					'logo-text-color-hover',
+			array(
+				'selector'     => '#loginform,#registerform,#lostpasswordform',
+				'declarations' => array(
+					'min-height'       => 'form-height',
+					'background-image' => 'form-background-image',
+					'background-color' => 'form-background-color',
+					'padding'          => 'form-padding',
+					'border'           => 'form-border',
+					'border-radius'    => 'form-border-radius',
+					'box-shadow'       => 'form-shadow',
 				),
 			),
-			'#login > h1'                                => array(
-				'attributes' => array(
-					'display',
-				),
-				'options'    => array(
-					'logo-settings',
-				),
-			),
-			'#login > #nav,#login > #backtoblog'         => array(
-				'attributes' => array(
-					'display',
-				),
-				'options'    => array(
-					'hide-extra-links',
+			array(
+				'selector'     => '.login form .input,.login input[type="text"],.login input[type="password"]',
+				'declarations' => array(
+					'max-width'     => 'form-field-width',
+					'margin'        => 'form-field-margin',
+					'border-radius' => 'form-field-border-radius',
+					'border'        => 'form-field-border',
+					'background'    => 'form-field-background',
+					'color'         => 'form-field-color',
 				),
 			),
-			'#login form .forgetmenot'                   => array(
-				'attributes' => array(
-					'display',
+			array(
+				'selector'     => '.login label',
+				'declarations' => array(
+					'color' => 'form-label-color',
 				),
-				'options'    => array(
-					'hide-rememberme',
+			),
+			array(
+				'selector'     => '#login > #nav,#login > #backtoblog',
+				'declarations' => array(
+					'display' => 'hide-extra-links',
+				),
+			),
+			array(
+				'selector'     => '.wp-core-ui .button-primary.focus,.wp-core-ui .button-primary.hover,.wp-core-ui .button-primary:focus,.wp-core-ui .button-primary:hover',
+				'declarations' => array(
+					'background'   => 'button-background-hover',
+					'border-color' => 'button-border-color-hover',
+				),
+			),
+			array(
+				'selector'     => '.wp-core-ui .button-primary',
+				'declarations' => array(
+					'background'   => 'button-background',
+					'border-color' => 'button-border-color',
+					'box-shadow'   => 'button-shadow',
+					'text-shadow'  => 'button-text-shadow',
+					'color'        => 'button-color',
+					'width'        => 'button-width',
+				),
+			),
+			array(
+				'selector'     => '.login #backtoblog a,.login #nav a',
+				'declarations' => array(
+					'color' => 'link-color',
+				),
+			),
+			array(
+				'selector'     => '.login #backtoblog a:hover,.login #nav a:hover,.login h1 a:hover',
+				'declarations' => array(
+					'color' => 'link-color-hover',
+				),
+			),
+			array(
+				'selector'     => '#login form .forgetmenot',
+				'declarations' => array(
+					'display' => 'hide-rememberme',
 				),
 			),
 		);
 	}
 
 	/**
-	 * Create the CSS string for output
+	 * Create the CSS string for output.
 	 *
-	 * @return mixed|string
+	 * @return string
 	 */
-	public function create_css() {
-		$string = '';
-		// In case the array is empty, we return an empty string.
+	public function create_css(): string {
 		if ( empty( $this->options ) ) {
-			return $string;
+			return '';
 		}
 
-		/**
-		 * Start building the CSS file
-		 */
-		$string .= $this->_set_background_options();
-		$string .= $this->_set_background_filter();
-		$string .= $this->_set_logo_options();
-		$string .= $this->_set_form_options();
-		$string .= $this->_set_miscellaneous_options();
+		$css = '';
 
-		return $string;
+		foreach ( $this->get_css_rules() as $rule ) {
+			$css .= $this->create_css_lines( $rule['selector'], $rule['declarations'] );
+		}
+
+		return $css . $this->background_filter_css();
 	}
 
 	/**
 	 * Build the CSS filter (blur + brightness) applied to the background image.
 	 *
+	 * Mirrored by backgroundFilter() in clc-preview.js.
+	 *
 	 * @return string
 	 */
-	public function _set_background_filter() {
-		$blur       = isset( $this->options['background-blur'] ) ? absint( $this->options['background-blur'] ) : 0;
-		$brightness = isset( $this->options['background-brightness'] ) ? absint( $this->options['background-brightness'] ) : 100;
+	private function background_filter_css(): string {
+		$blur       = absint( $this->options['background-blur'] ?? 0 );
+		$brightness = absint( $this->options['background-brightness'] ?? 100 );
 
 		$filters = array();
 
@@ -458,432 +453,105 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
-	 * Build CSS for the miscellaneous (links, custom background) options.
+	 * Build a CSS rule block for a selector from the given declarations.
+	 *
+	 * @param string                $selector     CSS selector.
+	 * @param array<string, string> $declarations CSS property => option key.
 	 *
 	 * @return string
 	 */
-	public function _set_miscellaneous_options() {
-		$string = '';
+	private function create_css_lines( string $selector, array $declarations ): string {
+		$lines = '';
 
-		$string .= $this->create_css_lines(
-			'.wp-core-ui .button-primary.focus, .wp-core-ui .button-primary.hover, .wp-core-ui .button-primary:focus, .wp-core-ui .button-primary:hover',
-			array(
-				'background',
-				'border-color',
-			),
-			array(
-				'button-background-hover',
-				'button-border-color-hover',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.wp-core-ui .button-primary',
-			array(
-				'background',
-				'border-color',
-				'box-shadow',
-				'text-shadow',
-				'color',
-				'width',
-			),
-			array(
-				'button-background',
-				'button-border-color',
-				'button-shadow',
-				'button-text-shadow',
-				'button-color',
-				'button-width',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login #backtoblog a, .login #nav a',
-			array(
-				'color',
-			),
-			array(
-				'link-color',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login #backtoblog a:hover, .login #nav a:hover, .login h1 a:hover',
-			array(
-				'color',
-			),
-			array(
-				'link-color-hover',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'#login form .forgetmenot',
-			array(
-				'display',
-			),
-			array(
-				'hide-rememberme',
-			)
-		);
-
-		return $string;
-	}
-
-	/**
-	 * Build CSS for the login form options.
-	 *
-	 * @return string
-	 */
-	public function _set_form_options() {
-		$string = '';
-
-		$string .= $this->create_css_lines(
-			'.ml-container #login',
-			array(
-				'max-width',
-			),
-			array(
-				'form-width',
-			)
-		);
-
-		/**
-		 * Set form variables
-		 */
-		$string .= $this->create_css_lines(
-			'#loginform,#registerform,#lostpasswordform',
-			array(
-				'min-height',
-				'background-image',
-				'background-color',
-				'padding',
-				'border',
-				'border-radius',
-				'box-shadow',
-			),
-			array(
-				'form-height',
-				'form-background-image',
-				'form-background-color',
-				'form-padding',
-				'form-border',
-				'form-border-radius',
-				'form-shadow',
-			)
-		);
-
-		/**
-		 * Set form field variables
-		 */
-		$string .= $this->create_css_lines(
-			'.login form .input, .login input[type="text"], .login input[type="password"]',
-			array(
-				'max-width',
-				'margin',
-				'border-radius',
-				'border',
-				'background',
-				'color',
-			),
-			array(
-				'form-field-width',
-				'form-field-margin',
-				'form-field-border-radius',
-				'form-field-border',
-				'form-field-background',
-				'form-field-color',
-			)
-		);
-
-		/**
-		 * Set form field labels
-		 */
-		$string .= $this->create_css_lines(
-			'.login label',
-			array(
-				'color',
-			),
-			array(
-				'form-label-color',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'#login > #nav,#login > #backtoblog',
-			array(
-				'display',
-			),
-			array(
-				'hide-extra-links',
-			)
-		);
-
-		return $string;
-	}
-
-	/**
-	 * Build CSS for the page background options.
-	 *
-	 * @return string
-	 */
-	public function _set_background_options() {
-		$string = '';
-		/**
-		 * Set background-image
-		 */
-		$string .= $this->create_css_lines(
-			'.ml-container .ml-extra-div',
-			array(
-				'background-image',
-				'background-color',
-			),
-			array(
-				'custom-background',
-				'custom-background-color',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.ml-container .ml-form-container',
-			array(
-				'background-image',
-				'background-color',
-			),
-			array(
-				'custom-background-form',
-				'custom-background-color-form',
-			)
-		);
-
-		/**
-		 * Set background-color for half screens
-		 */
-		$string .= $this->create_css_lines(
-			'.ml-half-screen div.ml-form-container',
-			array(
-				'background-color',
-			),
-			array(
-				'custom-background-color',
-			)
-		);
-		return $string;
-	}
-
-	/**
-	 * Build CSS for the logo options.
-	 *
-	 * @return string
-	 */
-	public function _set_logo_options() {
-		$string = '';
-		/**
-		 * Set logo dimensions
-		 */
-		$string .= $this->create_css_lines(
-			'.login:not(.clc-both-logo) h1 a',
-			array(
-				'background-image',
-				'background-size',
-				'width',
-				'height',
-			),
-			array(
-				'custom-logo',
-				'logo-width',
-				'logo-width',
-				'logo-height',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login.clc-both-logo h1 a',
-			array(
-				'background-image',
-				'background-size',
-			),
-			array(
-				'custom-logo',
-				'logo-width',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login.clc-text-logo h1 a',
-			array(
-				'color',
-				'font-size',
-			),
-			array(
-				'logo-text-color',
-				'logo-text-size',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login.clc-both-logo h1 a',
-			array(
-				'background-size',
-				'padding-top',
-			),
-			array(
-				'logo-width',
-				'logo-width',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'.login.clc-text-logo h1 a:hover,.login.clc-both-logo h1 a:hover',
-			array(
-				'color',
-			),
-			array(
-				'logo-text-color-hover',
-			)
-		);
-
-		$string .= $this->create_css_lines(
-			'#login > h1',
-			array(
-				'display',
-			),
-			array(
-				'logo-settings',
-			)
-		);
-
-		return $string;
-	}
-
-	/**
-	 * Build a CSS rule block for a selector from the given options.
-	 *
-	 * @param string $selector   CSS selector.
-	 * @param array  $properties CSS properties to set, indexed alongside $options.
-	 * @param array  $options    Option keys whose values feed the properties.
-	 *
-	 * @return string
-	 */
-	private function create_css_lines( $selector, $properties, $options ) {
-
-		$string = '';
-		$valued = array();
-		$i      = 0;
-
-		foreach ( $options as $option ) {
-			if ( ! empty( $this->options[ $option ] ) ) {
-				$val = $this->options[ $option ];
-
-				// 3 toggle buttons were replaced with one select, so we need to make sure
-				// h1 displays correctly.
-				if ( 'logo-settings' === $option ) {
-					$val = ( 'hide-logo' === $val ) ? '1' : '0';
-				}
-
-				$valued[ $properties[ $i ] ] = $val;
+		foreach ( $declarations as $property => $option ) {
+			if ( empty( $this->options[ $option ] ) ) {
+				continue;
 			}
-			++$i;
+
+			/*
+			 * Escaped with clc_escape_css_value(), not esc_attr(): HTML
+			 * entities are not decoded inside a <style> element, so
+			 * esc_attr() would corrupt legitimate values (quoted font
+			 * names became &#039;) while blocking nothing.
+			 */
+			$value = clc_escape_css_value( $this->css_value( $property, $option, $this->options[ $option ] ) );
+
+			if ( '' !== $value ) {
+				$lines .= $property . ':' . $value . ";\n";
+			}
 		}
 
-		if ( ! empty( $valued ) ) {
-
-			$string .= $selector . '{' . "\n";
-
-			foreach ( $valued as $index => $value ) {
-				/*
-				 * Escaped with clc_escape_css_value(), not esc_attr(): HTML
-				 * entities are not decoded inside a <style> element, so
-				 * esc_attr() would corrupt legitimate values (quoted font
-				 * names became &#039;) while blocking nothing.
-				 */
-				$declaration = clc_escape_css_value( (string) $this->add_artifacts( $index, $value ) );
-
-				if ( '' === $declaration ) {
-					continue;
-				}
-
-				$string .= $index . ':' . $declaration . ';' . "\n";
-			}
-			$string .= '}' . "\n";
+		if ( '' === $lines ) {
+			return '';
 		}
 
-		return $string;
+		return $selector . "{\n" . $lines . "}\n";
 	}
 
 	/**
-	 * Append CSS units/wrappers to a raw value based on the property.
+	 * Turn a saved option value into a CSS value for the given property.
+	 *
+	 * Mirrored by cssValue() in clc-preview.js.
 	 *
 	 * @param string $property CSS property name.
-	 * @param string $value    Raw value to decorate.
+	 * @param string $option   Option key the value came from.
+	 * @param mixed  $value    Saved option value.
 	 *
 	 * @return string
 	 */
-	private function add_artifacts( $property, $value ) {
+	private function css_value( string $property, string $option, $value ): string {
 		switch ( $property ) {
 			case 'background-image':
 				// Quote the URL and drop characters that could close url() early.
-				$value = 'url("' . str_replace( array( '"', "'", '(', ')' ), '', (string) $value ) . '")';
-				break;
+				return 'url("' . str_replace( array( '"', "'", '(', ')' ), '', clc_stringify( $value ) ) . '")';
 
 			case 'width':
-			case 'min-width':
 			case 'max-width':
-			case 'background-size':
 			case 'height':
 			case 'min-height':
-			case 'max-height':
 			case 'font-size':
 				// Append px only to bare numbers, so values that already carry a
 				// unit or keyword (e.g. 100%, auto) are passed through unchanged.
-				if ( is_numeric( $value ) ) {
-					$value = $value . 'px';
-				}
-				break;
+				$value = clc_stringify( $value );
+
+				return is_numeric( $value ) ? $value . 'px' : $value;
+
 			case 'display':
-				if ( ! $value ) {
-					$value = 'block';
-				} else {
-					$value = 'none';
+				// The logo used to be three toggles and is now one select.
+				if ( 'logo-settings' === $option ) {
+					return 'hide-logo' === $value ? 'none' : 'block';
 				}
-				// Fall through to default.
-			default:
-				break;
+
+				return 'none';
 		}
 
-		return $value;
+		return clc_stringify( $value );
 	}
-
 
 	/**
 	 * Filter the login page body classes based on the saved layout options.
 	 *
-	 * @param array $classes Existing body classes.
-	 * @return array Modified body classes.
+	 * @param array<int, string> $classes Existing body classes.
+	 * @return array<int, string> Modified body classes.
 	 */
 	public function body_class( $classes ) {
+		$classes = (array) $classes;
 
-		if ( '2' === $this->options['columns'] ) {
+		// Compare as integers: the setting is saved as a string, but older
+		// migrations stored the number 2.
+		if ( 2 === (int) $this->options['columns'] ) {
 			$classes[] = 'ml-half-screen';
-			if ( isset( $this->options['form-column-align'] ) ) {
-				$classes[] = 'ml-login-align-' . esc_attr( $this->options['form-column-align'] );
-			}
+			$classes[] = 'ml-login-align-' . sanitize_html_class( clc_stringify( $this->options['form-column-align'] ) );
 		}
 
-		if ( isset( $this->options['form-vertical-align'] ) ) {
-			$classes[] = 'ml-login-vertical-align-' . esc_attr( $this->options['form-vertical-align'] );
-		}
+		$classes[] = 'ml-login-vertical-align-' . sanitize_html_class( clc_stringify( $this->options['form-vertical-align'] ) );
+		$classes[] = 'ml-login-horizontal-align-' . sanitize_html_class( clc_stringify( $this->options['form-horizontal-align'] ) );
 
-		if ( isset( $this->options['form-horizontal-align'] ) ) {
-			$classes[] = 'ml-login-horizontal-align-' . esc_attr( $this->options['form-horizontal-align'] );
-		}
-
-		if ( isset( $this->options['logo-settings'] ) && 'show-text-only' == $this->options['logo-settings'] ) {
+		if ( 'show-text-only' === $this->options['logo-settings'] ) {
 			$classes[] = 'clc-text-logo';
-		}
-
-		if ( isset( $this->options['logo-settings'] ) && 'use-both' == $this->options['logo-settings'] ) {
-			$classes[] = 'clc-text-logo clc-both-logo';
+		} elseif ( 'use-both' === $this->options['logo-settings'] ) {
+			$classes[] = 'clc-text-logo';
+			$classes[] = 'clc-both-logo';
 		}
 
 		return $classes;
@@ -896,11 +564,9 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return string Custom or default logo URL.
 	 */
 	public function logo_url( $url ) {
-		if ( '' !== $this->options['logo-url'] ) {
-			return esc_url( $this->options['logo-url'] );
-		}
+		$custom = clc_stringify( $this->options['logo-url'] );
 
-		return $url;
+		return '' !== $custom ? esc_url( $custom ) : $url;
 	}
 
 	/**
@@ -910,11 +576,14 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return string Custom or default logo title.
 	 */
 	public function logo_title( $title ) {
-		if ( isset( $this->options['logo-title'] ) ) {
-			return wp_kses_post( $this->options['logo-title'] );
+		$custom = $this->options['logo-title'];
+
+		// Not customised: keep core's own (translated) text.
+		if ( ! is_scalar( $custom ) || self::DEFAULT_LOGO_TITLE === $custom ) {
+			return $title;
 		}
 
-		return $title;
+		return wp_kses_post( (string) $custom );
 	}
 
 	/**
@@ -943,49 +612,50 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return void
 	 */
 	public function generate_css(): void {
-		$css         = $this->create_css();
-		$custom_css  = $this->options['custom-css'];
-		$columns_css = '';
+		$in_preview = is_customize_preview();
+		$css        = $this->create_css();
+		$columns    = '';
+		$logo_css   = '';
 
-		if ( 2 === (int) $this->options['columns'] ) {
-			$widths = $this->options['columns-width'];
+		// The preview needs these rules up front so switching layout or logo
+		// mode live works without a refresh; both are scoped by body class.
+		if ( $in_preview || 2 === (int) $this->options['columns'] ) {
+			$widths = clc_sanitize_columns_width( $this->options['columns-width'] );
 
-			$left_width  = ( 100 / 12 ) * absint( $widths['left'] );
-			$right_width = ( 100 / 12 ) * absint( $widths['right'] );
+			$left_width  = ( 100 / 12 ) * $widths['left'];
+			$right_width = ( 100 / 12 ) * $widths['right'];
 
-			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' . $left_width . '%; }';
-			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' . $left_width . '%; }';
+			$columns .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' . $left_width . '%; }';
+			$columns .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' . $left_width . '%; }';
 
-			$columns_css .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' . $right_width . '%; }';
-			$columns_css .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' . $right_width . '%; }';
-
+			$columns .= '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' . $right_width . '%; }';
+			$columns .= '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' . $right_width . '%; }';
 		}
 
-		if ( ! empty( $this->options['logo-height'] ) && ! empty( $this->options['logo-width'] ) ) {
-			$backgriund_size = absint( $this->options['logo-width'] ) . 'px ' . absint( $this->options['logo-height'] ) . 'px';
-		} else {
-			$backgriund_size = '20px 20px';
-		}
+		if ( $in_preview || 'use-both' === $this->options['logo-settings'] ) {
+			$logo_width  = absint( $this->options['logo-width'] );
+			$logo_height = absint( $this->options['logo-height'] );
 
-		if ( ! empty( $this->options['custom-logo'] ) ) {
-			$background_image = $this->options['custom-logo'];
-		} else {
-			$background_image = get_site_url() . '/wp-admin/images/wordpress-logo.svg';
-		}
+			$background_size  = ( $logo_width && $logo_height ) ? $logo_width . 'px ' . $logo_height . 'px' : '20px 20px';
+			$background_image = clc_stringify( $this->options['custom-logo'] );
 
-		$logo_css = '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent: unset;background-position:top center !important;padding-top:' . ( 30 + absint( $this->options['logo-height'] ) ) . 'px; background-size: ' . $backgriund_size . '; margin-top: -' . ( 15 + absint( $this->options['logo-height'] ) ) . 'px; position:relative;background-image:url(' . esc_url( $background_image ) . ')}';
+			if ( '' === $background_image ) {
+				$background_image = admin_url( 'images/wordpress-logo.svg' );
+			}
+
+			$logo_css = '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent:unset;background-position:top center !important;padding-top:' . ( 30 + $logo_height ) . 'px;background-size:' . $background_size . ';margin-top:-' . ( 15 + $logo_height ) . 'px;position:relative;background-image:url(' . esc_url( $background_image ) . ')}';
+		}
 
 		/*
 		 * The static base stylesheet is enqueued as a real file by
 		 * enqueue_login_styles(); only the settings-derived rules are inlined
-		 * here. Every value below is sanitized on save (colors, dimensions,
-		 * image URLs) and re-filtered through clc_sanitize_css() on output, so
-		 * it cannot be passed through esc_html() without breaking the CSS.
+		 * here. The logo block is printed first so a custom logo in #clc-style
+		 * (which the preview rewrites live) overrides its fallback image.
 		 */
-		echo '<style id="clc-style">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from sanitized option values, filtered per-property in create_css_lines().
-		echo '<style id="clc-columns-style">' . $columns_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() column widths.
 		echo '<style id="clc-logo-style">' . $logo_css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from absint() dimensions and esc_url() logo path.
-		echo '<style id="clc-custom-css">' . clc_sanitize_css( (string) $custom_css ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Passed through clc_sanitize_css(), which strips tags and dangerous directives.
+		echo '<style id="clc-style">' . $css . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from sanitized option values, escaped per declaration in create_css_lines().
+		echo '<style id="clc-columns-style">' . $columns . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from integer column widths.
+		echo '<style id="clc-custom-css">' . clc_sanitize_css( $this->options['custom-css'] ) . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Passed through clc_sanitize_css(), which strips tags and dangerous directives.
 	}
 
 	/**
@@ -994,14 +664,20 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @return void
 	 */
 	public function add_extra_div() {
+		$background = clc_stringify( $this->options['custom-background'] );
+		$link       = clc_stringify( $this->options['custom-background-link'] );
 
-		$options = get_option( 'clc-options' );
+		echo '<div class="ml-container"><div class="ml-extra-div">';
 
-		if ( isset( $options['custom-background'] ) && '' !== $options['custom-background'] && isset( $options['custom-background-link'] ) && '' !== $options['custom-background-link'] ) {
-			echo '<div class="ml-container"><div class="ml-extra-div"><a class="clc-custom-background-link" href="' . esc_url( $options['custom-background-link'] ) . '"></a></div><div class="ml-form-container">';
-		} else {
-			echo '<div class="ml-container"><div class="ml-extra-div"></div><div class="ml-form-container">';
+		if ( '' !== $background && '' !== $link ) {
+			printf(
+				'<a class="clc-custom-background-link" href="%1$s" aria-label="%2$s"></a>',
+				esc_url( $link ),
+				esc_attr__( 'Background image link', 'colorlib-login-customizer' )
+			);
 		}
+
+		echo '</div><div class="ml-form-container">';
 	}
 
 	/**
@@ -1066,7 +742,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 			$first = true;
 			foreach ( $links as $link ) {
 				if ( ! $first ) {
-					echo ' <span class="clc-footer-sep">&middot;</span> ';
+					echo ' <span class="clc-footer-sep" aria-hidden="true">&middot;</span> ';
 				}
 				echo '<a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['text'] ) . '</a>';
 				$first = false;
@@ -1082,166 +758,116 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	}
 
 	/**
-	 * Register gettext filters for the shared/general login texts.
+	 * Register a core login string to be replaced by a setting.
+	 *
+	 * Whether a string needs escaping depends on how core prints it — see the
+	 * "gettext Filter Escaping" table in CLAUDE.md before changing one.
+	 *
+	 * @param string $text   Core source string (domain `default`).
+	 * @param string $option Option key holding the replacement.
+	 * @param bool   $escape True when core prints the string unescaped.
+	 * @param string $empty  What an empty setting renders: 'blank', 'hide' or 'keep'.
+	 * @return void
+	 */
+	private function add_login_text( string $text, string $option, bool $escape, string $empty = 'blank' ): void {
+		$this->login_texts[ $text ] = array(
+			'option' => $option,
+			'escape' => $escape,
+			'empty'  => $empty,
+		);
+	}
+
+	/**
+	 * Register the gettext filters and the strings shared by every login action.
 	 *
 	 * @return void
 	 */
 	public function check_general_texts() {
+		$this->add_login_text( 'Lost your password?', 'lost-password-text', true );
 
-		add_filter( 'gettext', array( $this, 'change_lost_password_text' ), 99, 3 );
+		add_filter( 'gettext', array( $this, 'filter_login_text' ), 99, 3 );
 		add_filter( 'gettext_with_context', array( $this, 'change_back_to_text' ), 99, 4 );
 	}
 
 	/**
-	 * Register gettext filters for the login-page texts.
+	 * Register the login-page texts.
 	 *
 	 * @return void
 	 */
 	public function check_login_texts() {
-
-		add_filter( 'gettext', array( $this, 'change_username_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_password_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_rememberme_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_login_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
+		$this->add_login_text( 'Username or Email Address', 'username-label', true, 'hide' );
+		$this->add_login_text( 'Password', 'password-label', true, 'hide' );
+		$this->add_login_text( 'Remember Me', 'rememberme-label', false );
+		$this->add_login_text( 'Log In', 'login-label', false, 'keep' );
+		$this->add_login_text( 'Register', 'register-link-label', true );
 	}
 
 	/**
-	 * Register gettext filters for the registration-page texts.
+	 * Register the registration-page texts.
 	 *
 	 * @return void
 	 */
 	public function check_register_texts() {
-
-		add_filter( 'gettext', array( $this, 'change_register_username_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_register_email_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_register_register_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_register_confirmation_text' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
+		$this->add_login_text( 'Username', 'register-username-label', true, 'hide' );
+		$this->add_login_text( 'Email', 'register-email-label', true, 'hide' );
+		$this->add_login_text( 'Register', 'register-button-label', false, 'keep' );
+		$this->add_login_text( 'Registration confirmation will be emailed to you.', 'register-confirmation-email', true );
+		$this->add_login_text( 'Log in', 'login-link-label', true );
 	}
 
 	/**
-	 * Register gettext filters for the lost-password-page texts.
+	 * Register the lost-password-page texts.
 	 *
 	 * @return void
 	 */
 	public function check_lostpasswords_texts() {
-
-		add_filter( 'gettext', array( $this, 'change_lostpasswords_username_label' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_lostpasswords_button_label' ), 99, 3 );
-
-		add_filter( 'gettext', array( $this, 'change_register_login_link_text' ), 99, 3 );
-		add_filter( 'gettext', array( $this, 'change_login_register_link_text' ), 99, 3 );
-	}
-
-
-	/**
-	 * Customizer output for custom username label.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_username_label( $translated_text, $text, $domain ) {
-		$default = 'Username or Email Address';
-		$label   = $this->options['username-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints this label with _e() (unescaped), so escape here.
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-	/**
-	 * Customizer output for custom password label.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_password_label( $translated_text, $text, $domain ) {
-		$default = 'Password';
-		$label   = $this->options['password-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
+		$this->add_login_text( 'Username or Email Address', 'lostpassword-username-label', true, 'hide' );
+		$this->add_login_text( 'Get New Password', 'lostpassword-button-label', false, 'keep' );
+		$this->add_login_text( 'Register', 'register-link-label', true );
+		$this->add_login_text( 'Log in', 'login-link-label', true );
 	}
 
 	/**
-	 * Customizer output for custom remember me text.
+	 * Replace a core login string with the customised text.
 	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
+	 * One callback serves every string registered with add_login_text(). Only
+	 * core's `default` text domain is touched: other plugins on the login page
+	 * (two-factor, CAPTCHA, WooCommerce, ...) translate their own "Password" or
+	 * "Email" strings and must keep them.
+	 *
+	 * @param string $translated_text The translated text.
+	 * @param string $text            The source text.
+	 * @param string $domain          The text domain.
 	 * @return string
 	 */
-	public function change_rememberme_label( $translated_text, $text, $domain ) {
-		$default = 'Remember Me';
-		$label   = $this->options['rememberme-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
+	public function filter_login_text( $translated_text, $text = '', $domain = 'default' ) {
+		if ( 'default' !== $domain || ! is_string( $text ) || ! isset( $this->login_texts[ $text ] ) ) {
 			return $translated_text;
 		}
 
-		// Check if the label is changed.
+		$entry = $this->login_texts[ $text ];
+		$value = $this->options[ $entry['option'] ] ?? '';
+		$label = is_scalar( $value ) ? (string) $value : '';
+
+		// Still the English default: keep core's translation.
 		if ( $label === $text ) {
 			return $translated_text;
-		} else {
-			// Core prints this with esc_html_e(); escaping here would double-encode.
-			$translated_text = $label;
 		}
 
-		return $translated_text;
-	}
+		if ( '' === $label ) {
+			if ( 'keep' === $entry['empty'] ) {
+				return $translated_text;
+			}
 
-	/**
-	 * Customizer output for custom lost your password text.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_lost_password_text( $translated_text, $text, $domain ) {
-		$default = 'Lost your password?';
-		$label   = $this->options['lost-password-text'];
+			if ( 'hide' === $entry['empty'] ) {
+				// Visually removed, but the field keeps its accessible name.
+				return '<span class="screen-reader-text">' . esc_html( $translated_text ) . '</span>';
+			}
 
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
+			return '';
 		}
 
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
+		return $entry['escape'] ? esc_html( $label ) : $label;
 	}
 
 	/**
@@ -1253,7 +879,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 	 * @param string $domain          The text domain of the site.
 	 * @return string
 	 */
-	public function change_back_to_text( $translated_text, $text, $context, $domain ) {
+	public function change_back_to_text( $translated_text, $text, $context, $domain = 'default' ) {
 		/*
 		 * WordPress 5.7 renamed this string from "Back to %s" to "Go to %s"
 		 * (and added the `login_site_html_link` filter). Match both so the
@@ -1262,7 +888,7 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$patterns = array( '&larr; Back to %s', '&larr; Go to %s' );
 
 		// Check if this is our text.
-		if ( ! in_array( $text, $patterns, true ) ) {
+		if ( 'default' !== $domain || ! in_array( $text, $patterns, true ) ) {
 			return $translated_text;
 		}
 
@@ -1295,253 +921,5 @@ class Colorlib_Login_Customizer_CSS_Customization {
 		$label = str_replace( '%', '%%', $label );
 
 		return '&larr; ' . esc_html( $label ) . ' %s';
-	}
-
-	/**
-	 * Customizer output for custom login text.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_login_label( $translated_text, $text, $domain ) {
-		$default = 'Log In';
-		$label   = $this->options['login-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
-			$translated_text = $label;
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for custom register username label.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_register_username_label( $translated_text, $text, $domain ) {
-		$default = 'Username';
-		$label   = $this->options['register-username-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints this label with _e() (unescaped), so escape here.
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for custom register email label.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_register_email_label( $translated_text, $text, $domain ) {
-		$default = 'Email';
-		$label   = $this->options['register-email-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for custom registration confirmation text.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_register_confirmation_text( $translated_text, $text, $domain ) {
-		$default = 'Registration confirmation will be emailed to you.';
-		$label   = $this->options['register-confirmation-email'];
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints this with _e() (unescaped), so escape here.
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for custom register button text.
-	 *
-	 * @param string|string $translated_text The translated text.
-	 * @param string|string $text The label we want to replace.
-	 * @param string|string $domain The text domain of the site.
-	 * @return string
-	 */
-	public function change_register_register_label( $translated_text, $text, $domain ) {
-		$default = 'Register';
-		$label   = $this->options['register-button-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
-			$translated_text = $label;
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for the login link text.
-	 *
-	 * @param string $translated_text The translated text.
-	 * @param string $text            The label we want to replace.
-	 * @param string $domain          The text domain of the site.
-	 * @return string
-	 */
-	public function change_login_register_link_text( $translated_text, $text, $domain ) {
-		$default = 'Log in';
-		$label   = $this->options['login-link-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for the register link text.
-	 *
-	 * @param string $translated_text The translated text.
-	 * @param string $text            The label we want to replace.
-	 * @param string $domain          The text domain of the site.
-	 * @return string
-	 */
-	public function change_register_login_link_text( $translated_text, $text, $domain ) {
-		$default = 'Register';
-		$label   = $this->options['register-link-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for the lost-password username label.
-	 *
-	 * @param string $translated_text The translated text.
-	 * @param string $text            The label we want to replace.
-	 * @param string $domain          The text domain of the site.
-	 * @return string
-	 */
-	public function change_lostpasswords_username_label( $translated_text, $text, $domain ) {
-		$default = 'Username or Email Address';
-		$label   = $this->options['lostpassword-username-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints this label with _e() (unescaped), so escape here.
-			$translated_text = esc_html( $label );
-		}
-
-		return $translated_text;
-	}
-
-	/**
-	 * Customizer output for the lost-password button label.
-	 *
-	 * @param string $translated_text The translated text.
-	 * @param string $text            The label we want to replace.
-	 * @param string $domain          The text domain of the site.
-	 * @return string
-	 */
-	public function change_lostpasswords_button_label( $translated_text, $text, $domain ) {
-		$default = 'Get New Password';
-		$label   = $this->options['lostpassword-button-label'];
-
-		// Check if this is our text.
-		if ( $default !== $text ) {
-			return $translated_text;
-		}
-
-		// Check if the label is changed.
-		if ( $label === $text ) {
-			return $translated_text;
-		} else {
-			// Core prints the button value with esc_attr_e(); escaping here would double-encode.
-			$translated_text = $label;
-		}
-
-		return $translated_text;
 	}
 }

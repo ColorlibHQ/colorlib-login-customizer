@@ -300,6 +300,15 @@ body.ml-login-horizontal-align-3 .ml-form-container {
 .login textarea:focus {
 	box-shadow: none;
 }
+/* Core's focus ring is the box-shadow removed above (templates restyle the
+   fields), so keyboard users need a replacement to see where they are. */
+.login input:focus-visible,
+.login select:focus-visible,
+.login textarea:focus-visible,
+.login .clc-custom-background-link:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 1px;
+}
 
 @media only screen and (max-width: 768px) {
 

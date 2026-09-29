@@ -1,362 +1,286 @@
-( function( $ ) {
+/**
+ * Customizer live preview for the login page.
+ *
+ * #clc-style is rebuilt from CLC.rules, the same rule list PHP prints on the
+ * real login page, so the preview and the saved result cannot drift apart.
+ * cssValue(), backgroundFilter() and bothLogoCSS() mirror css_value(),
+ * background_filter_css() and generate_css() in
+ * includes/lib/class-colorlib-login-customizer-css-customization.php —
+ * change them together.
+ */
+( function ( $, api, data ) {
+	'use strict';
 
-  var clcCustomCSS = {
-    selectors: {},
-    settings: {},
-    style: '',
-    init: function( settings, selectors ) {
-      this.selectors = selectors;
-      this.settings = settings;
+	var PX_PROPERTIES = [ 'width', 'max-width', 'height', 'min-height', 'font-size' ],
+	    values        = {},
+	    queued        = false;
 
-      this.style = $( '#clc-style' );
-      this._binds();
-    },
-    _binds: function() {
-      var self = this;
-      $.each( self.settings, function( index, setting ) {
-        wp.customize( setting.name, function( value ) {
-          value.bind( function( to ) {
-            self.settings[ index ].value = to;
-            self.createCSSLines();
-          } );
-        } );
-      });
-    },
-    createCSSLines: function() {
-      var style = '',
-          self = this;
-      $.each( self.selectors, function( index, selector ) {
-        var cssLine = index + '{';
-        $.each( selector, function( index, option ) {
-          cssLine = cssLine + self.generateCSSLine( option );
-        });
-        style = style + cssLine + '}';
-      });
-     
-      // textContent, not innerHTML: stylesheet text must never be parsed as markup.
-      self.style.text( style );
+	if ( ! data || ! data.rules ) {
+		return;
+	}
 
-    },
-    generateCSSLine: function( option ) {
+	// Mirrors PHP empty() for the value types a setting can hold.
+	function isEmpty( value ) {
+		return undefined === value || null === value || false === value || '' === value || '0' === value || 0 === value;
+	}
 
-        var line = this.settings[ option ].attribute + ':';
+	function absint( value ) {
+		return Math.abs( parseInt( value, 10 ) ) || 0;
+	}
 
-        if ( '' === this.settings[ option ].value && 'custom-logo' !== option ) {
-          return '';
-        }
-        if ( undefined === this.settings[ option ].attribute || undefined === this.settings[ option ].value ) {
-          return '';
-        }
+	// Last line of defence, like clc_escape_css_value(): nothing may leave the declaration.
+	function escapeValue( value ) {
+		return String( value ).replace( /[<>{};\\]/g, '' ).trim();
+	}
 
-      if ( $.inArray( this.settings[ option ].attribute, [ 'width', 'min-width', 'max-width', 'background-size', 'height', 'min-height', 'max-height', 'font-size' ] ) >= 0 ) {
-        line += this.settings[ option ].value + 'px';
+	function cssValue( property, option, value ) {
+		value = String( value ).trim();
 
-      } else if ( 'background-image' === this.settings[option].attribute ) {
-        if ( this.settings[option].value.length ) {
-          line += 'url(' + this.settings[option].value + ') !important;';
-        } else {
-          line += 'url(wp-admin/images/wordpress-logo.svg) !important;';
-        }
-      } else if ( 'display' === this.settings[option].attribute ) {
-        // We replaced toggle with select so we need to make sure
-        // h1 displays correctly
-        if ( 'clc-options[logo-settings]' !== this.settings[option].name ) {
-          if ( this.settings[option].value ) {
-            line += 'none';
-          } else {
-            line += 'block';
-          }
-        } else {
-          if ( 'hide-logo' === this.settings[option].value ) {
-            line += 'none';
-          } else {
-            line += 'block';
-          }
-        }
-      } else {
-        line += this.settings[ option ].value;
-      }
-      line += ';';
- 
-      return line;
-    }
-  };
+		switch ( property ) {
+			case 'background-image':
+				return 'url("' + value.replace( /["'()]/g, '' ) + '")';
 
-  clcCustomCSS.init( CLC.settings, CLC.selectors );
+			case 'display':
+				if ( 'logo-settings' === option ) {
+					return 'hide-logo' === value ? 'none' : 'block';
+				}
+				return 'none';
+		}
 
-  // Live edits
-  /* Columns */
-  wp.customize( 'clc-options[columns]', function( value ) {
-    value.bind( function( to ) {
-      if ( '2' === to ) {
-        $( 'body' ).addClass( 'ml-half-screen' );
-      } else {
-        $( 'body' ).removeClass( 'ml-half-screen' );
-      }
-    } );
-  } );
+		if ( -1 !== PX_PROPERTIES.indexOf( property ) && /^-?\d*\.?\d+$/.test( value ) ) {
+			return value + 'px';
+		}
 
-  // Change classes base on what logo settings are enabled
-  wp.customize( 'clc-options[logo-settings]', function ( settings ) {
-    settings.bind( function ( value ) {
-      if ( 'show-text-only' === value ) {
-        $( 'body' ).removeClass( 'clc-both-logo' ).addClass( 'clc-text-logo' );
-      } else if ( 'use-both' === value ) {
-        $( 'body' ).removeClass( 'clc-text-logo' ).addClass( 'clc-both-logo' );
-      } else {
-        $( 'body' ).removeClass( 'clc-text-logo clc-both-logo');
-      }
-    } );
-  } );
+		return value;
+	}
 
+	function backgroundFilter() {
+		var blur       = absint( values[ 'background-blur' ] ),
+		    brightness = values[ 'background-brightness' ],
+		    filters    = [];
 
-  wp.customize( 'clc-options[logo-title]', function( value ) {
-    value.bind( function( to ) {
-      $( '#logo-text' ).text( to );
-    } );
-  } );
+		brightness = ( undefined === brightness || null === brightness ) ? 100 : absint( brightness );
 
-  // logo title
-	wp.customize( 'clc-options[logo-title]', function( value ) {
-		value.bind( function( to ) {
+		if ( blur > 0 ) {
+			filters.push( 'blur(' + blur + 'px)' );
+		}
+
+		if ( 100 !== brightness ) {
+			filters.push( 'brightness(' + brightness + '%)' );
+		}
+
+		return filters.length ? '.ml-container .ml-extra-div{filter:' + filters.join( ' ' ) + ';}' : '';
+	}
+
+	function buildCSS() {
+		var css = '';
+
+		$.each( data.rules, function ( index, rule ) {
+			var lines = '';
+
+			$.each( rule.declarations, function ( property, option ) {
+				var value;
+
+				if ( isEmpty( values[ option ] ) ) {
+					return;
+				}
+
+				value = escapeValue( cssValue( property, option, values[ option ] ) );
+
+				if ( '' !== value ) {
+					lines += property + ':' + value + ';\n';
+				}
+			} );
+
+			if ( lines ) {
+				css += rule.selector + '{\n' + lines + '}\n';
+			}
+		} );
+
+		return css + backgroundFilter();
+	}
+
+	function bothLogoCSS() {
+		var width  = absint( values[ 'logo-width' ] ),
+		    height = absint( values[ 'logo-height' ] ),
+		    image  = String( values[ 'custom-logo' ] || '' ).replace( /["'()\\]/g, '' ) || data.defaultLogo,
+		    size   = ( width && height ) ? width + 'px ' + height + 'px' : '20px 20px';
+
+		return '.login.clc-both-logo h1 a{width:100%;height:100%;text-indent:unset;background-position:top center !important;' +
+			'padding-top:' + ( 30 + height ) + 'px;background-size:' + size + ';margin-top:-' + ( 15 + height ) + 'px;' +
+			'position:relative;background-image:url("' + image + '")}';
+	}
+
+	// Coalesce bursts (a template sets dozens of settings at once) into one repaint.
+	function render() {
+		if ( queued ) {
+			return;
+		}
+
+		queued = true;
+
+		window.requestAnimationFrame( function () {
+			queued = false;
+
+			// textContent, not innerHTML: stylesheet text must never be parsed as markup.
+			$( '#clc-style' ).text( buildCSS() );
+			$( '#clc-logo-style' ).text( bothLogoCSS() );
+		} );
+	}
+
+	$.each( data.settings, function ( option, setting ) {
+		values[ option ] = setting.value;
+
+		api( setting.name, function ( value ) {
+			value.bind( function ( to ) {
+				values[ option ] = to;
+				render();
+			} );
+		} );
+	} );
+
+	// Replace the text of an element when a setting changes.
+	function bindText( setting, selector, keepWhenEmpty ) {
+		api( 'clc-options[' + setting + ']', function ( value ) {
+			value.bind( function ( to ) {
+				if ( keepWhenEmpty && ! to ) {
+					return;
+				}
+				$( selector ).text( to );
+			} );
+		} );
+	}
+
+	// Replace the value of a submit button when a setting changes.
+	function bindButton( setting, selector ) {
+		api( 'clc-options[' + setting + ']', function ( value ) {
+			value.bind( function ( to ) {
+				if ( to ) {
+					$( selector ).val( to );
+				}
+			} );
+		} );
+	}
+
+	// Swap one body class from a numbered family.
+	function bindBodyClass( setting, prefix, count ) {
+		api( 'clc-options[' + setting + ']', function ( value ) {
+			value.bind( function ( to ) {
+				var i, classes = [];
+
+				for ( i = 1; i <= count; i++ ) {
+					classes.push( prefix + i );
+				}
+
+				$( document.body ).removeClass( classes.join( ' ' ) ).addClass( prefix + to );
+			} );
+		} );
+	}
+
+	/* Layout */
+	api( 'clc-options[columns]', function ( value ) {
+		value.bind( function ( to ) {
+			$( document.body ).toggleClass( 'ml-half-screen', 2 === parseInt( to, 10 ) );
+		} );
+	} );
+
+	bindBodyClass( 'form-column-align', 'ml-login-align-', 4 );
+	bindBodyClass( 'form-vertical-align', 'ml-login-vertical-align-', 3 );
+	bindBodyClass( 'form-horizontal-align', 'ml-login-horizontal-align-', 3 );
+
+	api( 'clc-options[columns-width]', function ( value ) {
+		value.bind( function ( to ) {
+			var css, left, right;
+
+			if ( ! to || undefined === to.left || undefined === to.right ) {
+				return;
+			}
+
+			left  = ( 100 / 12 ) * parseInt( to.left, 10 );
+			right = ( 100 / 12 ) * parseInt( to.right, 10 );
+
+			css  = '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' + left + '%; }';
+			css += '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' + left + '%; }';
+			css += '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' + right + '%; }';
+			css += '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' + right + '%; }';
+
+			$( '#clc-columns-style' ).text( css );
+		} );
+	} );
+
+	/* Logo */
+	api( 'clc-options[logo-settings]', function ( value ) {
+		value.bind( function ( to ) {
+			$( document.body )
+				.toggleClass( 'clc-text-logo', 'show-text-only' === to || 'use-both' === to )
+				.toggleClass( 'clc-both-logo', 'use-both' === to );
+		} );
+	} );
+
+	api( 'clc-options[logo-title]', function ( value ) {
+		value.bind( function ( to ) {
+			$( '#logo-text' ).text( to );
 			$( '#clc-logo-link' ).attr( 'title', to );
 		} );
 	} );
 
-  /* Column Align */
-  wp.customize( 'clc-options[form-column-align]', function( value ) {
-    value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-align-1 ml-login-align-2 ml-login-align-3 ml-login-align-4' ).addClass( 'ml-login-align-' + to );
-    } );
-  } );
+	api( 'clc-options[logo-url]', function ( value ) {
+		value.bind( function ( to ) {
+			$( '#clc-logo-link' ).attr( 'href', to );
+		} );
+	} );
 
-  /* Column Vertical Align */
-  wp.customize( 'clc-options[form-vertical-align]', function( value ) {
-    value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-vertical-align-1 ml-login-vertical-align-2 ml-login-vertical-align-3' ).addClass( 'ml-login-vertical-align-' + to );
-    } );
-  } );
+	/* Custom CSS */
+	api( 'clc-options[custom-css]', function ( value ) {
+		value.bind( function ( to ) {
+			$( '#clc-custom-css' ).text( to );
+		} );
+	} );
 
-  /* Column Horizontal Align */
-  wp.customize( 'clc-options[form-horizontal-align]', function( value ) {
-    value.bind( function( to ) {
-      $( 'body' ).removeClass( 'ml-login-horizontal-align-1 ml-login-horizontal-align-2 ml-login-horizontal-align-3' ).addClass( 'ml-login-horizontal-align-' + to );
-    } );
-  } );
+	/* Form texts */
+	bindText( 'username-label', '#clc-username-label' );
+	bindText( 'password-label', '#clc-password-label' );
+	bindText( 'rememberme-label', '#clc-rememberme-label' );
+	bindText( 'lost-password-text', '#clc-lost-password-text' );
+	bindText( 'register-username-label', '#clc-register-username-label' );
+	bindText( 'register-email-label', '#clc-register-email-label' );
+	bindText( 'register-confirmation-email', '#reg_passmail' );
+	bindText( 'lostpassword-username-label', '#clc-lostpassword-username-label' );
+	bindText( 'register-link-label', '#register-link-label', true );
+	bindText( 'login-link-label', '#login-link-label', true );
 
-  // Custom CSS
-  wp.customize( 'clc-options[custom-css]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-custom-css' ).text( to );
-    } );
-  } );
+	bindButton( 'login-label', '#loginform input[name="wp-submit"]' );
+	bindButton( 'register-button-label', '#registerform input[name="wp-submit"]' );
+	bindButton( 'lostpassword-button-label', '#lostpasswordform input[name="wp-submit"]' );
 
-  // Username label
-  wp.customize( 'clc-options[username-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-username-label' ).text( to );
-    } );
-  } );
+	api( 'clc-options[back-to-text]', function ( value ) {
+		value.bind( function ( to ) {
+			$( '#clc-back-to-text' ).text( '← ' + to );
+		} );
+	} );
 
-  // Password label
-  wp.customize( 'clc-options[password-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-password-label' ).text( to );
-    } );
-  } );
+	// Shortcut buttons in the preview open the matching Customizer section.
+	$( '.clc-preview-event' ).on( 'click', function ( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+		api.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
+	} );
 
-  // Remember Me label
-  wp.customize( 'clc-options[rememberme-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-rememberme-label' ).text( to );
-    } );
-  } );
+	api.bind( 'preview-ready', function () {
+		api.preview.bind( 'change-form', function ( form ) {
+			var forms = [ 'login', 'register', 'lostpassword' ];
 
-    // Logo url
-    wp.customize( 'clc-options[logo-url]', function( value ) {
-        value.bind( function( to ) {
-            $( 'a#clc-logo-link' ).attr('href', to );
-        } );
-    } );
+			if ( -1 === forms.indexOf( form ) ) {
+				form = 'login';
+			}
 
-    // Lost password text
-    wp.customize( 'clc-options[lost-password-text]', function( value ) {
-        value.bind( function( to ) {
-            $( '#clc-lost-password-text' ).text( to );
-        } );
-    } );
+			$.each( forms, function ( index, name ) {
+				if ( name !== form ) {
+					$( '.show-only_' + name ).hide();
+				}
+			} );
 
-    // Back to site text
-  wp.customize( 'clc-options[back-to-text]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-back-to-text' ).text( '\u2190 ' + to );
-    } );
-  } );
-
-     // Login label
-  wp.customize( 'clc-options[login-label]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
-        return;
-      }
-      $( '#loginform input[name="wp-submit"]' ).val( to );
-    } );
-  } );
-
-  // Register username label
-  wp.customize( 'clc-options[register-username-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-register-sername-label' ).text( to );
-    } );
-  } );
-
-  // Register email label
-  wp.customize( 'clc-options[register-email-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#clc-register-email-label' ).text( to );
-    } );
-  } );
-
-  // Register confirmation text
-  wp.customize( 'clc-options[register-confirmation-email]', function( value ) {
-    value.bind( function( to ) {
-      $( '#reg_passmail' ).text( to );
-    } );
-  } );
-
-
-  // Register button text
-  wp.customize( 'clc-options[register-button-label]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
-        return;
-      }
-      $( '#registerform input[name="wp-submit"]' ).val( to );
-    } );
-  } );
-
-  // Register link text
-  wp.customize( 'clc-options[register-link-label]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
-        return;
-      }
-      $( '#register-link-label' ).text( to );
-    } );
-  } );
-
-  // Login link text
-  wp.customize( 'clc-options[login-link-label]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
-        return;
-      }
-      $( '#login-link-label' ).text( to );
-    } );
-  } );
-
-  // Logo width
-  wp.customize( 'clc-options[logo-width]', function ( value ) {
-
-    value.bind( function ( to ) {
-      if ( !to ) {
-        return;
-      }
-
-
-      var h_size = wp.customize( 'clc-options[logo-height]' )._value + 'px ';
-      var pad_t = ( 30 + parseInt( wp.customize( 'clc-options[logo-height]' )._value, 10 ) ) + 'px ';
-      var mar_top = ( 0 - (30 + parseInt( wp.customize( 'clc-options[logo-height]' )._value, 10 ) )) + 'px ';
-      var w_size = to + 'px ';
-
-      $( '.login.clc-both-logo h1 a' ).css( {
-        'margin-top':      mar_top,
-        'background-size': w_size + h_size,
-        'padding-top':     pad_t
-      } );
-    } );
-  } );
-
-  // Logo height
-  wp.customize( 'clc-options[logo-height]', function ( value ) {
-
-    value.bind( function ( to ) {
-      if ( !to ) {
-        return;
-      }
-
-      var w_size = wp.customize( 'clc-options[logo-width]' )._value + 'px ';
-      var h_size = to + 'px';
-
-      $( '.login.clc-both-logo h1 a' ).css( {
-        'margin-top':      ( 0 - (30 + parseInt( to, 10 )) ) + 'px',
-        'background-size': w_size + h_size,
-        'padding-top':     ( 30 + parseInt( to, 10 ) ) + 'px'
-      } );
-    } );
-  } );
-
-  // Lost password button text
-  wp.customize( 'clc-options[lostpassword-button-label]', function( value ) {
-    value.bind( function( to ) {
-      if( ! to ) {
-        return;
-      }
-      $( '#lostpasswordform input[name="wp-submit"]' ).val( to );
-    } );
-  } );
-
-  // Username label
-  wp.customize( 'clc-options[lostpassword-username-label]', function( value ) {
-    value.bind( function( to ) {
-      $( '#lostpasswordform label span' ).text( to );
-    } );
-  } );
-
-
-  // Columns width
-  wp.customize( 'clc-options[columns-width]', function( value ) {
-    value.bind( function( to ) {
-      var customCSS = '',
-          leftWidth,
-          rightWidth;
-      if ( '' !== to && undefined !== to.left && undefined !== to.right ) {
-        leftWidth = ( 100 / 12 )*parseInt( to.left, 10 );
-        rightWidth = ( 100 / 12 )*parseInt( to.right, 10 );
-        customCSS = '.ml-half-screen.ml-login-align-3 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-1 .ml-container .ml-form-container{ width:' + leftWidth + '%; }';
-        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-extra-div,.ml-half-screen.ml-login-align-2 .ml-container .ml-form-container{ flex-basis:' + leftWidth + '%; }';
-
-        customCSS += '.ml-half-screen.ml-login-align-3 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-1 .ml-container .ml-extra-div{ width:' + rightWidth + '%; }';
-        customCSS += '.ml-half-screen.ml-login-align-4 .ml-container .ml-form-container,.ml-half-screen.ml-login-align-2 .ml-container .ml-extra-div{ flex-basis:' + rightWidth + '%; }';
-
-        $( '#clc-columns-style' ).text( customCSS );
-
-      }
-    } );
-  } );
-
-  $( '.clc-preview-event' ).on( 'click', function( e ) {
-    e.preventDefault();
-    e.stopPropagation();
-    wp.customize.preview.send( 'clc-focus-section', $( this ).data( 'section' ) );
-  } );
-
-  wp.customize.bind( 'preview-ready', function() {
-    wp.customize.preview.bind( 'change-form', function( form ) {
-      if ( 'register' === form ) {
-        $('.show-only_login').hide();
-        $('.show-only_lostpassword').hide();
-        $('.show-only_register').show();
-      }else if( 'lostpassword' === form ){
-        $('.show-only_login').hide();
-        $('.show-only_register').hide();
-        $('.show-only_lostpassword').show();
-      }else{
-        $('.show-only_register').hide();
-        $('.show-only_lostpassword').hide();
-        $('.show-only_login').show();
-      }
-    } );
-  } );
-
-})( jQuery );
+			$( '.show-only_' + form ).show();
+		} );
+	} );
+}( jQuery, wp.customize, window.CLC ) );
