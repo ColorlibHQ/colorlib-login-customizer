@@ -39,20 +39,6 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 	public $choices = array();
 
 	/**
-	 * Colorlib_Login_Customizer_Button_Group_Control constructor.
-	 *
-	 * @since 1.1.0
-	 *
-	 * @param WP_Customize_Manager $manager Customizer manager instance.
-	 * @param string               $id      Control ID.
-	 * @param array                $args    Control arguments.
-	 */
-	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
-		parent::__construct( $manager, $id, $args );
-		$manager->register_control_type( 'Colorlib_Login_Customizer_Button_Group_Control' );
-	}
-
-	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @since  1.1.0
@@ -66,13 +52,37 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 		$json['default']   = $this->default;
 		$json['choices']   = $this->choices;
 		$json['groupType'] = $this->set_group_type();
-
-		$this->json['inputAttrs'] = '';
-		foreach ( $this->input_attrs as $attr => $value ) {
-			$this->json['inputAttrs'] .= $attr . '="' . esc_attr( $value ) . '" ';
-		}
+		$json['labels']    = $this->choice_labels();
 
 		return $json;
+	}
+
+	/**
+	 * Accessible names for the image-only buttons, keyed like the choices.
+	 *
+	 * @return array<string|int, string>
+	 */
+	public function choice_labels() {
+		$names = array(
+			'left'   => __( 'Left', 'colorlib-login-customizer' ),
+			'right'  => __( 'Right', 'colorlib-login-customizer' ),
+			'top'    => __( 'Top', 'colorlib-login-customizer' ),
+			'bottom' => __( 'Bottom', 'colorlib-login-customizer' ),
+			'middle' => __( 'Middle', 'colorlib-login-customizer' ),
+		);
+
+		$labels = array();
+
+		foreach ( array_keys( $this->choices ) as $key ) {
+			if ( isset( $names[ $key ] ) ) {
+				$labels[ $key ] = $names[ $key ];
+			} else {
+				/* translators: %d: number of columns. */
+				$labels[ $key ] = sprintf( _n( '%d column', '%d columns', (int) $key, 'colorlib-login-customizer' ), (int) $key );
+			}
+		}
+
+		return $labels;
 	}
 
 	/**
@@ -87,8 +97,19 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 			4 => 'four',
 		);
 
-		return $arr[ count( $this->choices ) ];
+		return $arr[ count( $this->choices ) ] ?? 'four';
 	}
+
+	/**
+	 * Don't render the content via PHP: the JS template below replaces it.
+	 *
+	 * Without this override core's default markup was built (and discarded)
+	 * for every instance, and for the column widths it called esc_attr() on
+	 * the array value, logging "Array to string conversion".
+	 *
+	 * @return void
+	 */
+	public function render_content() {}
 
 	/**
 	 * Display the control's content
@@ -111,13 +132,13 @@ class Colorlib_Login_Customizer_Button_Group_Control extends WP_Customize_Contro
 			<div class="colorlib-login-customizer-control-set">
 				<div class="colorlib-login-customizer-control-group colorlib-login-customizer-group-{{ data.groupType }}">
 					<# for( var i in data.choices ) { #>
-						<a href="#" data-value="{{ data.choices[i].value }}" <# if( data.value == data.choices[i].value ) { #> class="active" <# } #> >
+						<a href="#" role="button" data-value="{{ data.choices[i].value }}" aria-label="{{ data.labels[i] }}" <# if( data.value == data.choices[i].value ) { #> class="active" aria-pressed="true" <# } else { #> aria-pressed="false" <# } #> >
 							<# if( ! _.isUndefined( data.choices[i].icon ) ) { #>
-								<i class="dashicons {{ data.choices[i].icon }}"/>
+								<i class="dashicons {{ data.choices[i].icon }}" aria-hidden="true"></i>
 							<# } #>
 
 							<# if( ! _.isUndefined( data.choices[i].png ) ) { #>
-								<img src="{{ data.choices[i].png }}" />
+								<img src="{{ data.choices[i].png }}" alt="" />
 							<# } #>
 						</a>
 					<# } #>

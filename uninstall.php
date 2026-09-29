@@ -23,7 +23,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
  * - `clc-options`                      main settings blob.
  * - `clc-admin-menu-location`          admin menu placement preference.
  * - `colorlib-login-customizer_version` version stamp written on activation.
- * - `clc_review`                       install-date transient for the review notice.
+ * - `clc_review_installed`             install date for the review notice.
+ * - `clc_review`                       legacy (pre-2.3.1) install-date transient.
  *
  * @return void
  */
@@ -31,6 +32,7 @@ function clc_uninstall_site_data(): void {
 	delete_option( 'clc-options' );
 	delete_option( 'clc-admin-menu-location' );
 	delete_option( 'colorlib-login-customizer_version' );
+	delete_option( 'clc_review_installed' );
 
 	delete_transient( 'clc_review' );
 }

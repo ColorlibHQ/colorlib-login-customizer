@@ -21,8 +21,10 @@ $GLOBALS['clc_test_options'] = array();
  * @return void
  */
 function clc_test_reset(): void {
-	$GLOBALS['clc_test_hooks']   = array();
-	$GLOBALS['clc_test_options'] = array();
+	$GLOBALS['clc_test_hooks']     = array();
+	$GLOBALS['clc_test_options']   = array();
+	$GLOBALS['clc_test_localized'] = array();
+	$GLOBALS['clc_test_preview']   = false;
 }
 
 /**
@@ -206,6 +208,11 @@ function home_url( $path = '' ): string {
 }
 
 /** @return string */
+function admin_url( $path = '' ): string {
+	return 'https://example.test/wp-admin/' . ltrim( (string) $path, '/' );
+}
+
+/** @return string */
 function plugins_url( $path = '', $plugin = '' ): string {
 	return 'https://example.test/wp-content/plugins/colorlib-login-customizer' . $path;
 }
@@ -232,7 +239,7 @@ function load_plugin_textdomain( $domain, $deprecated = false, $path = '' ): boo
 
 /** @return bool */
 function is_customize_preview(): bool {
-	return false;
+	return ! empty( $GLOBALS['clc_test_preview'] );
 }
 
 /** @return bool */
@@ -259,6 +266,16 @@ function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $
 /** @return string */
 function __( $text, $domain = 'default' ): string {
 	return (string) $text;
+}
+
+/** @return string */
+function esc_attr__( $text, $domain = 'default' ): string {
+	return esc_attr( $text );
+}
+
+/** @return string */
+function esc_html__( $text, $domain = 'default' ): string {
+	return esc_html( $text );
 }
 
 /** @return string */

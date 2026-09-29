@@ -122,9 +122,6 @@ class Colorlib_Login_Customizer {
 
 		add_filter( 'template_include', array( $this, 'change_template_if_necessary' ), 99 );
 
-		// Handle localisation.
-		add_action( 'init', array( $this, 'load_localisation' ), 0 );
-
 		// Generate plugins css.
 		add_action( 'init', array( $this, 'load_customizer_css' ) );
 
@@ -149,15 +146,6 @@ class Colorlib_Login_Customizer {
 	 */
 	public function load_customizer_css(): void {
 		new Colorlib_Login_Customizer_CSS_Customization();
-	}
-
-	/**
-	 * Load plugin localisation.
-	 *
-	 * @return void
-	 */
-	public function load_localisation(): void {
-		load_plugin_textdomain( 'colorlib-login-customizer', false, dirname( plugin_basename( $this->file ) ) . '/languages/' );
 	}
 
 	/**
@@ -208,7 +196,7 @@ class Colorlib_Login_Customizer {
 		if ( $options ) {
 			if ( isset( $options['templates'] ) && '01' === $options['templates'] ) {
 				$options['templates'] = 'default';
-				$options['columns']   = 2;
+				$options['columns']   = '2';
 			}
 
 			update_option( $this->key_name, $options );
@@ -228,10 +216,13 @@ class Colorlib_Login_Customizer {
 	/**
 	 * Change template to custom login template when in customizer preview.
 	 *
-	 * @param string $template Current template path.
-	 * @return string Modified template path.
+	 * Untyped on purpose: another plugin's template_include filter may hand
+	 * over a non-string, and a strict signature would turn that into a fatal.
+	 *
+	 * @param mixed $template Current template path.
+	 * @return mixed Modified template path.
 	 */
-	public function change_template_if_necessary( string $template ): string {
+	public function change_template_if_necessary( $template ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only preview check; no data is processed and it is gated by login + edit_theme_options capability below.
 		if ( is_customize_preview() && isset( $_GET['colorlib-login-customizer-customization'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			&& is_user_logged_in()
@@ -269,7 +260,7 @@ class Colorlib_Login_Customizer {
 			 * Logo section
 			 */
 			'logo-settings'                => 'show-image-only',
-			'logo-url'                     => site_url(),
+			'logo-url'                     => home_url( '/' ),
 			'logo-title'                   => 'Powered by WordPress',
 			'login-page-title'             => '',
 			'custom-logo'                  => '',
@@ -394,11 +385,14 @@ class Colorlib_Login_Customizer {
 	/**
 	 * Filter options aio_wp_security_configs.
 	 *
-	 * @param array<string, mixed> $option Options array.
-	 * @return array<string, mixed> Filtered options.
+	 * @param mixed $option Options array.
+	 * @return mixed Filtered options.
 	 */
-	public function clc_aio_wp_security_filter_options( array $option ): array {
-		unset( $option['aiowps_enable_rename_login_page'] );
+	public function clc_aio_wp_security_filter_options( $option ) {
+		if ( is_array( $option ) ) {
+			unset( $option['aiowps_enable_rename_login_page'] );
+		}
+
 		return $option;
 	}
 }

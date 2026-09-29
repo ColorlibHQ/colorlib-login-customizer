@@ -126,8 +126,20 @@
   padding-top: 3px;
   width: calc(100% + 1px);
 }
+/* Visually hidden but still focusable, so templates can be picked by keyboard. */
 .customize-control-clc-templates .colorlib-login-customizer-templates__input {
-  display: none !important;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: 0 !important;
+  opacity: 0;
+  clip-path: inset(50%);
+}
+.customize-control-clc-templates .colorlib-login-customizer-templates__input:focus-visible + label,
+.colorlib-login-customizer-control-group a:focus-visible,
+.clc-layouts-container-advanced .clc-column > a:focus-visible {
+  outline: 2px solid #2271b1;
+  outline-offset: 1px;
 }
 .customize-control-clc-templates .colorlib-login-customizer-templates__input:checked + label {
   box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.7);

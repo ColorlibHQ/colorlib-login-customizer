@@ -241,9 +241,11 @@ class CssOutputTest extends TestCase {
 	public function test_labels_printed_raw_by_core_are_escaped(): void {
 		$css = $this->makeBooted( array( 'username-label' => 'User & Email' ) );
 
+		$css->check_login_texts();
+
 		$this->assertSame(
 			'User &amp; Email',
-			$css->change_username_label( 'Username or Email Address', 'Username or Email Address', 'default' )
+			$css->filter_login_text( 'Username or Email Address', 'Username or Email Address', 'default' )
 		);
 	}
 
@@ -253,17 +255,18 @@ class CssOutputTest extends TestCase {
 	 *
 	 * @dataProvider preEscapedByCoreProvider
 	 *
-	 * @param string $method  Filter method.
+	 * @param string $action  Login action whose texts are registered.
 	 * @param string $option  Option key.
 	 * @param string $source  Source string core translates.
 	 */
-	public function test_values_pre_escaped_by_core_are_not_double_encoded( string $method, string $option, string $source ): void {
+	public function test_values_pre_escaped_by_core_are_not_double_encoded( string $action, string $option, string $source ): void {
 		$css = $this->makeBooted( array( $option => "Tom & Jerry's" ) );
+		$css->{$action}();
 
 		$this->assertSame(
 			"Tom & Jerry's",
-			$css->{$method}( $source, $source, 'default' ),
-			$method . '() must not escape a value core already escapes'
+			$css->filter_login_text( $source, $source, 'default' ),
+			$option . ' must not be escaped: core already escapes it'
 		);
 	}
 
@@ -272,10 +275,10 @@ class CssOutputTest extends TestCase {
 	 */
 	public function preEscapedByCoreProvider(): array {
 		return array(
-			'Log In button'          => array( 'change_login_label', 'login-label', 'Log In' ),
-			'Remember Me label'      => array( 'change_rememberme_label', 'rememberme-label', 'Remember Me' ),
-			'Register button'        => array( 'change_register_register_label', 'register-button-label', 'Register' ),
-			'Get New Password'       => array( 'change_lostpasswords_button_label', 'lostpassword-button-label', 'Get New Password' ),
+			'Log In button'     => array( 'check_login_texts', 'login-label', 'Log In' ),
+			'Remember Me label' => array( 'check_login_texts', 'rememberme-label', 'Remember Me' ),
+			'Register button'   => array( 'check_register_texts', 'register-button-label', 'Register' ),
+			'Get New Password'  => array( 'check_lostpasswords_texts', 'lostpassword-button-label', 'Get New Password' ),
 		);
 	}
 
@@ -358,10 +361,11 @@ class CssOutputTest extends TestCase {
 	 */
 	public function test_unrelated_strings_are_untouched(): void {
 		$css = $this->makeBooted( array( 'username-label' => 'Custom' ) );
+		$css->check_login_texts();
 
 		$this->assertSame(
 			'Some other string',
-			$css->change_username_label( 'Some other string', 'Some other string', 'default' )
+			$css->filter_login_text( 'Some other string', 'Some other string', 'default' )
 		);
 	}
 
@@ -424,5 +428,168 @@ class CssOutputTest extends TestCase {
 			'Log In &lsaquo; Example Site &#8212; WordPress',
 			$css->login_page_title( 'Log In &lsaquo; Example Site &#8212; WordPress' )
 		);
+	}
+
+	/*
+	 * ---------------------------------------------------------------------
+	 * 2.3.1 regressions.
+	 * ---------------------------------------------------------------------
+	 */
+
+	/**
+	 * Other plugins' strings are never rewritten, even when the English
+	 * source matches: a two-factor or WooCommerce "Password" field on the
+	 * login page must keep its own label.
+	 */
+	public function test_login_texts_only_touch_the_default_domain(): void {
+		$css = $this->makeBooted( array( 'password-label' => 'Secret' ) );
+		$css->check_login_texts();
+
+		$this->assertSame( 'Passwort', $css->filter_login_text( 'Passwort', 'Password', 'woocommerce' ) );
+		$this->assertSame( 'Secret', $css->filter_login_text( 'Passwort', 'Password', 'default' ) );
+	}
+
+	/**
+	 * An emptied field label is hidden visually but keeps its accessible name.
+	 */
+	public function test_empty_label_stays_available_to_screen_readers(): void {
+		$css = $this->makeBooted( array( 'username-label' => '' ) );
+		$css->check_login_texts();
+
+		$this->assertSame(
+			'<span class="screen-reader-text">Benutzername</span>',
+			$css->filter_login_text( 'Benutzername', 'Username or Email Address', 'default' )
+		);
+	}
+
+	/**
+	 * An emptied button label falls back to core's text instead of rendering
+	 * a blank button.
+	 */
+	public function test_empty_button_label_keeps_core_text(): void {
+		$css = $this->makeBooted( array( 'login-label' => '' ) );
+		$css->check_login_texts();
+
+		$this->assertSame( 'Anmelden', $css->filter_login_text( 'Anmelden', 'Log In', 'default' ) );
+	}
+
+	/**
+	 * The untranslated default logo title is treated as "not customised".
+	 */
+	public function test_default_logo_title_keeps_core_translation(): void {
+		$css = $this->makeBooted();
+
+		$this->assertSame( 'Stolz präsentiert von WordPress', $css->logo_title( 'Stolz präsentiert von WordPress' ) );
+
+		$css = $this->makeBooted( array( 'logo-title' => 'Acme' ) );
+
+		$this->assertSame( 'Acme', $css->logo_title( 'Powered by WordPress' ) );
+	}
+
+	/**
+	 * Older installs stored the column count as the integer 2; the layout
+	 * class must still be added, or the column CSS applies to a one-column
+	 * page.
+	 */
+	public function test_two_column_class_accepts_integer_setting(): void {
+		$css = $this->makeBooted( array( 'columns' => 2 ) );
+
+		$this->assertContains( 'ml-half-screen', $css->body_class( array() ) );
+	}
+
+	/**
+	 * A corrupt (non-array) column width must not fatal the login page.
+	 */
+	public function test_non_array_column_width_does_not_fatal(): void {
+		$out = $this->render(
+			array(
+				'columns'       => '2',
+				'columns-width' => '8/4',
+			)
+		);
+
+		$this->assertStringContainsString( 'width:50%', $out );
+	}
+
+	/**
+	 * The two-column page-colour fallback must not outrank the dedicated
+	 * "Form Column background color" setting.
+	 */
+	public function test_form_column_color_wins_over_page_color(): void {
+		$out = $this->render(
+			array(
+				'columns'                      => '2',
+				'custom-background-color'      => '#fbbf24',
+				'custom-background-color-form' => '#ffffff',
+			)
+		);
+
+		$fallback = strpos( $out, ".ml-half-screen .ml-form-container{\nbackground-color:#fbbf24;" );
+		$column   = strpos( $out, ".ml-container .ml-form-container{\nbackground-color:#ffffff;" );
+
+		$this->assertNotFalse( $fallback );
+		$this->assertNotFalse( $column );
+		$this->assertLessThan( $column, $fallback, 'the fallback must be printed first' );
+		$this->assertStringNotContainsString( 'div.ml-form-container', $out );
+	}
+
+	/**
+	 * Unit-bearing values are passed through; bare numbers get px.
+	 */
+	public function test_dimensions_only_get_px_when_unitless(): void {
+		$out = $this->render(
+			array(
+				'form-width'       => '400',
+				'form-field-width' => '100%',
+			)
+		);
+
+		$this->assertStringContainsString( 'max-width:400px;', $out );
+		$this->assertStringContainsString( 'max-width:100%;', $out );
+	}
+
+	/**
+	 * The "both" logo rules are only printed when that mode is in use.
+	 */
+	public function test_both_logo_css_only_when_used(): void {
+		$this->assertStringContainsString( '<style id="clc-logo-style"></style>', $this->render() );
+
+		$out = $this->render( array( 'logo-settings' => 'use-both' ) );
+
+		$this->assertStringContainsString( 'https://example.test/wp-admin/images/wordpress-logo.svg', $out );
+	}
+
+	/**
+	 * The preview receives the very rules the login page prints.
+	 */
+	public function test_preview_uses_the_login_page_rules(): void {
+		$css = $this->make( array( 'background-blur' => 4 ) );
+		$css->output_css_object();
+
+		$data = $GLOBALS['clc_test_localized']['CLC'];
+
+		$this->assertSame( $css->get_css_rules(), $data['rules'] );
+		$this->assertSame( 'clc-options[background-blur]', $data['settings']['background-blur']['name'] );
+		$this->assertSame( 4, $data['settings']['background-blur']['value'] );
+		$this->assertArrayHasKey( 'custom-background-color-form', $data['settings'] );
+	}
+
+	/**
+	 * The clickable background has an accessible name.
+	 */
+	public function test_background_link_has_accessible_name(): void {
+		$css = $this->makeBooted(
+			array(
+				'custom-background'      => 'https://example.test/bg.jpg',
+				'custom-background-link' => 'https://example.test/promo',
+			)
+		);
+
+		ob_start();
+		$css->add_extra_div();
+		$out = (string) ob_get_clean();
+
+		$this->assertStringContainsString( 'aria-label="Background image link"', $out );
+		$this->assertStringContainsString( 'href="https://example.test/promo"', $out );
 	}
 }

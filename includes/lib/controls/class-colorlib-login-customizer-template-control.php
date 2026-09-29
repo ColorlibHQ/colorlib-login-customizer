@@ -33,18 +33,6 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 	public $type = 'clc-templates';
 
 	/**
-	 * Colorlib_Login_Customizer_Template_Control constructor.
-	 *
-	 * @param WP_Customize_Manager $manager Customizer manager instance.
-	 * @param string               $id      Control ID.
-	 * @param array                $args    Control arguments.
-	 */
-	public function __construct( WP_Customize_Manager $manager, $id, array $args = array() ) {
-		$manager->register_section_type( 'Colorlib_Login_Customizer_Template_Control' );
-		parent::__construct( $manager, $id, $args );
-	}
-
-	/**
 	 * Add custom parameters to pass to the JS via JSON.
 	 *
 	 * @access public
@@ -62,6 +50,7 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 		$this->json['link']    = $this->get_link();
 		$this->json['choices'] = $arrays['choices'];
 		$this->json['options'] = $arrays['options'];
+		$this->json['labels']  = $arrays['labels'];
 	}
 
 	/**
@@ -83,10 +72,12 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 		$arrays = array(
 			'choices' => array(),
 			'options' => array(),
+			'labels'  => array(),
 		);
 
 		foreach ( $this->choices as $key => $choice ) {
 			$arrays['choices'][ $key ] = $choice['url'];
+			$arrays['labels'][ $key ]  = $this->choice_label( (string) $key );
 			$arrays['options'][ $key ] = array();
 			foreach ( $choice['options'] as $option_key => $option_value ) {
 				$name                                     = $this->generate_name( $option_key );
@@ -98,6 +89,21 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 		}
 
 		return $arrays;
+	}
+
+	/**
+	 * Human-readable name of a template, for screen readers.
+	 *
+	 * @param string $key Choice key, e.g. `default` or `template-05`.
+	 * @return string
+	 */
+	private function choice_label( string $key ): string {
+		if ( preg_match( '/^template-0*(\d+)$/', $key, $matches ) ) {
+			/* translators: %d: template number. */
+			return sprintf( __( 'Template %d', 'colorlib-login-customizer' ), (int) $matches[1] );
+		}
+
+		return __( 'Default', 'colorlib-login-customizer' );
 	}
 
 	/**
@@ -136,9 +142,10 @@ class Colorlib_Login_Customizer_Template_Control extends WP_Customize_Control {
 
 			<# for ( choice in data.choices ) { #>
 
-				<input type="radio" value="{{ choice }}" name="_customize-{{ data.id }}" id="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__input" />
+				<input type="radio" value="{{ choice }}" name="_customize-{{ data.id }}" id="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__input" <# if ( data.value === choice ) { #>checked<# } #> />
 
 				<label for="{{ data.id }}{{ choice }}" class="colorlib-login-customizer-templates__label">
+					<span class="screen-reader-text">{{ data.labels[ choice ] }}</span>
 					<div class="colorlib-login-customizer-templates__intrinsic">
 						<div class="colorlib-login-customizer-templates__screenshot" style="background-image: url( {{ data.choices[ choice ] }} );"></div>
 					</div>

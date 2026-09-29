@@ -2,8 +2,8 @@
 Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
-Tested up to: 7.0
-Stable tag: 2.3.0
+Tested up to: 7.1
+Stable tag: 2.3.1
 Requires PHP: 8.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -182,10 +182,35 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 
 == Upgrade Notice ==
 
+= 2.3.1 =
+Fixes the login page's form-column colour, login labels leaking onto other plugins' fields, a fatal error with corrupt column settings, and settings import. Adds keyboard and screen-reader improvements, a live background preview and lighter images.
+
 = 2.3.0 =
 Security and correctness release. Custom-CSS sanitization is hardened (dangerous directives could previously be smuggled through by nesting them), the review-notice AJAX handler now checks capabilities, and several login-page texts no longer render double-escaped. Also fixes the "Back to site text" setting, which had silently stopped working on WordPress 5.7 and later. Recommended for all users.
 
 == Changelog ==
+
+= 2.3.1 =
+* Fix: Custom login labels no longer replace other plugins' texts. The plugin swapped any "Password", "Email", "Username", "Register" or "Log in" string on the login page, including those of two-factor, CAPTCHA and WooCommerce fields; it now only changes WordPress's own.
+* Fix: "Form Column background color" now works in two-column layouts. A more specific rule painted the form column with the page background colour, so the setting was ignored whenever a page colour was set (Template 08's white form column showed up yellow).
+* Fix: A corrupt or legacy column-width value no longer causes a fatal error on the login page.
+* Fix: Sites migrated from 1.x with a two-column layout get the correct layout class again (the column count was compared as a string but stored as a number).
+* Fix: The Customizer preview now uses exactly the same CSS rules as the login page, so what you see is what you get: widths with units such as 100% no longer break in the preview, and the "logo and text" mode updates live.
+* Fix: Importing settings no longer empties text labels that contain a semicolon, no longer accepts arrays for regular settings, validates layout and logo choices and image URLs, and works on Windows servers (the upload path was being stripped of its backslashes).
+* Fix: The template picker now remembers and highlights the selected template.
+* Fix: Removed a PHP "Array to string conversion" warning logged on every Customizer load once column widths had been saved.
+* Fix: Registration text settings are hidden when registration is disabled, including on sites where the option is stored empty.
+* Fix: The review request no longer comes back every 30 days. Its install date was kept in a transient that expired and restarted the countdown; "No, not good enough" is now final, and the notice only appears on the Dashboard, Plugins screen and this plugin's page.
+* Fix: Leaving the Login Customizer panel returns the preview to the page you were on, and the preview uses your site address rather than the WordPress install address (sites with WordPress in a subdirectory).
+* Usability: "Start Customizing!" opens the Customizer directly on the Login Customizer panel.
+* Usability: Background blur and brightness now update live instead of reloading the preview on every slider step.
+* Usability: An empty button label keeps WordPress's default text instead of rendering a blank button, and the Customizer says so.
+* Usability: The default logo title follows the site language instead of always showing the English "Powered by WordPress".
+* Accessibility: Emptied field labels stay available to screen readers. Keyboard focus is visible on the login form again, the template picker can be used with a keyboard, and the layout buttons, column-width arrows and background link have accessible names.
+* Performance: Template backgrounds and thumbnails are 45% smaller (1.6 MB to 0.9 MB); the Template 01 background a visitor downloads went from 964 KB to 452 KB.
+* Performance: One gettext filter replaces up to twelve, the "logo and text" and column rules are only printed when used, and the review notice no longer costs two uncached database queries on every admin page.
+* Compatibility: Tested up to WordPress 7.1. Translations are loaded by WordPress automatically; the redundant load_plugin_textdomain() call was removed.
+* Housekeeping: The autoloader only handles this plugin's classes and no longer leaves an `$autoloader` global behind; the preview template's variables are prefixed so they cannot overwrite core globals such as `$user_login`.
 
 = 2.3.0 =
 * Security: Hardened custom-CSS sanitization. Dangerous directives (@import, javascript:, expression(), behavior:, -moz-binding:, data: URIs) were previously stripped in a single pass, so a nested payload could reassemble itself into a working token. Filtering now repeats until the value stops changing.

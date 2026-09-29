@@ -79,7 +79,7 @@ class Colorlib_Login_Customizer_Customizer {
 			'fields'      => array(
 				array(
 					'id'          => 'templates',
-					'label'       => esc_html__( 'Temapltes', 'colorlib-login-customizer' ),
+					'label'       => esc_html__( 'Templates', 'colorlib-login-customizer' ),
 					'description' => '',
 					'type'        => 'clc-templates',
 					'default'     => 'default',
@@ -101,7 +101,7 @@ class Colorlib_Login_Customizer_Customizer {
 								 * Logo section
 								 */
 								'logo-settings'            => 'show-image-only',
-								'logo-url'                 => site_url(),
+								'logo-url'                 => home_url( '/' ),
 								'custom-logo'              => '',
 								'logo-text-color'          => '#444',
 								'logo-text-size'           => '20',
@@ -206,7 +206,7 @@ class Colorlib_Login_Customizer_Customizer {
 								 */
 								'logo-settings'           => 'show-text-only',
 								'logo-title'              => 'Login to continue',
-								'logo-url'                => site_url(),
+								'logo-url'                => home_url( '/' ),
 								'custom-logo'             => '',
 								'logo-text-color'         => '#333',
 								'logo-text-size'          => '30',
@@ -239,7 +239,7 @@ class Colorlib_Login_Customizer_Customizer {
 								 */
 								'logo-settings'            => 'show-text-only',
 								'logo-title'               => 'Account Login',
-								'logo-url'                 => site_url(),
+								'logo-url'                 => home_url( '/' ),
 								'custom-logo'              => '',
 								'logo-text-color'          => '#333',
 								'logo-text-size'           => '20',
@@ -472,12 +472,12 @@ class Colorlib_Login_Customizer_Customizer {
 					'label'       => esc_html__( 'Logo URL', 'colorlib-login-customizer' ),
 					'description' => esc_html__( 'This is where the logo will link to.', 'colorlib-login-customizer' ),
 					'type'        => 'text',
-					'default'     => site_url(),
+					'default'     => home_url( '/' ),
 				),
 				array(
 					'id'          => 'logo-title',
 					'label'       => esc_html__( 'Logo Title', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'The tooltip that will be displayed when hovering over the logo. Also this is used as Logo text when you select "Use Text Logo"', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'The tooltip that will be displayed when hovering over the logo. It is also used as the logo text when the logo shows text.', 'colorlib-login-customizer' ),
 					'type'        => 'text',
 					'default'     => 'Powered by WordPress',
 				),
@@ -520,7 +520,7 @@ class Colorlib_Login_Customizer_Customizer {
 				array(
 					'id'              => 'custom-logo',
 					'label'           => esc_html__( 'Custom logo', 'colorlib-login-customizer' ),
-					'description'     => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'Upload an image or pick one from your media library. Once selected, its thumbnail is shown above these buttons.', 'colorlib-login-customizer' ),
 					'type'            => 'image',
 					'default'         => '',
 					'active_callback' => array( $this, 'check_if_not_text_logo' ),
@@ -566,11 +566,11 @@ class Colorlib_Login_Customizer_Customizer {
 					'choices'     => array(
 						1 => array(
 							'value' => 1,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/one-column.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/one-column.png',
 						),
 						2 => array(
 							'value' => 2,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/two-column.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/two-column.png',
 						),
 					),
 					'type'        => 'clc-button-group',
@@ -590,19 +590,19 @@ class Colorlib_Login_Customizer_Customizer {
 					'choices'         => array(
 						'left'   => array(
 							'value' => 1,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-left.jpg',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-align-left.jpg',
 						),
 						'top'    => array(
 							'value' => 2,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-top.jpg',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-align-top.jpg',
 						),
 						'right'  => array(
 							'value' => 3,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-right.jpg',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-align-right.jpg',
 						),
 						'bottom' => array(
 							'value' => 4,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-align-bottom.jpg',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-align-bottom.jpg',
 						),
 					),
 					'type'            => 'clc-button-group',
@@ -616,15 +616,15 @@ class Colorlib_Login_Customizer_Customizer {
 					'choices'     => array(
 						'top'    => array(
 							'value' => 1,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-top.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-vertical-align-top.png',
 						),
 						'middle' => array(
 							'value' => 2,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-middle.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-vertical-align-middle.png',
 						),
 						'bottom' => array(
 							'value' => 3,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-bottom.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-vertical-align-bottom.png',
 						),
 					),
 					'type'        => 'clc-button-group',
@@ -637,15 +637,15 @@ class Colorlib_Login_Customizer_Customizer {
 					'choices'     => array(
 						'left'   => array(
 							'value' => 1,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-horizontal-align-left.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-horizontal-align-left.png',
 						),
 						'middle' => array(
 							'value' => 2,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-vertical-align-middle.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-vertical-align-middle.png',
 						),
 						'right'  => array(
 							'value' => 3,
-							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . '/assets/img/form-horizontal-align-right.png',
+							'png'   => COLORLIB_LOGIN_CUSTOMIZER_URL . 'assets/img/form-horizontal-align-right.png',
 						),
 					),
 					'type'        => 'clc-button-group',
@@ -667,7 +667,7 @@ class Colorlib_Login_Customizer_Customizer {
 				array(
 					'id'          => 'custom-background',
 					'label'       => esc_html__( 'Custom background', 'colorlib-login-customizer' ),
-					'description' => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'description' => esc_html__( 'Upload an image or pick one from your media library. Once selected, its thumbnail is shown above these buttons.', 'colorlib-login-customizer' ),
 					'type'        => 'image',
 					'default'     => '',
 				),
@@ -697,7 +697,6 @@ class Colorlib_Login_Customizer_Customizer {
 						'max'  => 30,
 						'step' => 1,
 					),
-					'transport'   => 'refresh',
 				),
 				array(
 					'id'          => 'background-brightness',
@@ -710,12 +709,11 @@ class Colorlib_Login_Customizer_Customizer {
 						'max'  => 200,
 						'step' => 5,
 					),
-					'transport'   => 'refresh',
 				),
 				array(
 					'id'              => 'custom-background-form',
 					'label'           => esc_html__( 'Form Column background', 'colorlib-login-customizer' ),
-					'description'     => esc_html__( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'colorlib-login-customizer' ),
+					'description'     => esc_html__( 'Upload an image or pick one from your media library. Once selected, its thumbnail is shown above these buttons.', 'colorlib-login-customizer' ),
 					'type'            => 'image',
 					'default'         => '',
 					'active_callback' => array( $this, 'check_two_column_layout' ),
@@ -1203,7 +1201,7 @@ class Colorlib_Login_Customizer_Customizer {
 			case 'clc-button-group':
 			case 'select':
 			case 'radio':
-				return 'sanitize_text_field';
+				return 'clc_sanitize_choice';
 
 			case 'clc-column-width':
 				return 'clc_sanitize_columns_width';
@@ -1259,6 +1257,12 @@ class Colorlib_Login_Customizer_Customizer {
 	 * @param WP_Customize_Manager $manager Customizer manager instance.
 	 */
 	public function register_settings( $manager ) {
+		// Once per request: core prints one JS template per registered entry
+		// and does not de-duplicate, so this must not live in the constructors.
+		$manager->register_control_type( 'Colorlib_Login_Customizer_Template_Control' );
+		$manager->register_control_type( 'Colorlib_Login_Customizer_Button_Group_Control' );
+		$manager->register_control_type( 'Colorlib_Login_Customizer_Column_Width' );
+
 		$manager->add_panel(
 			'clc_main_panel',
 			array(
@@ -1404,8 +1408,10 @@ class Colorlib_Login_Customizer_Customizer {
 			'colorlib-login-customizer-script',
 			'CLCUrls',
 			array(
-				'siteurl'      => get_option( 'siteurl' ),
+				// The preview only accepts front-end URLs, so use home_url(), not siteurl.
+				'previewUrl'   => add_query_arg( 'colorlib-login-customizer-customization', 'true', home_url( '/' ) ),
 				'register_url' => wp_registration_url(),
+				'emptyLabel'   => __( 'This button needs a label. An empty value keeps the WordPress default.', 'colorlib-login-customizer' ),
 			)
 		);
 	}
@@ -1460,10 +1466,7 @@ class Colorlib_Login_Customizer_Customizer {
 	 * @return bool
 	 */
 	public function check_if_user_can_register() {
-		$user_can_register = get_option( 'users_can_register' );
-		if ( '0' == $user_can_register ) {
-			return false;
-		}
-		return true;
+		// The option is '0', '' or missing when registration is closed.
+		return (bool) get_option( 'users_can_register' );
 	}
 }

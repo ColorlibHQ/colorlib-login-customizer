@@ -356,6 +356,41 @@ function clc_sanitize_select( $value, array $choices, string $default = '' ): st
 }
 
 /**
+ * Customizer callback: keep a select / button-group / template value only when
+ * it is one of the control's choices.
+ *
+ * Core hands every sanitize_callback the setting object as its second
+ * argument, which is how the control (and so its choices) is found. Choices
+ * are either `key => label` or, for the button groups, `key => array( 'value'
+ * => ... )`. Anything else falls back to the setting's default.
+ *
+ * @param mixed $value   Submitted value.
+ * @param mixed $setting WP_Customize_Setting being sanitized.
+ * @return string Allowed value, or the default.
+ */
+function clc_sanitize_choice( $value, $setting = null ): string {
+	$value = clc_stringify( $value );
+
+	if ( ! $setting instanceof WP_Customize_Setting ) {
+		return sanitize_text_field( $value );
+	}
+
+	$control = $setting->manager->get_control( $setting->id );
+
+	if ( ! $control || empty( $control->choices ) || ! is_array( $control->choices ) ) {
+		return sanitize_text_field( $value );
+	}
+
+	$allowed = array();
+
+	foreach ( $control->choices as $key => $choice ) {
+		$allowed[] = (string) ( ( is_array( $choice ) && isset( $choice['value'] ) ) ? $choice['value'] : $key );
+	}
+
+	return clc_sanitize_select( $value, array_flip( $allowed ), clc_stringify( $setting->default ) );
+}
+
+/**
  * Sanitize image URL (must point at a permitted image type).
  *
  * @param mixed $url Image URL to sanitize.
