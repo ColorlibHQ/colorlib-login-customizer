@@ -2,7 +2,7 @@
 Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
-Tested up to: 7.1
+Tested up to: 7.2
 Stable tag: 2.3.1
 Requires PHP: 8.0
 License: GPLv3 or later
