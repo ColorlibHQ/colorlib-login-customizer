@@ -9,7 +9,7 @@ Colorlib Login Customizer is a WordPress plugin that customizes the WordPress lo
 **Repository**: https://github.com/puikinsh/colorlib-login-customizer
 **PHP**: 8.0+ (verified through 8.5) | **WordPress**: 6.0+ | **Tested up to**: 7.2
 
-Current version is `2.3.1`. The version is declared in three places that must stay in sync on every release: the plugin header in `colorlib-login-customizer.php`, the `COLORLIB_LOGIN_CUSTOMIZER_VERSION` constant, and `readme.txt`'s `Stable tag`. `package.json`'s `version` should match too (it drives the Grunt build archive name). When shipping a change after a released version, add a NEW `= x.y.z =` heading at the top of the `readme.txt` changelog — do not edit already-released entries or `@since` docblock tags.
+Current version is `2.3.2`. The version is declared in three places that must stay in sync on every release: the plugin header in `colorlib-login-customizer.php`, the `COLORLIB_LOGIN_CUSTOMIZER_VERSION` constant, and `readme.txt`'s `Stable tag`. `package.json`'s `version` should match too (it drives the Grunt build archive name). When shipping a change after a released version, add a NEW `= x.y.z =` heading at the top of the `readme.txt` changelog — do not edit already-released entries or `@since` docblock tags.
 
 ## Build Commands
 
@@ -219,7 +219,7 @@ Findings — all clean:
 Caveats — important when trusting the green result:
 - The pinned `phpcompatibility/php-compatibility` is **9.3.5**, whose sniff data only reaches ~PHP 8.0. So PHPCS confirms the 8.0 baseline; the 8.1–8.5 deprecation coverage above comes from manual scanning + an actual `php -l` under a real PHP 8.5 build. Don't read a clean PHPCS run as proof for 8.5 on its own.
 - The one class of issue neither static check catches is *passing `null` to non-nullable internal params* (deprecated since 8.1). Heavy input sanitization mitigates it, but final sign-off needs a live smoke test under PHP 8.5 + WP 7.x with `WP_DEBUG = true`.
-- `Tested up to: 7.2` is set in the plugin header and `readme.txt` (tested on 7.2 RC3 with PHP 8.6 and 8.5 on 2026-11-26; WordPress.org accepts the upcoming major once it reaches RC). Keep this value at or below the current stable WP release — WordPress.org rejects anything higher.
+- `Tested up to: 7.2` is set in `readme.txt` only. Plugin Check now reports a `Tested up to` plugin header as an error (`plugin_header_tested_up_to_not_allowed`), so it was dropped from the header in 2.3.2 (tested on 7.2 RC3 with PHP 8.6 and 8.5 on 2026-11-26; WordPress.org accepts the upcoming major once it reaches RC). Keep this value at or below the current stable WP release — WordPress.org rejects anything higher.
 
 ## Third-Party Libraries
 
