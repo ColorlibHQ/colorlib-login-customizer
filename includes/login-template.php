@@ -279,6 +279,12 @@ $clc_classes   = apply_filters( 'login_body_class', $clc_classes, 'login' );
 		<?php do_action( 'login_footer' ); ?>
 		<div class="clear"></div>
 		<?php
+		/*
+		 * This preview never fires wp_enqueue_scripts, which is where core unhooks
+		 * the_block_template_skip_link(). Left hooked, it logs a deprecation notice
+		 * on every preview load under a block theme.
+		 */
+		remove_action( 'wp_footer', 'the_block_template_skip_link' );
 		wp_footer();
 		?>
 	</body>
