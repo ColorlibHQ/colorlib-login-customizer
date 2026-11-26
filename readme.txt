@@ -3,7 +3,7 @@ Contributors: silkalns
 Tags: login customizer, custom login page, login page, login form, white label login
 Requires at least: 6.0
 Tested up to: 7.2
-Stable tag: 2.3.1
+Stable tag: 2.3.2
 Requires PHP: 8.0
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -182,6 +182,9 @@ For support, please visit the [WordPress.org support forum](https://wordpress.or
 
 == Upgrade Notice ==
 
+= 2.3.2 =
+Compatibility release for WordPress 7.2 and PHP 8.6. Also stops a deprecation notice that the Customizer preview logged under block themes.
+
 = 2.3.1 =
 Fixes the login page's form-column colour, login labels leaking onto other plugins' fields, a fatal error with corrupt column settings, and settings import. Adds keyboard and screen-reader improvements, a live background preview and lighter images.
 
@@ -189,6 +192,10 @@ Fixes the login page's form-column colour, login labels leaking onto other plugi
 Security and correctness release. Custom-CSS sanitization is hardened (dangerous directives could previously be smuggled through by nesting them), the review-notice AJAX handler now checks capabilities, and several login-page texts no longer render double-escaped. Also fixes the "Back to site text" setting, which had silently stopped working on WordPress 5.7 and later. Recommended for all users.
 
 == Changelog ==
+
+= 2.3.2 =
+* Compatibility: Tested up to WordPress 7.2 and PHP 8.6.
+* Fix: The Customizer's login preview no longer logs a "the_block_template_skip_link is deprecated" notice on every load when a block theme is active.
 
 = 2.3.1 =
 * Fix: Custom login labels no longer replace other plugins' texts. The plugin swapped any "Password", "Email", "Username", "Register" or "Log in" string on the login page, including those of two-factor, CAPTCHA and WooCommerce fields; it now only changes WordPress's own.
